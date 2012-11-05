@@ -42,6 +42,7 @@ namespace bgcc {
 
 #endif
 RECON:
+        sema->signal();
         connect = SharedPointer<ClientSocket>(
                 new(std::nothrow) ClientSocket(server_ip, server_port));
 
@@ -54,14 +55,19 @@ RECON:
 
         ret = proto->writeMessageBegin("bgcc::BaseProcessor_enroll", "__enroll", bgcc::CALL, 0);
         if (ret < 0) {
-            return NULL;
+            bgcc::TimeUtil::safe_sleep_s(1);
+            goto RECON;
         }
         ret = proto->writeString(proxy_name);
         if (ret < 0) {
-            return NULL;
+            bgcc::TimeUtil::safe_sleep_s(1);
+            goto RECON;
         }
-        proto->writeMessageEnd();
-        sema->signal();
+        ret = proto->writeMessageEnd();
+        if (ret < 0) {
+            bgcc::TimeUtil::safe_sleep_s(1);
+            goto RECON;
+        }
 #ifndef _WIN32
         ee.data.fd = connect->get_socket();
         ee.events = EPOLLIN;
@@ -81,6 +87,7 @@ RECON:
 #ifndef _WIN32
                     epoll_ctl(ep, EPOLL_CTL_DEL, connect->get_socket(), &ee);
 #endif
+                    bgcc::TimeUtil::safe_sleep_s(1);
                     goto RECON;
                 }
                 int32_t body_len = (int32_t)ntohl(*(uint32_t*)(buffer +16));
@@ -92,6 +99,7 @@ RECON:
 #ifndef _WIN32
                     epoll_ctl(ep, EPOLL_CTL_DEL, connect->get_socket(), &ee);
 #endif
+                    bgcc::TimeUtil::safe_sleep_s(1);
                     goto RECON;
                 }
                 int32_t processor_name_len = (int32_t)ntohl(*(uint32_t*)(body));
