@@ -1,20 +1,12 @@
-/***************************************************************************
- * 
- * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
- **************************************************************************/
-
-
-
-/**
- * @file bgcc/event_callback.cpp
- * @author chenyuzhen(chenyuzhen)
- * @date 2013/04/22 14:02:18
- * @version 1.0.0 
- * @brief 
- *  
- **/
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
 #include "event_callback.h"
 

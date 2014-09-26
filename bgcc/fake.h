@@ -1,21 +1,12 @@
-/***************************************************************************
- * 
- * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
- **************************************************************************/
- 
- 
- 
-/**
- * @file binary_protocol_fake.h
- * @author chenyuzhen(chenyuzhen)
- * @date 2013/04/17 12:02:30
- * @version 1.0.0 
- * @brief 
- *  
- **/
-
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
 #ifndef  __BINARY_PROTOCOL_FAKE_H_
 #define  __BINARY_PROTOCOL_FAKE_H_

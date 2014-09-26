@@ -1,3 +1,13 @@
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
+
 #include <ssl_server_peer_socket.h>
 #include <log.h>
 

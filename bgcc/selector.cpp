@@ -1,20 +1,12 @@
-/***************************************************************************
- * 
- * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
- * $Id$ 
- * 
- **************************************************************************/
- 
- 
- 
-/**
- * @file Selector.cpp
- * @author chenyuzhen(chenyuzhen)
- * @date 2013/04/16 17:01:01
- * @version 1.0.0 
- * @brief 
- *  
- **/
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
 #include "selector.h"
 #include "log.h"

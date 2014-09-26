@@ -1,17 +1,12 @@
-/***************************************************************************
- *
- * Copyright (c) 2012 , Inc. All Rights Reserved
- *
- **************************************************************************/
-
-/**
- * @file     bgcc_net_util.cpp
- * @brief
- * @author   liuxupeng(liuxupeng@baidu.com)
- * @version
- * @date     2013年10月11日 18时57分38秒
- *
- **/
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
 #ifdef WIN32
 #include <Winsock2.h>

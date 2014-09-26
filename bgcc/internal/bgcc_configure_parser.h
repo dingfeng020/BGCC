@@ -1,18 +1,13 @@
-/***************************************************************************
- *
- * Copyright (c) 2012 , Inc. All Rights Reserved
- *
- **************************************************************************/
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
-/**
- * @file     bgcc_consfigure_parser.h
- * @brief
- * @author   liuxupeng(liuxupeng@baidu.com)
- * @version
- * @date     2013年10月11日 19时23分51秒
- *
- **/
-#pragma once
 #ifndef _BGCC2_CONFIGURE_PARSER_H_
 #define _BGCC2_CONFIGURE_PARSER_H_
 

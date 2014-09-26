@@ -1,18 +1,13 @@
-/***************************************************************************
- *
- * Copyright (c) 2012 , Inc. All Rights Reserved
- *
- **************************************************************************/
+/***********************************************************************
+  * Copyright (c) 2013, Baidu Inc. All rights reserved.
+  * 
+  * Licensed under the BSD License
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  * 
+  *      license.txt
+  *********************************************************************/
 
-/**
- * @file     bgcc_net_util.h
- * @brief
- * @author   liuxupeng(liuxupeng@baidu.com)
- * @version
- * @date     2013年10月11日 18时53分41秒
- *
- **/
-#pragma once
 #ifndef _BGCC_NET_UTIL_H_
 #define _BGCC_NET_UTIL_H_
 
