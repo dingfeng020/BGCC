@@ -11,7 +11,7 @@
 #ifndef _BGCC2_I_SERVER_H_
 #define _BGCC2_I_SERVER_H_
 
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 #include "shareable.h"
 
 namespace bgcc {

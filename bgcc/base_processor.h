@@ -12,8 +12,8 @@
 #define __BASE_PROCESSOR_HH__
 
 #include <map>
-#include "bgcc.h"
 #include <iostream>
+#include "bgcc.h"
 
 #include "processor.h"
 #include "exception.h"
@@ -59,6 +59,11 @@ namespace bgcc {
                 SharedPointer<IProtocol> proto,
                 int32_t seqid);
         std::map<std::string, do_function_ptr> __fun_map;
+
+	protected:
+		const static char * PROXY_NAME;
+		const static char * PEER_IP;
+		const static char * PEER_PORT;
     };
 
 } // namespace

@@ -8,7 +8,6 @@
   *      license.txt
   *********************************************************************/
 
-#include <stdio.h>
 #include "mutex.h"
 #include "time_util.h"
 #include "bgcc_error.h"

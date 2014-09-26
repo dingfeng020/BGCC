@@ -8,7 +8,6 @@
   *      license.txt
   *********************************************************************/
 
-#include <string.h>
 #include "bgcc_error.h"
 
 namespace bgcc {

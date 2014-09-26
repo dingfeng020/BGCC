@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <sstream>
+#include <stdint.h>
 
 /**
  * @brief 统一管理并解析若干个bidl文件
@@ -96,14 +98,15 @@ public:
 
     std::string get_tmp_var() {
         static int32_t i = 0;
-        static char buffer[10] = "var";
+        static const char* prefix = "var";
+        std::stringstream ss;
+
+        ss << prefix << ++i;
 
         if (i >= INT_MAX) {
             i = 0;
         }
-
-        snprintf(buffer + 3, 7, "%d", ++i);
-        return std::string(buffer);
+        return ss.str();
     }
 private:
     bool _debuged;

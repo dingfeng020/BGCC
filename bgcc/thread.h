@@ -17,13 +17,9 @@
 #include "shared_pointer.h"
 #include "sema.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
 namespace bgcc {
 
-    typedef void* (*run_func_t)(void*);
+    typedef void* (*run_func_t)(const bool*, void*);
     typedef SharedPointer<Runnable> RunnableSharedPointer;
     typedef SharedPointer<Runnable> RunnableSP;
     /**
@@ -157,9 +153,13 @@ namespace bgcc {
         run_func_t _func_ptr;
         void* _func_arg;
         Semaphore _sema;
-        mutable bool _detached;
+        volatile bool _detached;
         state_t _state;
-
+    public:
+        //Add by Stars 2013-1-16
+        bool _isstopped;
+        //End Add
+ 
 #ifdef _WIN32
         HANDLE _handle;
         DWORD _thread_id;

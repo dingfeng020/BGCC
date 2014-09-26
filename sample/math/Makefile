@@ -1,10 +1,10 @@
 .PHONY: output-cpp output-java
 
-cpp: math.bidl address.bidl output-cpp
+cpp: math_demo.bidl address.bidl output-cpp
 	../../bidl2sl/bidl2sl *.bidl
 	$(MAKE) -C cpp
 
-java: math.bidl address.bidl output-java
+java: math_demo.bidl address.bidl output-java
 	../../bidl2sl/bidl2sl *.bidl -g java
 	cd java && ant && cd -
 

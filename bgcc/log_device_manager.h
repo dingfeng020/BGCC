@@ -12,8 +12,11 @@
 #define _BGCC2_LOG_DEVICE_MANAGER_H_
 
 #include <vector>
+#include "bgcc_common.h"
 #include "log_device.h"
-#include "bgcc_stdint.h"
+
+#define STR(x) STR2(x)
+#define STR2(x) #x
 
 //BGCC log level definition
 #define BGCC_LOGLEVEL_TRACE  0x0

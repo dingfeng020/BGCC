@@ -11,12 +11,14 @@
 #ifndef _BGCC_SYNC_VECTOR_H_
 #define _BGCC_SYNC_VECTOR_H_
 
-#include <vector>
+#include <queue>
 #include "mutex.h"
 #include "sema.h"
 #include "guard.h"
 #include "bgcc_error.h"
 #include "shareable.h"
+#include "libs/rwlock.h"
+#include "log.h"
 
 /**
  * @brief 线程安全vector
@@ -30,7 +32,18 @@ namespace bgcc {
     template <typename ElemType>
         class SyncVector : public Shareable {
         public:
-            SyncVector() { }
+            SyncVector() 
+            {
+                _psem = new Semaphore();
+            }
+            
+            ~SyncVector()
+            {
+                if(_psem != NULL)
+                {
+                    delete _psem;
+                }
+            }
             typedef Guard<Mutex> ScopedGuard;
 
             /**
@@ -49,7 +62,7 @@ namespace bgcc {
                     ScopedGuard guard(&_mutex);
                     if (guard.is_locked()) {
                         try {
-                            _vector.push_back(elem);
+                            _queue.push(elem);
                         }
                         catch(std::bad_alloc &) {
                             return E_BGCC_NOMEM;
@@ -59,7 +72,7 @@ namespace bgcc {
                         return E_BGCC_SYSERROR;
                     }
                 }
-                _sem.signal();
+                _psem->signal();
                 return 0;
             }
 
@@ -77,29 +90,55 @@ namespace bgcc {
              * @date    2012年05月30日 19时12分19秒
              */
             int32_t get(ElemType& elem, int millisecond) {
-                int32_t ret = _sem.wait(millisecond);
+                _rwlock_clear.get_rdlock();
+                int32_t ret = _psem->wait(millisecond);
 
                 if (0 == ret) {
-                    {
+                    {   
                         ScopedGuard guard(&_mutex);
                         if (guard.is_locked()) {
-                            elem = _vector.back();
-                            _vector.pop_back();
-                        }
+                            elem = _queue.front();
+                            _queue.pop();
+                        }   
                         else {
+                            _rwlock_clear.unlock();
                             return E_BGCC_SYSERROR;
-                        }
+                        }   
                     }
+                    _rwlock_clear.unlock();   
                     return 0;
-                }
+                }   
                 else {
+                    _rwlock_clear.unlock();
                     return ret;
                 }
             }
 
             int32_t size() {
+                return (int32_t)_queue.size();
+            }
+
+            /**
+             * @brief 清空
+             *
+             * @return  void
+             * @retval   
+             * @see 
+             * @note 
+             * @author zhangyue
+             * @date 2013/01/05 15:12:51
+            **/
+            void clear() {
+                BGCC_DEBUG("bgcc","SyncVector Clear()");
+                _rwlock_clear.get_wrlock();
                 ScopedGuard guard(&_mutex);
-                return (int32_t)_vector.size();
+                std::vector<ElemType> tmp;
+				while(_queue.size()){
+					_queue.pop();
+				}
+                delete _psem;
+                _psem = new Semaphore();
+                _rwlock_clear.unlock();
             }
 
         protected:
@@ -107,9 +146,10 @@ namespace bgcc {
             SyncVector& operator=(const SyncVector&);
 
         private:
-            std::vector<ElemType> _vector;
+            std::queue<ElemType> _queue;
             Mutex _mutex;
-            Semaphore _sem;
+            RWLock _rwlock_clear;
+            Semaphore * _psem;
 
         }; // end of class SyncVector
 }

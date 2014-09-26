@@ -1,21 +1,19 @@
- /***********************************************************************
-  * Copyright (c) 2012, Baidu Inc. All rights reserved.
-  * 
-  * Licensed under the BSD License
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  * 
-  *      license.txt
-  *********************************************************************/
- 
- 
+/***************************************************************************
+ *
+ * Copyright (c) 2012 Baidu.com, Inc. All Rights Reserved
+ * $Id$
+ *
+ **************************************************************************/
+
+
+
 /**
  * @file callback_send_impl.h
  * @author chenyuzhen(chenyuzhen@baidu.com)
  * @date 2012/11/13 11:25:46
- * @version 1.0.0 
- * @brief 
- *  
+ * @version 1.0.0
+ * @brief
+ *
  **/
 
 
@@ -24,19 +22,23 @@
 
 #include "output-cpp/callback.h"
 
-class callback_send_impl_t : public demo::CallbackSender{
-	public:
-        virtual demo::CallbackResult AddClient(
+extern std::map<std::string, demo::CallbackRecverProxy*> g_proxys;
+extern bgcc::Mutex g_mutex;
+
+class callback_send_impl_t : public demo::CallbackSender {
+public:
+    virtual demo::CallbackResult AddClient(
             const std::map<std::string, std::string>& ctx);
-        
-		virtual demo::CallbackResult DelClient(
+
+    virtual demo::CallbackResult DelClient(
             const std::map<std::string, std::string>& ctx);
-	
 };
 
-class callback_send_thrd_t : public bgcc::Runnable{
-	virtual int32_t operator()(void* arg);
+
+class callback_send_thrd_t : public bgcc::Runnable {
+    virtual int32_t operator()(const bool* isstopped, void* arg);
 };
+
 
 
 

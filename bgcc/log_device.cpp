@@ -9,26 +9,15 @@
   *********************************************************************/
 
 #include <iostream>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <string>
 
-#ifndef _WIN32
-#include <stdint.h>
-#include <sys/time.h>
-#include <unistd.h>
-#endif
-
-#include <string.h>
-#include <stdio.h>
-
-#include "bgcc_stdint.h"
 #include "log_device.h"
 #include "file_util.h"
 #include "string_util.h"
 #include "time_util.h"
 #include "log_device_manager.h"
 #include "guard.h"
+#include "thread_util.h"
 
 namespace bgcc {
 
@@ -102,20 +91,24 @@ namespace bgcc {
         return(NULL != _fp);
     }
 
-#ifdef _WIN32
-#define snprintf _snprintf
-#endif
-
     int32_t FileLogDevice::open(void* param) {
         char buffer[BUFSIZ];
+
         if (false == is_opened()) {
             if (NULL != param) {
-                snprintf(buffer, BUFSIZ, "%s%s", _file_path, (char*)param);
-            } else {
-                snprintf(buffer, BUFSIZ, "%s", _file_path);
+                strncat(_file_path, (char*)param, MAX_FILE_PATH_LEN);
             }
 
-            _fp = fopen(buffer, "a");
+            snprintf(buffer, BUFSIZ, "%s", _file_path);
+            char* p = strrchr(buffer, '/');
+            if (NULL != p) {
+                *p = '\0';
+                if (0 != FileUtil::create_directories(buffer)) {
+                    return -1;
+                }
+            }
+
+            _fp = fopen(_file_path, "a");
             if (NULL == _fp) {
                 return errno;
             }
@@ -123,13 +116,30 @@ namespace bgcc {
             get_file_stat(state);
             _file_size = state.st_size;
 
-            gettimeofday(&_create_time, NULL);
+			TimeUtil::gettimeofday(&_create_time, NULL);
         }
+
+		snprintf(buffer, BUFSIZ, "%s", _file_path);
+		struct log_message_t log_message = {
+			BGCC_LOGLEVEL_NOTICE, 
+			"BGCC Version:"VERSION, "=ver=", 
+			__FILE__, 
+#ifndef _WIN32			
+			STR(__LINE__), 
+#else
+			itoa(__LINE__, buffer, 10),
+#endif
+            __FUNCTION__,
+			_create_time, bgcc::ThreadUtil::self_id()
+		};
+
+		write(log_message);
 
         return 0;
     }
 
     int32_t FileLogDevice::close(void* param) {
+        (void)param;
         if (true == is_opened()) {
             fclose(_fp);
             _fp = NULL;
@@ -142,24 +152,32 @@ namespace bgcc {
             return 0;
         }
 
-        char buffer[1024];
+        char buffer[1024] = {0};
         int32_t split_policy;
         int32_t nformated;
 
-        nformated = format_log_message(buffer, 1024, log_message);
+        nformated = format_log_message(buffer, 1022, log_message);
         split_policy = get_split_policy();
-
-        if (!is_opened()) {
-            return -1;
-        }
 
         {
             Guard<Mutex> guard(&_mutex);
 
+            if (!is_opened()) {
+                return -1;
+            }
+
             if (BGCC_LOG_SPLIT_POLICY_BY_TIME == split_policy) {
-                exec_time_split_policy();
+                if (exec_time_split_policy() != 0) {
+                    return -1;
+                }
             } else {
-                exec_size_split_policy(nformated);
+                if (exec_size_split_policy(nformated) != 0) {
+                    return -1;
+                }
+            }
+
+            if (!is_opened()) {
+                return -1;
             }
 
             fwrite(buffer, nformated, 1, _fp);
@@ -173,17 +191,18 @@ namespace bgcc {
 
     int32_t FileLogDevice::exec_time_split_policy() {
         struct timeval now;
-        gettimeofday(&now, NULL);
+		TimeUtil::gettimeofday(&now, NULL);
 
         if (now.tv_sec - _create_time.tv_sec >= get_max_record_interval()) {
             close();
 
             char buffer[BUFSIZ];
             snprintf(buffer, BUFSIZ, "%s%s", _file_path, create_filename_suffix().c_str());
-            if (rename(_file_path, buffer) != 0) {
+            rename(_file_path, buffer);
+
+            if (open() != 0) {
                 return -1;
             }
-            open();
         }
         return 0;
     }
@@ -200,10 +219,11 @@ namespace bgcc {
 
             char buffer[BUFSIZ];
             snprintf(buffer, BUFSIZ, "%s%s", _file_path, create_filename_suffix().c_str());
-            if (rename(_file_path, buffer) != 0) {
+            rename(_file_path, buffer);
+
+            if (open() != 0) {
                 return -1;
             }
-            open();
         }
         return 0;
     }
@@ -224,7 +244,8 @@ namespace bgcc {
 
     int32_t FileLogDevice::format_log_message(char* logbuf, int32_t logbufsiz, const struct log_message_t& log_message) {
         int32_t logbufused = 0;
-        const char *pc = _log_format;
+        const char* pc = _log_format;
+		const char* sep = NULL;
 
         while (*pc) {
             if ('%' != *pc) {
@@ -245,6 +266,13 @@ namespace bgcc {
                         break;
                     case 'F':
                         logbufused += StringUtil::xstrncpy(logbuf + logbufused, log_message.filename, logbufsiz - logbufused);
+                        break;
+					case 'f':
+						sep = strrchr(log_message.filename, FileUtil::SEP);
+                        logbufused += StringUtil::xstrncpy(logbuf + logbufused, (sep ? sep + 1 : log_message.filename), logbufsiz - logbufused);
+                        break;
+                    case 'U':
+                        logbufused += StringUtil::xstrncpy(logbuf + logbufused, log_message.func_name, logbufsiz - logbufused);
                         break;
                     case 'L':
                         logbufused += StringUtil::xstrncpy(logbuf + logbufused, log_message.line, logbufsiz - logbufused);

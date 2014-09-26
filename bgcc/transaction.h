@@ -15,7 +15,6 @@
 #include <string>               // for std::string
 #include <map>                  // for std::map
 
-#include "bgcc_stdint.h"
 #include "shareable.h"          // for super class
 #include "shared_pointer.h"      // for member _data
 #include "mutex.h"              // for member Mutex
@@ -68,7 +67,6 @@ namespace bgcc {
 
     class Transaction : public Shareable {
         private:
-            friend class IntervalClearRunner;
             Transaction();
         public:
             static Transaction* get_instance();
@@ -87,25 +85,7 @@ namespace bgcc {
              */
             TicketIdType getCurrentTicketId(ProtocolSharedPointer protocol, ThreadIdType threadId, std::string funcName);
 
-            /**
-             * @brief   根据事务号获取数据。函数内部将会申请新空间，用于存放数据。
-             * @param   ticketId 事务号
-             * @param   data [out] 用于指向数据存放位置
-             * @param   size [out] 用于接收数据区域大小
-             * @return  操作码。成功返回SUCCESS。
-             * @note    调用成功后，data须由调用者释放。
-             */
-            int32_t retrieveDataCopyByTicketId(TicketIdType ticketId, void** data, int32_t& size);
-
-            /**
-             * @brief   根据事务号存取数据。
-             * @param   ticketId 事务号
-             * @param   data 数据首地址
-             * @param   size 数据字节数
-             * @return  操作码。成功返回SUCCESS。
-             */
-            int32_t saveDataByTicketId(TicketIdType ticketId, void* data, int32_t size);
-
+            
         private:
             /**
              * @brief   根据protocol获取ip和port
@@ -137,24 +117,12 @@ namespace bgcc {
              */
             TicketIdType getNextTicketId();
 
-            /**
-             * @brief   周期性的清除过期数据
-             * @param   
-             * @return  
-             */
-            int32_t intervalClear();
-
         private:
             typedef std::map<TicketMapKeyType, TicketMapValueType> TicketKey2TicketValueMap;
-            typedef std::map<TicketIdType, SharedPointer<NBDataBuffer> > TicketId2DataMap;
-
             TicketKey2TicketValueMap _tickets;
-            TicketId2DataMap _data;
 
             TicketIdType _counter;
             Mutex _mutex;
-
-            SharedPointer<Thread> _intervalClearThread;
     };
 
 }

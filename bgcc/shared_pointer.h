@@ -11,7 +11,7 @@
 #ifndef _BGCC2_SHARED_POINTER_H_
 #define _BGCC2_SHARED_POINTER_H_
 
-#include <stdlib.h>
+#include "bgcc_common.h"
 
 namespace bgcc {
 

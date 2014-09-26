@@ -12,7 +12,6 @@
 #define _BGCC2_SHAREABLE_H_
 
 #include "mutex.h"
-#include "bgcc_stdint.h"
 
 namespace bgcc {
 

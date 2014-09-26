@@ -11,15 +11,9 @@
 #ifndef _BGCC2_LOG_DEVICE_H_
 #define _BGCC2_LOG_DEVICE_H_
 
-#include <stdio.h>      // for FILE
 #include <vector>
 
-#ifndef _WIN32
-#include <pthread.h>    // for pthread_mutex_t
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#endif
+#include "bgcc_common.h"
 #include "time_util.h"
 #include "mutex.h"
 
@@ -45,6 +39,7 @@ namespace bgcc {
         const char* loglevel_name; /** 日志级别名称，在格式串中用%N表示*/
         const char* filename;      /** 日志所在文件的文件名，在格式串中用%F表示*/
         const char* line;          /** 日志所在的行号，在格式串中用%L表示*/
+        const char* func_name;     /** 日志所在函数名*/
 		struct ::timeval tv;         /** 日志产生的日期时间，在格式串中用%D表示*/
         long long tid;       /** 线程ID，在格式串中用%T表示*/
     };
@@ -454,7 +449,6 @@ namespace bgcc {
         Mutex _mutex;
 		struct ::timeval _create_time;  /** 文件的创建时间, 用于按time日志分割策略, 采用此成员的原因是通过fstat得到的stat变量无法表示文件创建时间？*/
         off_t _file_size; /** 存放当前日志文件大小*/
-
     };
 }
 #endif // _BGCC2_LOG_DEVICE_H_

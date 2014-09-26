@@ -1,8 +1,8 @@
 CXX = g++
 SERVER = server
 CLIENT = client
-LOG = bgcc.log LXB.log
-CFLAGS = -Wall -L.. -lbgcc -lpthread
+LOG = log
+CFLAGS = -Wall -L.. -lbgcc -lssl -lpthread
 #CFLAGS = -Wall -L.. -lbgcc -lpthread -luuid -ftime-report -O0
 
 INC_PATH_PREFIX = ../../../output/include
@@ -12,7 +12,7 @@ INC_PATH += -I../output-cpp
 
 LD_PATH = -L../../../output/lib/
 
-SRC += ../output-cpp/math.cpp
+SRC += ../output-cpp/math_demo.cpp
 SRC += ../output-cpp/address.cpp
 
 all: $(CLIENT) $(SERVER)
@@ -25,4 +25,3 @@ $(CLIENT): client.cpp $(SRC)
 
 clean:
 	rm -rf $(CLIENT) $(SERVER) $(LOG)
-	killall server

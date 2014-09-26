@@ -1,4 +1,4 @@
-.PHONY: bgcc testsuite bidl2sl adapter bgcc_clean testsuite_clean
+.PHONY: bgcc testsuite bidl2sl adapter bgcc_clean testsuite_clean ssl
 
 ifdef JAVA_HOME_1_6_33
 export JAVA_HOME=$(JAVA_HOME_1_6_33)
@@ -10,13 +10,13 @@ else
 export ANT=ant
 endif
 
-all: bgcc bidl2sl adapter
+all: ssl bgcc bidl2sl 
 
 export OUTPUT_PATH=./output
 
-bgcc:
+bgcc: ssl
 	@echo
-	@echo
+	@echo 
 	@echo "make bgcc..."
 	@$(MAKE) -C bgcc
 	@echo "make bgcc ok."
@@ -43,7 +43,7 @@ adapter: bgcc
 	@echo
 	@echo
 
-clean: bgcc_clean bidl2sl_clean adapter_clean
+clean: bgcc_clean bidl2sl_clean
 	@rm -rf output
 
 bgcc_clean:

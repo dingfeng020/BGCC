@@ -56,57 +56,19 @@ namespace common {
         return false;
     }
 
-    int32_t Address::read(bgcc::SharedPointer<bgcc::IProtocol> proto) {
-        int32_t ret = 0;
-        std::string fname;
-        bgcc::DataTypeID ftype;
-        bgcc::FieldIDType fid;
-
-        ret = proto->readStructBegin(fname);
-        if (ret < 0) { return ret; }
-
-        while(true) {
-            ret = proto->readFieldBegin(fname, ftype, fid);
-            if(ret < 0) { return ret; }
-
-            if(ftype == bgcc::IDSTOP){
-                break;
-            }
-
-            switch(fid) {
-            case 1:
-                ret = proto->readString(city);
-                if (ret < 0) { return ret; }
-                break;
-            case 2:
-                ret = proto->readString(road);
-                if (ret < 0) { return ret; }
-                break;
-            case 3:
-                ret = proto->readInt32(number);
-                if (ret < 0) { return ret; }
-                break;
-            }
-            ret = proto->readFieldEnd();
-            if (ret < 0) { return ret; }
-        }
-
-        return proto->readStructEnd();
-    }
-
-    int32_t Address::read(bgcc::SharedPointer<bgcc::IProtocol> proto, char* request, int32_t request_len) {
+    int32_t Address::read(char *request, int32_t request_len, bgcc::SharedPointer<bgcc::IProtocol> proto){
         int32_t ret = 0;
         std::string fname;
         int32_t nread = 0;
         bgcc::DataTypeID ftype;
         bgcc::FieldIDType fid;
 
-        ret = proto->readStructBegin(request + nread, request_len - nread, fname);
+        ret = proto->readStructBegin(OFFSET_PTR(request, nread), request_len - nread, fname);
         if (ret < 0) { return ret; }
         nread += ret;
 
         while(true) {
-            ret = proto->readFieldBegin(request + nread, request_len - nread, fname, ftype, fid);
+            ret = proto->readFieldBegin(OFFSET_PTR(request, nread), request_len - nread, fname, ftype, fid);
             if(ret < 0) { return ret; }
             nread += ret;
 
@@ -116,17 +78,17 @@ namespace common {
 
             switch(fid) {
             case 1:
-                ret = proto->readString(request + nread, request_len - nread, city);
+                ret = proto->readString(OFFSET_PTR(request, nread), request_len - nread, city);
                 if (ret < 0) { return ret; }
                 nread += ret;
                 break;
             case 2:
-                ret = proto->readString(request + nread, request_len - nread, road);
+                ret = proto->readString(OFFSET_PTR(request, nread), request_len - nread, road);
                 if (ret < 0) { return ret; }
                 nread += ret;
                 break;
             case 3:
-                ret = proto->readInt32(request + nread, request_len - nread, number);
+                ret = proto->readInt32(OFFSET_PTR(request, nread), request_len - nread, number);
                 if (ret < 0) { return ret; }
                 nread += ret;
                 break;

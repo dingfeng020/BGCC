@@ -11,7 +11,6 @@
 #ifndef _BGCC_ITRANSPORT_H_
 #define _BGCC_ITRANSPORT_H_
 
-#include "bgcc_stdint.h"
 #include "shareable.h"
 
 namespace bgcc {
@@ -63,6 +62,8 @@ namespace bgcc {
          * @return  操作成功返回true；否则返回false。
          */
         virtual bool peek() const = 0;
+
+		virtual TRANSPORTID id() const =0;
 
     };
 

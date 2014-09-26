@@ -15,9 +15,8 @@
 #include <string>   // for std::string
 #include <sstream>  // for std::stringstream
 
-#include <string.h>
-#include <stdio.h>
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
+#include "mutex.h"
 
 namespace bgcc {
 
@@ -359,20 +358,6 @@ namespace bgcc {
          * @date    2012年06月12日 14时32分41秒
          */
         static std::string rand_string();
-    private:
-        /**
-         * @brief rtrim 去除字符串右端空白
-         *
-         * @param str C风格字符串
-         * @param len C风格字符串长度
-         *
-         * @return 去除右端空白的字符串
-         * @see
-         * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
-         * @date    2012年05月31日 16时23分34秒
-         */
-        static std::string rtrim(const char* str, int32_t len);
 
         /**
          * @brief str2integer 将数字字符串转换成为T型的数字
@@ -412,6 +397,28 @@ namespace bgcc {
 
                 return ret;
             }
+
+        template <typename T>
+        static std::string integer2str(const T& number) {
+            std::stringstream ss;
+            ss << number;
+            return ss.str();
+        }
+    private:
+        /**
+         * @brief rtrim 去除字符串右端空白
+         *
+         * @param str C风格字符串
+         * @param len C风格字符串长度
+         *
+         * @return 去除右端空白的字符串
+         * @see
+         * @note
+         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @date    2012年05月31日 16时23分34秒
+         */
+        static std::string rtrim(const char* str, int32_t len);
+		static Mutex stMutex;
     }; // end of class StringUtil
 
 }

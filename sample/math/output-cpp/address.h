@@ -20,8 +20,7 @@ namespace common {
         bool operator==(const Address& rhs) const;
         bool operator!=(const Address& rhs) const;
         bool operator< (const Address& rhs) const;
-        int32_t read(bgcc::SharedPointer<bgcc::IProtocol> proto);
-        int32_t read(bgcc::SharedPointer<bgcc::IProtocol> proto, char* request, int32_t request_len);
+        int32_t read(char *request, int32_t request_len, bgcc::SharedPointer<bgcc::IProtocol> proto);
         int32_t write(bgcc::SharedPointer<bgcc::IProtocol> proto) const;
     };
 

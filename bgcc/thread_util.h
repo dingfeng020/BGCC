@@ -11,12 +11,7 @@
 #ifndef _BGCC2_THREAD_UTIL_H_
 #define _BGCC2_THREAD_UTIL_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <pthread.h>
-#endif
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 namespace bgcc {
 	class ThreadUtil {

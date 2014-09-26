@@ -13,12 +13,7 @@
 
 #ifndef _WIN32
 
-#include <sys/epoll.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#define MAXNFD 10000
+#include "bgcc_common.h"
 
 namespace bgcc {
 
@@ -68,16 +63,20 @@ namespace bgcc {
          * @author  liuxupeng(liuxupeng@baidu.com)
          * @date    2012年06月14日 20时04分59秒
          */
-        Event() :
-            fd(-1),
-            mask(EVENT_NONE),
-            read_cb(NULL),
-            write_cb(NULL),
-            error_cb(NULL),
-            read_cb_arg(NULL),
-            write_cb_arg(NULL),
-            error_cb_arg(NULL) {
+        Event() {
+			Reset();
             }
+
+		void Reset(){
+			fd=INVALID_SOCKET;
+			mask=EVENT_NONE;
+			read_cb=NULL;
+			write_cb=NULL;
+			error_cb=NULL;	
+			read_cb_arg=NULL;
+			write_cb_arg=NULL;
+			error_cb_arg=NULL;	
+		}
 
         int32_t fd; /** 事件对应的fd*/
         uint32_t mask;  /** 事件标识位*/
@@ -135,7 +134,7 @@ namespace bgcc {
         };
     private:
         state_t _state;
-        mutable bool _stopped;
+        volatile bool _stopped;
         int32_t _epfd;
         struct epoll_event _ep_events[MAXNFD];
         Event _events[MAXNFD];

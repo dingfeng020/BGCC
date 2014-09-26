@@ -11,14 +11,7 @@
 #ifndef _BGCC_MUTEX_H_
 #define _BGCC_MUTEX_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <pthread.h>
-#include <limits.h>
-#endif
-
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 #ifdef _WIN32
 #define BGCC_MUTEX_WAIT_INFINITE INFINITE

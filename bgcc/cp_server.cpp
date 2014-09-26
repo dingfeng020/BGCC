@@ -10,12 +10,10 @@
 
 #ifdef _WIN32
 
-#include <winsock2.h>
-#include <Ws2tcpip.h>
-#include <string.h>
 #include <sstream>
 #include <iostream>
 
+#include "bgcc_common.h"
 #include "time_util.h"
 #include "cp_server.h"
 #include "binary_protocol.h"
@@ -223,7 +221,7 @@ namespace bgcc {
 		return 0;
 	}
 
-	static void enroll_proxy(const std::string& proxy_name, socket_t fd) {
+	static void enroll_proxy(const std::string& proxy_name, SOCKET fd) {
 		BGCC_TRACE("bgcc", "enroll_proxy name %s, %d", proxy_name.c_str(), fd);
         bgcc::ConnectionManager::get_instance()->enroll(proxy_name, fd);
     }
@@ -407,22 +405,11 @@ namespace bgcc {
 	}
 
 	int32_t CpServer::init() {
-#ifndef _WIN32
-        signal(SIGPIPE, SIG_IGN);
-#endif
 		if (S_UNINIT != _state) {
 			return E_BGCC_SERVER_ALREADY_INIT;
 		}
 
-		WSADATA wsaData;
-
-		int ret;
-		ret = WSAStartup(MAKEWORD(2,2), &wsaData);
-		if (NO_ERROR != ret) {
-			return -1;
-		}
-
-		ret = init_iocp();
+		int32_t ret = init_iocp();
 		if (0 != ret) {
 			return -1;
 		}
@@ -459,8 +446,17 @@ namespace bgcc {
 		ZeroMemory((char *)&ServerAddress, sizeof(ServerAddress));
 
 		ServerAddress.sin_family = AF_INET;
-		ServerAddress.sin_addr.s_addr = inet_addr(_node.c_str());
+		if(_node.empty()){
+			ServerAddress.sin_addr.s_addr = INADDR_ANY;
+		}
+		else{
+			ServerAddress.sin_addr.s_addr = inet_addr(_node.c_str());
+		}
 		ServerAddress.sin_port = htons(_port);
+		
+		SocketTool::set_reuseaddr(_listen_socket, 1);
+		SocketTool::set_keepalive(_listen_socket, 1);
+		SocketTool::set_tcpnodealy(_listen_socket, 1);
 
 		if (SOCKET_ERROR == bind(_listen_socket, (struct sockaddr *) &ServerAddress, sizeof(ServerAddress))) {
 			closesocket(_listen_socket);

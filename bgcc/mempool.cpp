@@ -9,7 +9,6 @@
   *********************************************************************/
 
 #include <utility>
-#include <stdlib.h>
 #include "mempool.h"
 #include "guard.h"
 
@@ -70,19 +69,21 @@ namespace bgcc {
         return ret;
     }
 
-    void Mempool::put_mem_block(void* mem_block) {
-        if (NULL == mem_block) {
+    void Mempool::put_mem_block(void** mem_block) {
+        if (!mem_block || !(*mem_block)) {
             return;
         }
 
-        int32_t* pi = (int32_t*)((char*)mem_block - 4);
+        int32_t* pi = (int32_t*)((char*)(*mem_block) - 4);
         if (*pi > 1024) {
             free(pi);
         }
         else {
             Guard<Mutex> guard(&_mutex);
-            _mem_blocks[*pi].push_back(mem_block);
+            _mem_blocks[*pi].push_back(*mem_block);
         }
+			
+		*mem_block=NULL;
     }
 
     int32_t Mempool::adjust_size(int32_t size) {

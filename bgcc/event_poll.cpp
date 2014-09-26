@@ -10,13 +10,16 @@
 
 #ifndef _WIN32
 
-#include <string.h>
 #include "event_poll.h"
+#include "socket_util.h"
+#include "log.h"
+#include "bgcc_error.h"
 
 namespace bgcc {
 
     EventLoop::EventLoop() :
         _state(S_UNINIT), _stopped(true), _epfd(-1) {
+			memset(_ep_events, 0, sizeof(_ep_events));
         }
 
     int32_t EventLoop::create() {
@@ -36,7 +39,7 @@ namespace bgcc {
     }
 
     int32_t EventLoop::destroy() {
-        close(_epfd);
+        SocketTool::close(_epfd);
         _state = S_DESTROYED;
         return 0;
     }
@@ -89,7 +92,21 @@ namespace bgcc {
             _events[fd].error_cb_arg = event->error_cb_arg;
         }
 
-        return epoll_ctl(_epfd, op, fd, &ee);
+        if(SocketTool::set_nonblock(fd, 1)!=0){
+            BGCC_WARN("bgcc", "Before Add fd=%d to Epoll Set To Nonblock Failed(%d)",
+                    fd, BgccGetLastError());
+            return -1;
+        }
+
+        int32_t ret=epoll_ctl(_epfd, op, fd, &ee);
+        if(0!=ret&&EPOLL_CTL_ADD==op){
+            if(SocketTool::set_nonblock(fd, 0)!=0){
+                BGCC_WARN("bgcc", "Add fd=%d to Epoll Failed Set To Block Failed(%d)",
+                    fd, BgccGetLastError());
+            }
+        }
+
+        return ret;
     }
 
     int32_t EventLoop::del_event(Event* event) {
@@ -116,9 +133,17 @@ namespace bgcc {
             op = EPOLL_CTL_MOD;
         } else {
             op = EPOLL_CTL_DEL;
+//			_events[fd].Reset();
         }
 
-        return epoll_ctl(_epfd, op, fd, &ee);
+        int32_t ret=epoll_ctl(_epfd, op, fd, &ee);
+        if(EPOLL_CTL_DEL==op&&0==ret){
+            if(SocketTool::set_nonblock(fd, 0)!=0){
+                BGCC_WARN("bgcc", "Del fd=%d From Epoll Set To Block Failed(%d)",
+                        fd, BgccGetLastError());
+            }
+        }
+        return ret;
     }
 
     int32_t EventLoop::loop() {
@@ -130,7 +155,7 @@ namespace bgcc {
 
         while (!_stopped) {
             int32_t numevents;
-            numevents = epoll_wait(_epfd, _ep_events, MAXNFD, 10);
+            while((numevents=epoll_wait(_epfd, _ep_events, MAXNFD, 200))==SOCKET_ERROR&&EINTR==errno);
 
             if (numevents > 0) {
                 int j;

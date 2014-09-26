@@ -11,21 +11,12 @@
 #ifndef _BGCC_SOCKET_BASE_H_
 #define _BGCC_SOCKET_BASE_H_
 
-#ifdef _WIN32 
-#include <windows.h>
-#define BGCC_EINTR  WSAEINTR
-#else 
-typedef int32_t SOCKET;
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define BGCC_EINTR  EINTR
-#endif
-
-#include "bgcc_stdint.h"
 #include "shareable.h"
 #include "transport.h"
 #include "mutex.h"
 #include "guard.h"
+
+#include "socket_util.h"
 
 namespace bgcc {
 
@@ -43,12 +34,8 @@ namespace bgcc {
          * @return  操作成功返回0；否则返回错误码。
          */
         virtual int32_t open();
-
-        /**
-         * @brief   关闭连接并初始化，windows下需要进行特殊处理
-         * @return  操作成功返回0；否则返回错误码。
-         */
-        virtual int32_t close();
+		
+		virtual int32_t close();
 
         /**
          * @brief   读取数据
@@ -78,59 +65,16 @@ namespace bgcc {
          */
         virtual bool peek() const;
 
-        /**
-         * @brief   设置socket超时时间
-         * @param   seconds 超时时长
-         * @param   optname 表示发送还是接受
-         * @return  操作成功返回0；否则返回错误码。
-         */
-        int32_t set_timeout(int32_t seconds, int32_t optname);
-        /**
-         * @brief   设置发送超时时长
-         * @param   buffer 进行recv数据的存储空间
-         * @return  操作成功返回0；否则返回错误码。
-         */
-        int32_t set_send_timeout(int32_t seconds);
+		TRANSPORTID id() const{
+			return _socket;
+		}
 
-        /**
-         * @brief   设置接收超时时长
-         * @param   buffer 进行recv数据的存储空间
-         * @return  操作成功返回0；否则返回错误码。
-         */
-        int32_t set_recv_timeout(int32_t second);
-
-        SOCKET get_socket() const {
-            return _socket;
-        }
-    protected:
+		protected:
         Socket();
         /**全局socket编号*/
         SOCKET _socket;
         int32_t _send_timeout;
         int32_t _recv_timeout;
-
-        /**超时时长*/
-        //int32_t _send_timeout;
-
-        /**接收超时时长*/
-        // int32_t _recv_timeout;
-
-    protected:
-        /**
-         * @brief   初始化主要为了完成对Winsock DLL的加载。
-         * @return  成功逆初始化返回0；否则返回Windows错误码。
-         */
-        int32_t init();
-
-        /**
-         * @brief   逆初始化主要完成对Winsock DLL的卸载。
-         * @return  操作成功返回0；否则返回错误码。
-         */
-        int32_t uninit();
-
-    private:
-        static int32_t _nofSockets;
-        static Mutex _mutex;
     };
 }
 

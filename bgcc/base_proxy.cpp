@@ -8,147 +8,22 @@
   *      license.txt
   *********************************************************************/
 
-#include <signal.h>
-#ifndef _WIN32
-#include <sys/epoll.h>
-#endif
+#include <sstream>
+#include "bgcc_common.h"
 #include "base_proxy.h"
 #include "protocol.h"
 #include "log.h"
 #include "client_socket.h"
 #include "string_util.h"
 #include "thread_util.h"
+#include "transaction.h"
+#include "callback_task.h"
 
-namespace bgcc {
-
-    void* call_back_thread_func(void* param) {
-        BGCC_TRACE("bgcc", "enroll self");
-
-
-        callback_thread_arg_t* arg = (callback_thread_arg_t*)param;
-        std::string proxy_name = arg->proxy_name;
-        std::string server_ip = arg->server_ip;
-        int32_t server_port = arg->server_port;
-        ServiceManager* service_manager = arg->service_manager;
-        Semaphore* sema = arg->sema;
-
-        SharedPointer<ClientSocket> connect;
-        SharedPointer<BinaryProtocol> proto;
-
-#ifndef _WIN32
-        int32_t ep = epoll_create(1);
-        struct epoll_event ee;
-        struct epoll_event revents[1];
-
-#endif
-RECON:
-        sema->signal();
-        connect = SharedPointer<ClientSocket>(
-                new(std::nothrow) ClientSocket(server_ip, server_port));
-
-        connect->open();
-
-        connect->set_recv_timeout(60*60*24*30);
-        proto = SharedPointer<BinaryProtocol>(
-                new(std::nothrow) BinaryProtocol(connect));
-        int32_t ret = 0;
-
-        ret = proto->writeMessageBegin("bgcc::BaseProcessor_enroll", "__enroll", bgcc::CALL, 0);
-        if (ret < 0) {
-            bgcc::TimeUtil::safe_sleep_s(1);
-            goto RECON;
-        }
-        ret = proto->writeString(proxy_name);
-        if (ret < 0) {
-            bgcc::TimeUtil::safe_sleep_s(1);
-            goto RECON;
-        }
-        ret = proto->writeMessageEnd();
-        if (ret < 0) {
-            bgcc::TimeUtil::safe_sleep_s(1);
-            goto RECON;
-        }
-#ifndef _WIN32
-        ee.data.fd = connect->get_socket();
-        ee.events = EPOLLIN;
-        epoll_ctl(ep, EPOLL_CTL_ADD, connect->get_socket(), &ee);
-#endif
-        while (true) {
-#ifndef _WIN32
-            int32_t nevent = epoll_wait(ep, revents, 1, -1);
-            BGCC_TRACE("bgcc", "epoll_wait return %d", nevent);
-            if (nevent >= 1) {
-#endif
-                char buffer[BUFSIZ];
-                int32_t xxret;
-                xxret = connect->read(buffer, 20);
-                BGCC_TRACE("bgcc", "ret value read %d", xxret);
-                if (0 != xxret) {
-#ifndef _WIN32
-                    epoll_ctl(ep, EPOLL_CTL_DEL, connect->get_socket(), &ee);
-#endif
-                    bgcc::TimeUtil::safe_sleep_s(1);
-                    goto RECON;
-                }
-                int32_t body_len = (int32_t)ntohl(*(uint32_t*)(buffer +16));
-                BGCC_TRACE("bgcc", "body size %d", body_len);
-                char body[BUFSIZ];
-                xxret = connect->read(body, body_len);
-                BGCC_TRACE("bgcc", "body ret value read %d", xxret);
-                if (0 != xxret) {
-#ifndef _WIN32
-                    epoll_ctl(ep, EPOLL_CTL_DEL, connect->get_socket(), &ee);
-#endif
-                    bgcc::TimeUtil::safe_sleep_s(1);
-                    goto RECON;
-                }
-                int32_t processor_name_len = (int32_t)ntohl(*(uint32_t*)(body));
-                std::string processor_name(body + 4, processor_name_len);
-                SharedPointer<IProcessor> processor =
-                    service_manager->get_service(processor_name);
-                if (processor.is_valid()) {
-                    processor->process(
-                            body + 4 + processor_name_len,
-                            body_len - 4 - processor_name_len,
-                            proto);
-                }
-
-                /* added for handling unexist service*/
-                else {
-                    processor = service_manager->get_service("._baseservice_2012");
-                    if (processor.is_valid()) {
-                        SharedPointer<BinaryProtocol> bp(new BinaryProtocol(SharedPointer<ITransport>(NULL)));
-
-                        bp->writeMessageBegin("xx", "__service_not_found", bgcc::CALL, 0);
-                        bp->writeInt32(0);
-                        bp->writeString("__service_not_found");
-                        bp->writeBool(false);
-
-                        void* data = NULL;
-                        int32_t head_body_size;
-                        NBDataBuffer* db = bp->get_data_buffer();
-                        db->get_data(&data, head_body_size);
-                        processor->process(
-                                (char*)data + 20 + 4 + 2,
-                                head_body_size - 20 - 4 - 2,
-                                proto);
-
-                    }
-                }
-#ifndef _WIN32
-            }
-#endif
-        }
-
-//#ifdef _WIN32
-        return NULL;
-//#endif
-
-    }
-
+namespace bgcc { 
     BaseProxy::BaseProxy(
             ServerInfo serverinfo,
-            int32_t nprotocols,
+            int32_t maxConn,
+            bool initConsNow,
             ServiceManager* service_manager,
             int32_t tryCount,
             int32_t tryInterval)
@@ -156,58 +31,64 @@ RECON:
         _service_manager(service_manager)
     {
         _name = StringUtil::generate_uuid();
-        _nProtocols = nprotocols;
+        _nMaxConn = maxConn;
         _tryCount = tryCount;
         _tryInterval = tryInterval;
-
-        init();
+		_seqid=~0;
+		_use_existing_socket=false;
+#ifndef _WIN32
+        signal(SIGPIPE, SIG_IGN);
+#endif
+        if(initConsNow){
+            init(INIT_ALL);
+        }
+		else{
+			init(INIT_CALLBACK);
+		}
     }
 
     BaseProxy::~BaseProxy() {
         uninit();
     }
 
-    int32_t BaseProxy::init() {
+    int32_t BaseProxy::init(INIT_TYPE type) {
         int32_t ncreated = 0;
 
-#ifndef _WIN32
-        signal(SIGPIPE, SIG_IGN);
-#endif
-
-        if (_service_manager) {
-            struct callback_thread_arg_t arg;
-            arg.proxy_name = get_name();
-            arg.server_ip = _serverinfo.getIP();
-            arg.server_port = _serverinfo.getPort();
-            arg.service_manager = _service_manager;
-            arg.sema = new Semaphore;
-
-            _callback_thread = SharedPointer<Thread>(
-                    new Thread(call_back_thread_func, &arg));
-            if (_callback_thread.is_valid()) {
-                BGCC_TRACE("bgcc", "before thread start");
-                _callback_thread->start();
-                BGCC_TRACE("bgcc", "before sema");
-                arg.sema->wait();
-                BGCC_TRACE("bgcc", "after sema");
-            }
+        if (_service_manager && (INIT_CALLBACK&type)) {
+			if(_selector.Create()==0){
+				_callback_thread = SharedPointer<Thread>(
+                    new Thread( SharedPointer<CallBackTask>(
+							new CallBackTask(_serverinfo.getIP(), _serverinfo.getPort(),
+								_name, _service_manager, &_selector))));
+	            if (_callback_thread.is_valid()) {
+		            BGCC_TRACE("bgcc", "Before Start proxy_name=%s Callback Thread",
+						_name.c_str());
+			        _callback_thread->start();
+				}
+			}
+			else{
+				BGCC_WARN("bgcc", "Selector Create Failed, CallBackTask Start Failed");
+			}
         }
 
-        for (int32_t i = 0; i < _nProtocols; ++i) {
-            SharedPointer<ClientSocket> connect(
+		if((type&INIT_CALL)&&!_use_existing_socket){
+			for (int32_t i = 0; i < _nMaxConn; ++i) {
+				SharedPointer<ClientSocket> connect(
                     new(std::nothrow) ClientSocket(_serverinfo.getIP(), _serverinfo.getPort()));
-            if (connect.is_valid() && connect->open() == 0) {
-                SharedPointer<BinaryProtocol> proto(
+	            if (connect.is_valid() && connect->open() == 0) {
+		            SharedPointer<BinaryProtocol> proto(
                         new(std::nothrow) BinaryProtocol(connect));
-                if (proto.is_valid()) {
-                    if (_protocols.put(proto) == 0) {
-                        ++ncreated;
-                    }
-                }
-            }
-        }
-        BGCC_TRACE("bgcc", "Proxy %s create %d conntections to server(%s:%d)",
+			        if (proto.is_valid()) {
+				        if (_protocols.put(proto) == 0) {
+					        ++ncreated;
+						}
+	                }
+		        }
+			}
+        
+			BGCC_TRACE("bgcc", "Proxy %s create %d conntections to server(%s:%d)",
                 _name.c_str(), ncreated, _serverinfo.getIP().c_str(), _serverinfo.getPort());
+		}
 
         return ncreated;
     }
@@ -215,54 +96,39 @@ RECON:
     int32_t BaseProxy::uninit() {
         if (_callback_thread.is_valid()) {
             _callback_thread->stop();
+            _callback_thread->join();
         }
+
+		_selector.Destroy();
+
         return 0;
     }
 
     int32_t BaseProxy::__get_ticket_id(
             const std::string& fun,
             int32_t& ticket_id,
-            bool belast,
-            SharedPointer<IProtocol> __iprot,
+            bool ,
+            SharedPointer<IProtocol> ,
             SharedPointer<IProtocol> __oprot)
     {
-        int32_t ret = 0;
-        int32_t tid = (int32_t)bgcc::ThreadUtil::self_id();
-        std::string fname;
-        MsgTypeID msg_type;
-        int32_t msg_seqid;
-        ret = __oprot->writeMessageBegin(_whoami.c_str(), "__get_ticket_id", bgcc::CALL, 0);
-        if (ret < 0) { goto end; }
-        ret = __oprot->writeInt32(tid);
-        if (ret < 0) { goto end; }
-        ret = __oprot->writeString(fun);
-        if (ret < 0) { goto end; }
-        ret = __oprot->writeBool(belast);
-        if (ret < 0) { goto end; }
-        __oprot->writeMessageEnd();
+		ticket_id=Transaction::get_instance()->getTicketId(__oprot,(ThreadIdType)ThreadUtil::self_id(),fun);
+        set_errno(0);
+		return 0;
+    }
 
-        ret = __iprot->readMessageBegin(fname, msg_type, msg_seqid);
-        if (ret < 0) { 
-            BGCC_TRACE("bgcc", "read message begin get ticket id");
-            goto end;}
-            if (msg_type == bgcc::EXCEPTION) {
-                int32_t remote_code = 0;
-                ret = __iprot->readInt32(remote_code);
-                if(ret >= 0) { ret = remote_code; }
-                goto end;
-            }
-            if (msg_type != bgcc::REPLY || fname != "__get_ticket_id") {
-                ret = __iprot->skip(bgcc::IDINT32);
-                if(ret < 0) { goto end;} 
-                ret = __iprot->readMessageEnd();
-                if(ret < 0) { goto end;} 
-            }
-            ret = __iprot->readInt32(ticket_id);
-            BGCC_TRACE("bgcc", "ticket id %d", ticket_id);
-            __iprot->readMessageEnd();
-end:
-            set_errno(ret);
-            return ret;
+    /**
+     * @brief 手动关闭连接
+     *
+     * @return  void 
+     * @retval   
+     * @see 
+     * @note 
+     * @author zhangyue
+     * @date 2013/01/05 15:07:28
+    **/
+    void BaseProxy::close()
+    {
+        _protocols.clear();
     }
 
     std::string BaseProxy::get_name() const {
@@ -281,4 +147,128 @@ end:
         _whoami = whoami;
     }
 
+	bool BaseProxy::set_property(const std::string &key, int32_t val){
+		std::ostringstream os;
+		os<<val;
+
+		if(set_property(key, os.str())){
+			if(key==PROXY_HB_TIMEOUT){
+				_selector.UpdateHBTimeout(val);
+			}
+			return true;
+		}
+		
+		return false;
+	}
+
+	bool BaseProxy::set_property(const std::string &key, const std::string& val){
+		if(!is_support(key)){
+			return false;
+		}
+
+		_property[key]=val;
+
+		return true;
+	}
+	
+	bool BaseProxy::get_property(const std::string &key, int32_t &val) const{
+		std::string ret;
+		if(get_property(key, ret)){
+			val=atoi(ret.c_str());
+			return true;
+		}
+
+		return false;
+	}
+	
+	bool BaseProxy::get_property(const std::string &key, std::string &val) const{
+		if(!is_support(key)){
+			return false;
+		}
+
+		std::map<std::string, std::string>::const_iterator it=_property.find(key);
+		if(it!=_property.end()){
+			val=it->second;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool BaseProxy::is_support(const std::string &key) const {
+		return (key==PROXY_SEND_TIMEOUT)
+			||(key==PROXY_RECV_TIMEOUT
+			||(key==PROXY_HB_TIMEOUT));
+	}
+	
+	SharedPointer<ConnInfo> BaseProxy::create_Conn(){
+        SharedPointer<bgcc::ClientSocket> client = 
+			SharedPointer<bgcc::ClientSocket>(
+					new ClientSocket(_serverinfo.getIP(),_serverinfo.getPort()));
+        
+		if (client.is_valid()) {
+            if(client->open()==0){
+                SharedPointer<BinaryProtocol> prot = 
+					SharedPointer<BinaryProtocol>(new bgcc::BinaryProtocol(client));
+                if(prot.is_valid()&& prot->getTransport().is_valid()){
+                    int32_t tm=0;
+                    if(get_property(PROXY_SEND_TIMEOUT, tm)){
+                        SocketTool::set_sndtimeout(prot->getTransport()->id(), tm);
+                    }
+                    if(get_property(PROXY_RECV_TIMEOUT, tm)){
+                        SocketTool::set_rcvtimeout(prot->getTransport()->id(), tm);
+                    }
+                }
+
+                return SharedPointer<ConnInfo>(new ConnInfo(prot));
+            }
+        }
+        return SharedPointer<ConnInfo>(NULL);
+    }
+
+    void BaseProxy::free_Conn(SharedPointer<ConnInfo> conn, int32_t err){
+        if(_use_existing_socket){
+            ConnectionManager::get_instance()->put_connection(_name, conn, (err!=0));
+        }
+        else if(!err && _protocols.put(conn->proto)!=0) {
+            BGCC_WARN("bgcc", "free conn failed");
+        }
+    }
+    
+	SharedPointer<ConnInfo> BaseProxy::get_Conn(){
+        SharedPointer<ConnInfo> conn;
+        if(_use_existing_socket){
+            conn = ConnectionManager::get_instance()->get_connection(_name);
+        }
+        else{
+            SharedPointer<BinaryProtocol> prot;
+			bool ok=false;
+
+			while(_protocols.get(prot, 10)==0&&!ok){ //deal CLOSE_WAIT connect 
+				if(prot.is_valid()&&prot->getTransport().is_valid()){
+					if((ok=SocketTool::is_ok(prot->getTransport()->id()))){
+						int32_t tm=0;
+	                    if(get_property(PROXY_SEND_TIMEOUT, tm)){
+		                    SocketTool::set_sndtimeout(prot->getTransport()->id(), tm);
+			            }
+				        if(get_property(PROXY_RECV_TIMEOUT, tm)){
+					        SocketTool::set_rcvtimeout(prot->getTransport()->id(), tm);
+						}
+
+						conn=SharedPointer<ConnInfo>(new(std::nothrow)ConnInfo(prot));
+						break;
+					}
+				}
+			}
+
+            if(!ok){
+                conn=create_Conn();
+            }
+        }
+        return conn;
+    }
+
+	const char * BaseProxy::PROXY_SEND_TIMEOUT="proxy.send.timeout";
+	const char * BaseProxy::PROXY_RECV_TIMEOUT="proxy.recv.timeout";
+	const char * BaseProxy::PROXY_HB_TIMEOUT="proxy.heartbeat.timeout";
 } // namespace

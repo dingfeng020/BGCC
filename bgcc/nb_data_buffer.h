@@ -12,8 +12,9 @@
 #define _BGCC2_NB_DATA_H_
 
 #include <string>
+
 #include "shareable.h"
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 namespace bgcc {
 

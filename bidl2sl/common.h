@@ -83,6 +83,7 @@ extern int yylineno;
 extern int yyleng;
 
 extern std::string g_cur_bidl_file_name;
+extern BidlNamespace* g_cur_bidl_namespace;
 
 #if _BIDL_DEBUG > 0
 extern void output_namespace(BidlType* bt, int level);
@@ -92,7 +93,22 @@ extern void output_struct_field(BidlType* bt, int level);
 extern void output_enum_field(BidlType* ef, int level, bool last);
 extern void output_element(BidlType* bt, int level);
 extern void output_source(BidlNamespace* ns);
-extern BidlNamespace* g_cur_bidl_namespace;
+#endif
+
+#ifdef _WIN32
+#include <direct.h>
+#include <io.h>
+#define MKDIR(DIRNAME) _mkdir(DIRNAME)
+#define ACCESS(FILENAME, MODE) _access(FILENAME, MODE)
+#define F_OK 0
+
+#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
+#define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
+#endif
+
+#else
+#define MKDIR(DIRNAME) mkdir(DIRNAME, 0777)
+#define ACCESS(FILENAME, MODE) access(FILENAME, MODE)
 #endif
 #endif // BIDL_COMMON_H
 

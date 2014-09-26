@@ -5,8 +5,8 @@ CLIENT = client
 
 OUTPUT_PATH=output
 
-CXXFLAGS = -Wall -g -W -Werror -pipe -Wno-unused-parameter -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare
-LDFLAGS= -lbgcc -lpthread
+CXXFLAGS = -Wall -g -W -Werror -pipe -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare
+LDFLAGS= -lbgcc -lssl -lpthread
 
 INC_PATH = -I../../output/include
 LD_PATH = -L../../output/lib/
@@ -28,7 +28,7 @@ all:$(CLIENT) $(SERVER)
 	if [ ! -d $(OUTPUT_PATH) ]; then mkdir -p $(OUTPUT_PATH); fi
 	cp $(SERVER) $(OUTPUT_PATH)/
 	cp $(CLIENT) $(OUTPUT_PATH)/
-	cp *.cfg $(OUTPUT_PATH)/
+	cp *.conf $(OUTPUT_PATH)/
 
 
 $(SERVER): $(BIDL_OBJS) $(SERVER_OBJS)
@@ -50,5 +50,6 @@ $(BIDL_SOURCES):
 	$(BIDL2SL) -g cpp $(BIDL_FILES)
 
 clean:
-	rm -fr $(OUTPUT_PATH)
-	rm -fr $(SERVER) $(CLIENT) $(SERVER_OBJS) $(CLIENT_OBJS) output-cpp *.log
+	if [ -d $(OUTPUT_PATH) ]; then rm -rf $(OUTPUT_PATH)/*; fi
+	if [ -d output-cpp ]; then rm -rf output-cpp/*; fi
+	rm -fr $(SERVER) $(CLIENT) $(SERVER_OBJS) $(CLIENT_OBJS) *.log*

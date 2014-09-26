@@ -11,14 +11,7 @@
 #ifndef _BGCC2_SEMAPHORE_H_
 #define _BGCC2_SEMAPHORE_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <semaphore.h>
-#include <limits.h>
-#endif
-
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 #ifdef _WIN32
 #define BGCC_SEMA_WAIT_INFINITE INFINITE
@@ -71,6 +64,7 @@ namespace bgcc {
          * @date    2012年05月30日 14时20分33秒
          */
         int32_t wait(uint32_t millisecond = BGCC_SEMA_WAIT_INFINITE);
+        bool try_wait();
 
         /**
          * @brief signal 触发信号量

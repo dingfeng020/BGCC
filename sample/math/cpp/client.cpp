@@ -23,15 +23,15 @@
 #include <bgcc.h>
 using namespace bgcc;
 
-#include "math.h"
+#include <math_demo.h>
 using namespace math;
 using namespace common;
 
 int main()
 {
 
-	log_open("bgcc.cfg");
-	ServerInfo serverInfo("localhost", 8503);
+	log_open("client.conf");
+	ServerInfo serverInfo("localhost", 8321);
 	MathProxy proxy(serverInfo);
 
 	proxy.ping();

@@ -11,15 +11,12 @@
 #ifndef _BGCC2_ERROR_H_
 #define _BGCC2_ERROR_H_
 
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 #ifdef _WIN32 
-#include <Windows.h>
 #define BgccGetLastError() GetLastError()
 #define BgccSockGetLastError() WSAGetLastError()
 #else
-#include <errno.h>
-#include <stdlib.h>
 #define BgccGetLastError() errno
 #define BgccSockGetLastError() errno
 #endif

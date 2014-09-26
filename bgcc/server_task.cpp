@@ -9,35 +9,52 @@
   *********************************************************************/
 
 #include <iostream>
-#ifndef _WIN32
-#include <netinet/in.h>
-#endif
+
 #include "server_task.h"
 #include "mempool.h"
 #include "log.h"
+#include "binary_protocol.h"
+#include "socket_util.h"
+#include "service_framework.h"
 
 namespace bgcc {
 
     ServerTask::ServerTask(
-            SharedPointer<IProcessor> processor,
-            void* request,
-            int32_t request_len,
-            SharedPointer<IProtocol> out) :
-        _processor(processor), 
-        _request(request),
-        _request_len(request_len),
-        _out(out) {
-        }
+            SharedPointer<IProcessor> processor, void* request, int32_t request_len, 
+			SharedPointer<IProtocol> out, void *asso
+            ) : _processor(processor), _request(request), _request_len(request_len), 
+				_out(out), _asso(asso)
+			{}
 
-    int32_t ServerTask::operator()(void* param) {
-        int32_t ret;
-        char* p = (char*)_request;
-        int32_t processor_name_len = (int32_t)ntohl(*(uint32_t*)p);
-        p += (4 + processor_name_len);
-        ret = _processor->process(p, _request_len - 4 - processor_name_len, _out);
-        Mempool::get_instance()->put_mem_block(_request);
-        _request = NULL;
-        _request_len = 0;
+    int32_t ServerTask::operator()(const bool* , void* ) {
+        int32_t ret = _processor->process(
+                (char*)_request, 
+                _request_len,
+                _out);
+
+#ifndef _WIN32
+		TaskAsso *pT= (TaskAsso*)_asso;
+        if(pT){
+			if(pT->pItem){
+				pT->pItem->Reset();
+			}
+
+			//after add_event, epoll may recv msg if pT->Reset after add_event, may 
+			//result destroy datacallback logic.
+			//so save pT' data before add_event, and do pT->Reset before add_event 
+			Event e=pT->event;
+			EventLoop *l=pT->pLoop;
+			pT->Reset();
+
+			if(!l || l->add_event(&e)!=0){
+				BGCC_WARN("bgcc", "After Process Add(fd=%d) To Epoll Faild", e.fd);
+				SocketTool::close(e.fd);
+			}
+			else{
+				BGCC_TRACE("bgcc", "After Process Add(fd=%d) To Epoll Success", e.fd);
+			}
+		}
+#endif
         return ret;
     }
 }

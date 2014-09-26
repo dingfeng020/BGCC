@@ -11,7 +11,7 @@
 #ifndef _BGCC2_GUARD_H_
 #define _BGCC2_GUARD_H_
 
-#include <stdlib.h>
+#include "bgcc_common.h"
 
 namespace bgcc {
 
@@ -72,7 +72,7 @@ namespace bgcc {
                 }
             }
         private:
-            mutable bool _locked;
+            volatile bool _locked;
             LockType* _lock;
         };
 }

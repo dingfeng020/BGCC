@@ -42,7 +42,7 @@ BidlParser::~BidlParser() {
 }
 
 void BidlParser::check4circle() const {
-    int32_t i, j;
+    size_t i;
 
     for (i = 0; i < _input_bidls.size(); ++i) {
         if (1 == matrix[i][i]) {
@@ -52,9 +52,9 @@ void BidlParser::check4circle() const {
 }
 
 std::vector<std::string> BidlParser::get_ordered_bidl() {
-    int32_t matrix_size = _input_bidls.size();
+    size_t matrix_size = _input_bidls.size();
     int32_t* count = new int32_t[matrix_size];
-    int32_t i, j;
+    size_t i, j;
 
     for (i = 0; i < matrix_size; ++i) {
         count[i] = 0;
