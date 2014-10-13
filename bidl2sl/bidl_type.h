@@ -132,7 +132,7 @@ class BidlType {
             return "Unknown type";
         }
 
-        virtual std::string get_tag(const SourceWriter* sw) const {
+        virtual std::string get_tag(const SourceWriter* ) const {
             return "Unknown type";
         }
 
@@ -223,6 +223,7 @@ class BidlType {
         }
 
         virtual std::string get_bgcc_type_name(const std::string& lang = "cpp") const {
+            (void*)(&lang);
             return "-1";
         }
 

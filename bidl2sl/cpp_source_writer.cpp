@@ -3259,7 +3259,7 @@ void CppSourceWriter::output_header_typedef(const BidlType* bt, int32_t level) {
     _f << level_str << "typedef " << t->get_sub_type()->get_tag(this) << " " << bt->get_name() << ";\n";
 }
 
-void CppSourceWriter::output_header_include(const BidlType* bt, int32_t level) {
+void CppSourceWriter::output_header_include(const BidlType* bt, int32_t) {
     _f << "#include \"" << replace_string(bt->get_name(), "bidl", "h") << "\"\n";
 }
 

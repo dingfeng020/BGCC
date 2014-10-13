@@ -74,7 +74,7 @@ public:
         }
     }
 
-    virtual std::string get_init_clause(int32_t level) const {
+    virtual std::string get_init_clause(int32_t) const {
         return "0";
     }
 

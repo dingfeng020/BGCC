@@ -23,13 +23,13 @@
 #include "util.h"
 #include "java_source_writer.h"
 
-JavaSourceWriter::JavaSourceWriter(const std::string& bidl) {
+JavaSourceWriter::JavaSourceWriter(const std::string&) {
 }
 
 JavaSourceWriter::~JavaSourceWriter() {
 }
 
-void JavaSourceWriter::write_header(const BidlType* bt) {
+void JavaSourceWriter::write_header(const BidlType*) {
     //do nothing. Java代码不需要创建头文件
 }
 
