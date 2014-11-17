@@ -74,7 +74,7 @@ typedef unsigned __int64	uint64_t;
 #define SOCKET int32_t
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
-#define MAXNFD 10000
+#define MAXNFD 60000
 #else
 #define snprintf _snprintf
 #endif

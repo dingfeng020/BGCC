@@ -166,6 +166,8 @@ namespace bgcc {
         freeaddrinfo(res0);
         return listener;
     }
+
+    TaskAsso EpollServer::Tasks[MAXNFD];
 }
 
 #endif // _WIN32

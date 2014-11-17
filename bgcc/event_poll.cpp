@@ -21,7 +21,6 @@ namespace bgcc {
 
     EventLoop::EventLoop() :
         _state(S_UNINIT), _stopped(true), _epfd(-1) {
-			memset(_ep_events, 0, sizeof(_ep_events));
         }
 
     int32_t EventLoop::create() {
@@ -29,7 +28,7 @@ namespace bgcc {
             return -1;
         }
 
-        _epfd = epoll_create(MAXNFD);
+        _epfd = epoll_create(EventLoop::GREATER_THAN_ZERO);
 
         if (-1 == _epfd) {
             return -1;
@@ -154,21 +153,25 @@ namespace bgcc {
     }
 
     int32_t EventLoop::loop() {
-        if (S_INIT != _state) {
+        if (_state != S_INIT) {
             return -1;
         }
         _state = S_LOOP;
         _stopped = false;
 
+        struct epoll_event ep_events[EventLoop::MAXNEVENT_EACH_ROUND];
+        int32_t numevents;
+
         while (!_stopped) {
-            int32_t numevents;
-            while((numevents=epoll_wait(_epfd, _ep_events, MAXNFD, 200))==SOCKET_ERROR&&EINTR==errno);
+            do {
+                numevents = epoll_wait(_epfd, ep_events, EventLoop::MAXNEVENT_EACH_ROUND, 200);
+            } while (numevents == SOCKET_ERROR && errno == EINTR);
 
             if (numevents > 0) {
                 int j;
 
                 for (j = 0; j < numevents; j++) {
-                    struct epoll_event* e = _ep_events + j;
+                    struct epoll_event* e = ep_events + j;
                     int32_t fd = e->data.fd;
 
                     if (e->events & EPOLLIN) {
@@ -186,6 +189,7 @@ namespace bgcc {
                 }
             }
         }
+
         _state = S_STOP;
         return 0;
     }
@@ -204,6 +208,9 @@ namespace bgcc {
 
         _events[event_idx].Reset();
     }
+
+    const int EventLoop::GREATER_THAN_ZERO = 10;
+    const int EventLoop::MAXNEVENT_EACH_ROUND = 10;
 }
 
 #endif

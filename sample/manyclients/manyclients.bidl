@@ -1,0 +1,5 @@
+namespace manyclients {
+  	class ManyClients {
+		void ping();
+	}
+}

@@ -138,8 +138,10 @@ namespace bgcc {
         state_t _state;
         volatile bool _stopped;
         int32_t _epfd;
-        struct epoll_event _ep_events[MAXNFD];
         Event _events[MAXNFD];
+
+        static const int MAXNEVENT_EACH_ROUND;
+        static const int GREATER_THAN_ZERO;
     };
 }
 

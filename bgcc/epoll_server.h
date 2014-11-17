@@ -40,7 +40,7 @@ namespace bgcc {
         ServiceManager* get_service_manager();
         ThreadPool* get_thread_pool();
 
-        TaskAsso Tasks[MAXNFD];
+        static TaskAsso Tasks[MAXNFD];
 
     protected:
         enum state_t {
