@@ -1,7 +1,7 @@
 .PHONY: bidl2sl
 
 VERSION = \"2.2.4.0\"
-CC = g++
+#CC = g++
 CFLAGS = -Wall -W -pipe -Wno-unused -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare \
 		 -finline-functions -Winline -Wreturn-type -Wtrigraphs -Wformat -Wparentheses -Wpointer-arith -Werror \
 		 -g3 -DVERSION=$(VERSION) -D_BIDL_DEBUG=1
@@ -20,10 +20,10 @@ $(EXE): $(OBJS)
 	#$(EXE): $(GRAMMAR).y $(SCANNER).l $(OBJS)
 	#bison -d $(GRAMMAR).y
 	#flex -o$(SCANNER).c $(SCANNER).l
-	$(CC) -o $@ $(OBJS) $(CFLAGS)
+	$(CXX) -o $@ $(OBJS) $(CFLAGS)
 
 $(OBJS): %.o: %.cpp 
-	$(CC) $(CFLAGS) -c $< -o $@ $(INC_PATH)
+	$(CXX) $(CFLAGS) -c $< -o $@ $(INC_PATH)
 
 clean:
 	rm -rf $(EXE) $(OBJS)

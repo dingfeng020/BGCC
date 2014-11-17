@@ -11,6 +11,7 @@
 #include "server_peer_socket.h"
 #include "socket_util.h"
 #include "bgcc_error.h"
+#include "log.h"
 
 namespace bgcc {
 
@@ -30,6 +31,7 @@ namespace bgcc {
         PeerInfo tmp("", 0);
         int32_t ret = SocketTool::getsockdetail(_socket, tmp, true);
         if (ret != 0) {
+            BGCC_WARN("bgcc", "InitPeerInfo Failed, fd=%d", _socket);
             return ret;
         }
         _peerinfo = SharedPointer<PeerInfo>(new PeerInfo(tmp.GetHost(), tmp.GetPort()));

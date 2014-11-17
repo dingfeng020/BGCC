@@ -61,13 +61,14 @@ namespace bgcc {
 #ifndef _WIN32
 					if(info->param){
 						TaskAsso *pTask=(TaskAsso*)info->param->pTask;
-						EventCallback::RemoveFD(pTask->pLoop, pTask->event.fd);
+                        //EventCallback::RemoveFD(pTask->pLoop, pTask->event.fd);
+                        SocketTool::close(pTask->event.fd);
 					}
 #endif
-					if(_info->param){
-						ReadItem *pItem=(ReadItem*)(_info->param);
-						pItem->Reset();
-					}
+                    //if(_info->param){
+                    //  ReadItem *pItem=(ReadItem*)(_info->param);
+                    //  pItem->Reset();
+                    //}
 					
 					BGCC_WARN("bgcc", "ConnectionNode put, invalid fd=%d", trans->id());
 					_info=SharedPointer<ConnInfo>(NULL);

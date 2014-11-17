@@ -1,4 +1,4 @@
-CXX = g++
+#CXX = g++
 #CXXFLAGS = -Wall -fPIC -g -DNDEBUG
 
 CXXFLAGS = -Wall -W -pipe -Wno-unused-parameter -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare\
@@ -39,8 +39,8 @@ OBJECTS = $(patsubst %.cpp,%.o, \
 all: lib inc
 	
 lib: $(OBJECTS)
-	-mkdir -p $(OUTPUT_LIBRARY_DIR)
-	ar cr $(OUTPUT_LIBRARY_DIR)/$(STATIC_LIBRARY_NAME) $^
+	mkdir -p $(OUTPUT_LIBRARY_DIR)
+	$(AR) cr $(OUTPUT_LIBRARY_DIR)/$(STATIC_LIBRARY_NAME) $^
 
 inc: 
 	mkdir -p $(OUTPUT_INCLUDE_DIR)

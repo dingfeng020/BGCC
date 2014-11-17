@@ -15,6 +15,8 @@
 #include "log.h"
 #include "bgcc_error.h"
 
+#include <assert.h>
+
 namespace bgcc {
 
     EventLoop::EventLoop() :
@@ -55,15 +57,8 @@ namespace bgcc {
 
         int32_t fd = event->fd;
         uint32_t mask = event->mask;
+        int32_t op = EPOLL_CTL_ADD;
 
-        int32_t op;
-        if (EVENT_NONE == _events[fd].mask) {
-            op = EPOLL_CTL_ADD;
-        }
-        else {
-            op = EPOLL_CTL_MOD;
-            mask |= _events[fd].mask;
-        }
         _events[fd].mask = mask;
 
         struct epoll_event ee;
@@ -99,6 +94,12 @@ namespace bgcc {
         }
 
         int32_t ret=epoll_ctl(_epfd, op, fd, &ee);
+        if (ret == -1) {
+            BGCC_WARN("bgcc", "epoll_ctl failed, fd=%d, op=%d(%d)", fd, op, BgccGetLastError());
+        } else {
+            BGCC_TRACE("bgcc", "epoll_ctl sucess, fd=%d, op=%d", fd, op);
+        }
+
         if(0!=ret&&EPOLL_CTL_ADD==op){
             if(SocketTool::set_nonblock(fd, 0)!=0){
                 BGCC_WARN("bgcc", "Add fd=%d to Epoll Failed Set To Block Failed(%d)",
@@ -137,6 +138,12 @@ namespace bgcc {
         }
 
         int32_t ret=epoll_ctl(_epfd, op, fd, &ee);
+        if (ret == -1) {
+            BGCC_WARN("bgcc", "epoll_ctl failed, fd=%d, op=%d(%d)", fd, op, BgccGetLastError());
+        } else {
+            BGCC_TRACE("bgcc", "epoll_ctl sucess, fd=%d, op=%d", fd, op);
+        }
+
         if(EPOLL_CTL_DEL==op&&0==ret){
             if(SocketTool::set_nonblock(fd, 0)!=0){
                 BGCC_WARN("bgcc", "Del fd=%d From Epoll Set To Block Failed(%d)",
@@ -190,6 +197,12 @@ namespace bgcc {
 
     bool EventLoop::is_stopped() const {
         return _stopped;
+    }
+
+    void EventLoop::reset_event(int event_idx) {
+        assert(event_idx < MAXNFD && event_idx >= 0);
+
+        _events[event_idx].Reset();
     }
 }
 

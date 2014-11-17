@@ -1,12 +1,20 @@
-/***********************************************************************
-  * Copyright (c) 2013, Baidu Inc. All rights reserved.
-  * 
-  * Licensed under the BSD License
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  * 
-  *      license.txt
-  *********************************************************************/
+/***************************************************************************
+ * 
+ * Copyright (c) 2013 Baidu.com, Inc. All Rights Reserved
+ * $Id$ 
+ * 
+ **************************************************************************/
+
+
+
+/**
+ * @file bgcc/event_callback.cpp
+ * @author chenyuzhen(chenyuzhen)
+ * @date 2013/04/22 14:02:18
+ * @version 1.0.0 
+ * @brief 
+ *  
+ **/
 
 #include "event_callback.h"
 
@@ -113,10 +121,16 @@ void bgcc::EventCallback::DataCallback(EventLoop* el, SOCKET fd, void* arg)
 	pItem->pTask=pT;
 
 	int32_t todel=1;
+
+        // save pItem->err and pItem->isEnroll
+        // because pItem may be invalid after Process when err && isEnroll
+        int32_t err = pItem->err;
+        bool is_enroll = pItem->isEnroll;
+
 	BusizProcessor::Process(pItem, pT, item.nread, &todel);
 
-	if(pItem->err){
-		if(pItem->isEnroll){//put_conn call RemoveFD, so here not to call RemoveFD
+    if (err) {
+        if (is_enroll) {//put_conn call RemoveFD, so here not to call RemoveFD
 			if(todel){
 				BGCC_WARN("bgcc", "Other Party is Closed Or Protocol Is Invalid, Force To Release fd=%d", fd);
 				SharedPointer<BinaryProtocol> proto = SharedPointer<BinaryProtocol>(
@@ -129,7 +143,7 @@ void bgcc::EventCallback::DataCallback(EventLoop* el, SOCKET fd, void* arg)
 				if(proto.is_valid()&&info.is_valid()){
 					bgcc::ConnectionManager::get_instance()->put_connection(pItem->item.memo, info, true);
 				}
-			}
+            }
 		}
 		else{
 			BGCC_WARN("bgcc", "Other Party is Closed Or Protocol Is Invalid, Force To Release fd=%d", fd);
@@ -185,8 +199,10 @@ void bgcc::EventCallback::AcceptCallback(EventLoop* el, SOCKET fd, void* arg)
 			Event e;
 			PrepareEvent(e, newfd, arg);
 
-			if(el->add_event(&e)!=0){
-				BGCC_WARN("bgcc", "Add fd=%d to epoll failed(errno=%d)", 
+            el->reset_event(newfd);
+
+			if (el->add_event(&e) != 0) {
+				BGCC_WARN("bgcc", "Add fd=%d to epoll failed(errno=%d)",
 					newfd, BgccSockGetLastError());
 				SocketTool::close(newfd);
 			}
@@ -375,7 +391,7 @@ void bgcc::SSLEventCallback::SSLAcceptCallback(EventLoop* el, SOCKET fd, void* a
 			BGCC_TRACE("bgcc", "ERROR NONE");
 			PrepareEvent(e, fd, newCallbackArg);
 
-			if (el->add_event(&e) != 0) {
+			if (el->del_event(&e) != 0 || el->add_event(&e) != 0) {
 				SSL_shutdown(newCallbackArg->ssl);
 				BGCC_DEBUG("bgcc", "Memory SSL free: %p", newCallbackArg->ssl);
 				SSL_free(newCallbackArg->ssl);
@@ -556,9 +572,9 @@ void bgcc::BusizProcessor::ProcessEnroll(ReadItem *pItem, void *param, bool ssl,
 		} else {
 			pT->event.read_cb = EventCallback::DataCallback;
 		}
-		if(pT->pLoop->add_event(&(pT->event))!=0){
-			SocketTool::close(sock);
-		}
+        //if(pT->pLoop->add_event(&(pT->event))!=0){
+        //	SocketTool::close(sock);
+        //}
 		pItem->pTask=pT;
 	}
 #endif
@@ -617,6 +633,12 @@ void bgcc::BusizProcessor::ProcessUser(ReadItem *pItem, const std::string &name,
 		} else {
 			server_peer_socket = new ServerPeerSocket(sock);
 		}
+
+        if (!server_peer_socket->GetPeerInfo().is_valid()) {
+            BGCC_WARN("bgcc", "Broken socket, fd=%d", sock);
+            return;
+        }
+
 		SharedPointer<ITransport> trans(server_peer_socket);
 		SharedPointer<IProtocol> proto(new BinaryProtocol(trans));
 		SharedPointer<Runnable> task(new ServerTask(processor, p, 
@@ -650,6 +672,11 @@ void bgcc::BusizProcessor::ProcessServerCallback(ReadItem *pItem, void *param, i
 		else{
 			if(todel){
 				*todel=0;
+                if (ssl) {
+                    SSLEventCallback::RemoveFD(pT->pLoop, sock, false);
+                } else {
+                    EventCallback::RemoveFD(pT->pLoop, sock, false);
+                }
 			}
 		}
 		pItem->psem->signal();

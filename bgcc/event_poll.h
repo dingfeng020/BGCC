@@ -124,6 +124,8 @@ namespace bgcc {
         int32_t loop();
         int32_t unloop();
         bool is_stopped() const;
+
+        void reset_event(int event_idx);
     private:
         enum state_t {
             S_UNINIT,

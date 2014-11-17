@@ -11,6 +11,7 @@
 #include "socket_util.h"
 #include "server_peer_socket.h"
 #include "log.h"
+#include "bgcc_error.h"
 
 namespace bgcc {
     int32_t SocketTool::getsockdetail(SOCKET sockfd, PeerInfo& peerInfo, bool remote) {
@@ -29,6 +30,8 @@ namespace bgcc {
 		}
         
 		if(ret != 0){
+            BGCC_WARN("bgcc", "get socket/peer name failed, fd=%d(%d)",
+                    sockfd, BgccSockGetLastError());
             return -1;
         }
 
