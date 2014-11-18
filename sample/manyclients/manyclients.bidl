@@ -1,5 +1,6 @@
 namespace manyclients {
     class ManyClients {
         void ping();
+        int32 submit(int32 num);
     }
 }

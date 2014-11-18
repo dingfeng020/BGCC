@@ -9,12 +9,17 @@ public:
 
     virtual void ping(
             const std::map<std::string, std::string>& ctx) {
-        BGCC_TRACE("LXB", "Enter ping");
-        BGCC_TRACE("LXB", "Leave ping\n");
+        BGCC_TRACE("LXB", "ping");
+    }
+
+    virtual int32_t submit(
+            int32_t num,
+            const std::map<std::string, std::string>& ctx) {
+        BGCC_TRACE("LXB", "submit num:%d", num);
+        return 100;
     }
 
 };
-
 
 void* server_func(const bool* isstopped, void*)
 {

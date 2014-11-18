@@ -27,22 +27,26 @@ using namespace manyclients;
 int main(int argc, char* argv[])
 {
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s count\n", argv[0]);
+        fprintf(stderr, "Usage: %s nproxy [internal_ms]\n", argv[0]);
         return -1;
     }
 
     log_open("client.conf");
     ServerInfo serverInfo("localhost", 8321);
 
-    int count = atoi(argv[1]);
+    int nproxy = atoi(argv[1]);
+    int internal_ms = 1000;
+    if (argv[2]) {
+        internal_ms = atoi(argv[2]);
+    }
 
-    ManyClientsProxy** proxys = (ManyClientsProxy**)malloc(sizeof(ManyClientsProxy*) * count);
+    ManyClientsProxy** proxys = (ManyClientsProxy**)malloc(sizeof(ManyClientsProxy*) * nproxy);
     if (proxys == NULL) {
         BGCC_WARN("bgcc", "Malloc proxys array failed");
         return -1;
     }
 
-    for (int i = 0; i < count; ++i) {
+    for (int i = 0; i < nproxy; ++i) {
         proxys[i] = new(std::nothrow) ManyClientsProxy(serverInfo, 1);
         if (proxys[i] == NULL) {
             BGCC_WARN("bgcc", "New Mathproxy: %d failed", i);
@@ -55,19 +59,32 @@ int main(int argc, char* argv[])
             return -1;
         }
 
-        proxys[i]->ping();
+        proxys[i]->submit(i);
 
         if (proxys[i]->get_errno() != 0) {
-            std::cerr << "Call proxy.ping failed " << i << std::endl;
+            std::cerr << "Call proxy.submit failed " << i << std::endl;
             return 0;
         } else {
-            std::cerr << "Call proxy.ping success " << i << std::endl;
+            std::cerr << "Call proxy.submit success " << i << std::endl;
         }
     }
 
-    bgcc::TimeUtil::safe_sleep_s(1000);
+    srand(time(NULL));
+    while (true) {
+        int r = rand() % nproxy;
 
-    for (int i = 0; i < count; ++i) {
+        proxys[r]->submit(r);
+
+        if (proxys[r]->get_errno() != 0) {
+            std::cerr << "Call proxy.submit failed " << r << std::endl;
+        } else {
+            std::cerr << "Call proxy.submit success " << r << std::endl;
+        }
+
+        bgcc::TimeUtil::safe_sleep_ms(internal_ms);
+    }
+
+    for (int i = 0; i < nproxy; ++i) {
         delete proxys[i];
     }
     free(proxys);
