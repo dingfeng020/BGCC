@@ -1,11 +1,9 @@
-#include <algorithm>
 #include <bgcc.h>
-#include <manyclients.h>
-
 using namespace bgcc;
+#include <manyclients.h>
 using namespace manyclients;
 
-class ManyClientsImpl : public ManyClients{
+class ManyClientsImpl : public ManyClients {
 public:
     virtual ~ManyClientsImpl() { }
 
@@ -17,9 +15,9 @@ public:
 
 };
 
-Server* server;
 
-void* server_func(const bool* isstopped, void*) {
+void* server_func(const bool* isstopped, void*)
+{
     SharedPointer<IProcessor> xp(
             new ManyClientsProcessor(
                 SharedPointer<ManyClients>(
@@ -30,14 +28,15 @@ void* server_func(const bool* isstopped, void*) {
 
     ThreadPool tp;
     tp.init(10);
-    server = new Server(&sm, &tp, 8321);
+    Server* server = new Server(&sm, &tp, 8321);
     if (0 != server->serve()) {
         return 0;
     }
     return NULL;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     log_open("server.conf");
     Thread t(server_func);
     t.start();
