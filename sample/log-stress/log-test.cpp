@@ -43,13 +43,13 @@ int main(int argc, char** args)
         ASSERT_EQ(sc_mgr_enabled, true);
 
         std::string sc_mgr_main_ip = sc_mgr["main-ip"].to_ipv4();
-        ASSERT_EQ(sc_mgr_main_ip, "192.168.99.1");
+        ASSERT_EQ(sc_mgr_main_ip, "127.0.0.1");
 
         //int64_t sc_mgr_main_port = sc_mgr["main-port"].to_port();
         //ASSERT_EQ(sc_mgr_main_port, 9080);
 
         //std::string sc_mgr_slave_ip = sc_mgr["slave-ip"].to_ipv4();
-        //ASSERT_EQ(sc_mgr_slave_ip, "192.168.99.2");
+        //ASSERT_EQ(sc_mgr_slave_ip, "127.0.0.1");
 
         //int64_t sc_mgr_slave_port = sc_mgr["slave-port"].to_port();
         //ASSERT_EQ(sc_mgr_slave_port, 9080);
@@ -57,7 +57,7 @@ int main(int argc, char** args)
         //// bus-mgr section
         //bgcc2::ConfUnit& bus_mgr = px_conf["bus-mgr"];
         //std::string bus_mgr_main_ip = bus_mgr["main-ip"].to_ipv4();
-        //ASSERT_EQ(bus_mgr_main_ip, "192.168.99.1");
+        //ASSERT_EQ(bus_mgr_main_ip, "127.0.0.1");
 
         //uint16_t bus_mgr_main_port = (uint16_t)bus_mgr["main-port"].to_port();
         //ASSERT_EQ(bus_mgr_main_port, 9080);

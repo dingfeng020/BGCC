@@ -39,7 +39,7 @@ int main()
         exit(1);
     }
 
-	ServerInfo serverInfo("10.81.14.171", 8321);
+	ServerInfo serverInfo("127.0.0.1", 8321);
 	SSLMathProxy proxy(serverInfo);
 
 	proxy.ping();

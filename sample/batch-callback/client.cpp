@@ -30,7 +30,7 @@
 using namespace bgcc;
 
 #define SERVER_PORT 8878
-//#define SERVER_IP "10.26.78.49"
+//#define SERVER_IP "127.0.0.1"
 #define SERVER_IP "127.0.0.1"
 
 #define POOL_SIZE 1

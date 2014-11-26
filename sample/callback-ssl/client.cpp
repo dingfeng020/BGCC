@@ -29,7 +29,7 @@ using namespace bgcc;
 
 #define SERVER_PORT 8321
 //#define SERVER_IP "127.0.0.1"
-#define SERVER_IP "10.81.14.171"
+#define SERVER_IP "127.0.0.1"
 
 void menu();
 
