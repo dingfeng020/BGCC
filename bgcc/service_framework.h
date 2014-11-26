@@ -24,7 +24,7 @@ namespace bgcc {
      * @brief 读取状态枚举值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月04日 14时01分03秒
      */
     enum reading_state_t {
@@ -37,7 +37,7 @@ namespace bgcc {
      * @brief 用于表示当前的读取状态
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月04日 14时01分26秒
      */
     class reading_item_t {
@@ -106,7 +106,7 @@ namespace bgcc {
      * @brief 用于表示当前的写出状态
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月04日 14时04分02秒
      */
     struct writing_item_t {

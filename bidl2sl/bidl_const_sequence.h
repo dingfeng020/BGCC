@@ -11,7 +11,7 @@
 /**
  * @file     bidl_const_sequence.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月28日 12时29分09秒
  *  

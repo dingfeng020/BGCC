@@ -11,7 +11,7 @@
 /**
  * @file     Logger.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月31日 13时25分00秒
  *  

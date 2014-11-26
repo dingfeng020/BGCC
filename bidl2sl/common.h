@@ -11,7 +11,7 @@
 /**
  * @file     common.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月03日 19时41分04秒
  *  

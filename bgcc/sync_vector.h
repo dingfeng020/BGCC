@@ -24,7 +24,7 @@
  * @brief 线程安全vector
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2012年05月30日 16时42分56秒
  */
 namespace bgcc {
@@ -54,7 +54,7 @@ namespace bgcc {
              * @return 添加成功返回0；否则返回错误码
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年05月30日 19时11分24秒
              */
             int32_t put(ElemType elem) {
@@ -86,7 +86,7 @@ namespace bgcc {
              * @return 成功返回0；否则返回错误码: E_BGCC_TIMEOUT表示超时.
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年05月30日 19时12分19秒
              */
             int32_t get(ElemType& elem, int millisecond) {

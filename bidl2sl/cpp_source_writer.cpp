@@ -11,7 +11,7 @@
 /**
  * @file     cpp_source_wirter.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月17日 15时13分34秒
  *  

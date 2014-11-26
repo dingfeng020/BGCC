@@ -11,7 +11,7 @@
 /**
  * @file     ThreadPool.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月31日 10时15分58秒
  *  

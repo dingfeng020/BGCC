@@ -11,7 +11,7 @@
 /**
  * @file     ServiceManager.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 15时55分04秒
  *  

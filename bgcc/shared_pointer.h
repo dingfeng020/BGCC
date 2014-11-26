@@ -21,7 +21,7 @@ namespace bgcc {
      * @tparam ElementType 要求该类型有inc()和dec()两函数或继承自bgcc::Shareable类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月13日 15时19分35秒
      */
     template <typename ElementType>
@@ -33,7 +33,7 @@ namespace bgcc {
              * @param ptr 资源指针
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 14时33分20秒
              */
             explicit SharedPointer(ElementType* ptr = NULL) : _pointer(ptr) {
@@ -48,7 +48,7 @@ namespace bgcc {
              * @param other SharedPointer引用
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时13分35秒
              */
             SharedPointer(const SharedPointer &other) : _pointer(other._pointer) {
@@ -64,7 +64,7 @@ namespace bgcc {
              * @param other other持有ElementType派生类的指针
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时14分17秒
              */
             template <typename U>
@@ -79,7 +79,7 @@ namespace bgcc {
              * @brief ~SharedPointer 构造函数，如果引用计数减为0，则释放资源
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时15分16秒
              */
             ~SharedPointer() {
@@ -99,7 +99,7 @@ namespace bgcc {
              * @return 
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时15分53秒
              */
             SharedPointer & operator=(const SharedPointer& r) {
@@ -127,7 +127,7 @@ namespace bgcc {
              * @return  底层资源指针
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时16分21秒
              */
             ElementType* get() const {
@@ -140,7 +140,7 @@ namespace bgcc {
              * @return 资源指针
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时17分41秒
              */
             ElementType* operator->() const {
@@ -153,7 +153,7 @@ namespace bgcc {
              * @return 资源引用
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时18分09秒
              */
             ElementType& operator*() const {
@@ -166,7 +166,7 @@ namespace bgcc {
              * @return 返回true，表示合法；否则，返回false 
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年06月13日 15时18分46秒
              */
             bool is_valid() const {

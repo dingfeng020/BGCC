@@ -11,7 +11,7 @@
 /**
  * @file     DataType.java
  * @brief    DataType枚举，定义协议中的数据类型
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 18时40分40秒
  *  

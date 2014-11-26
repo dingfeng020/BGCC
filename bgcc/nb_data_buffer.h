@@ -22,7 +22,7 @@ namespace bgcc {
      * @brief 网络字节序数据缓冲区
      * @see
      * @note 非线程安全
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 20时01分30秒
      */
     class NBDataBuffer : public Shareable {
@@ -31,7 +31,7 @@ namespace bgcc {
          * @brief NBDataBuffer 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时02分12秒
          */
         NBDataBuffer();
@@ -40,7 +40,7 @@ namespace bgcc {
          * @brief ~NBDataBuffer 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时02分18秒
          */
         ~NBDataBuffer();
@@ -54,7 +54,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时02分46秒
          */
         int32_t append_bool(bool b);
@@ -67,7 +67,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时04分19秒
          */
         int32_t append_int8(int8_t i8);
@@ -80,7 +80,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时05分35秒
          */
         int32_t append_int16(int16_t i16);
@@ -93,7 +93,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时06分09秒
          */
         int32_t append_int32(int32_t i32);
@@ -106,7 +106,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时06分46秒
          */
         int32_t append_int64(int64_t i64);
@@ -119,7 +119,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时07分22秒
          */
         int32_t append_float(float f);
@@ -132,7 +132,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时08分08秒
          */
         int32_t append_string(const std::string& str);
@@ -146,7 +146,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时09分13秒
          */
         int32_t append_binary(const void* buffer, int32_t buflen);
@@ -160,7 +160,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时10分11秒
          */
         int32_t append(const void* buffer, int32_t buflen);
@@ -174,7 +174,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note 调用者请勿free返回的数据
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时11分23秒
          */
         int32_t get_data(void** ppdata, int32_t& size);
@@ -188,7 +188,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时15分00秒
          */
         int32_t get_data_copy(void** ppdata, int32_t& size);
@@ -201,7 +201,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时17分37秒
          */
         int32_t clear(bool keep_allocted_mem = false);
@@ -213,7 +213,7 @@ namespace bgcc {
          * @param NBDataBuffer
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时22分04秒
          */
         NBDataBuffer(const NBDataBuffer&);
@@ -226,7 +226,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 20时22分18秒
          */
         NBDataBuffer& operator=(const NBDataBuffer&);

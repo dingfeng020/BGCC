@@ -11,7 +11,7 @@
 /**
  * @file     IntHolder.java
  * @brief    int类型的holder类，用于bgcc的out , all类型参数
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时25分19秒
  *  

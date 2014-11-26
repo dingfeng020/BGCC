@@ -11,7 +11,7 @@
 /**
  * @file     format_checker.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 15时47分48秒
  *  
@@ -31,7 +31,7 @@ public:
      * @return 
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年08月16日 15时49分23秒
      */
     static bool is_bidl_filename_valid(const std::string& bidl);

@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_Transaction.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月02日 10时33分00秒
  *  

@@ -30,7 +30,7 @@ namespace bgcc {
      * @brief 用于表示传输到日志设备的日志信息
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 11时05分26秒
      */
     struct log_message_t {
@@ -48,7 +48,7 @@ namespace bgcc {
      * @brief 日志设备接口。此类规定了日志设备所具有的公共方法
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 11时06分24秒
      */
     class ILogDevice {
@@ -57,7 +57,7 @@ namespace bgcc {
          * @brief ~ILogDevice 日志设备接口析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时06分37秒
          */
         virtual ~ILogDevice() {
@@ -69,7 +69,7 @@ namespace bgcc {
          * @return  若日志设备已打开则返回true；否则返回false。
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时06分53秒
          */
         virtual bool is_opened() const = 0;
@@ -82,7 +82,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时07分09秒
          */
         virtual int32_t open(void* param = NULL) = 0;
@@ -95,7 +95,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时07分49秒
          */
         virtual int32_t close(void* param = NULL) = 0;
@@ -108,7 +108,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时08分32秒
          */
         virtual int32_t write(const struct log_message_t& log_message) = 0;
@@ -119,7 +119,7 @@ namespace bgcc {
          * @return 日志设备名称
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时08分57秒
          */
         virtual const char* get_name() const = 0;
@@ -130,7 +130,7 @@ namespace bgcc {
          * @return 日志设备级别
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时09分15秒
          */
         virtual int32_t get_loglevel() const = 0;
@@ -141,7 +141,7 @@ namespace bgcc {
          * @return 日志设备分割策略
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时09分34秒
          */
         virtual int32_t get_split_policy() const = 0;
@@ -152,7 +152,7 @@ namespace bgcc {
          * @return  日志文件最大字节数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分04秒
          */
         virtual off_t get_max_size() const = 0;
@@ -163,7 +163,7 @@ namespace bgcc {
          * @return  日志文件记录最大时长
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分20秒
          */
         virtual int32_t get_max_record_interval() const = 0;
@@ -174,7 +174,7 @@ namespace bgcc {
          * @return  日志设备的日志格式控制串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分39秒
          */
         virtual const char* get_log_format() const = 0;
@@ -184,7 +184,7 @@ namespace bgcc {
      * @brief 日志设备的抽象类。此类定义的日志设备的通用方法
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 11时11分09秒
      */
     class AbstractLogDevice : public ILogDevice {
@@ -200,7 +200,7 @@ namespace bgcc {
          * @param log_format 日志格式控制串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时12分24秒
          */
         AbstractLogDevice(
@@ -215,7 +215,7 @@ namespace bgcc {
          * @brief ~AbstractLogDevice 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时13分12秒
          */
         virtual ~AbstractLogDevice();
@@ -226,7 +226,7 @@ namespace bgcc {
          * @return 日志设备名称
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时08分57秒
          */
         virtual const char* get_name() const;
@@ -237,7 +237,7 @@ namespace bgcc {
          * @return 日志设备级别
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时09分15秒
          */
         virtual int32_t get_loglevel() const;
@@ -248,7 +248,7 @@ namespace bgcc {
          * @return 日志设备分割策略
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时09分34秒
          */
         virtual int32_t get_split_policy() const;
@@ -259,7 +259,7 @@ namespace bgcc {
          * @return  日志文件最大字节数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分04秒
          */
         virtual off_t get_max_size() const;
@@ -270,7 +270,7 @@ namespace bgcc {
          * @return  日志文件记录最大时长
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分20秒
          */
         virtual int32_t get_max_record_interval() const;
@@ -281,7 +281,7 @@ namespace bgcc {
          * @return  日志设备的日志格式控制串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时10分39秒
          */
         virtual const char* get_log_format() const;
@@ -299,7 +299,7 @@ namespace bgcc {
      * @brief 文件日志设备类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 11时16分46秒
      */
     class FileLogDevice : public AbstractLogDevice {
@@ -316,7 +316,7 @@ namespace bgcc {
          * @param log_format 日志格式控制串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时16分56秒
          */
         FileLogDevice(
@@ -332,7 +332,7 @@ namespace bgcc {
          * @brief ~FileLogDevice 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时17分43秒
          */
         virtual ~FileLogDevice();
@@ -343,7 +343,7 @@ namespace bgcc {
          * @return  若日志设备已打开则返回true；否则返回false。
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时06分53秒
          */
         virtual bool is_opened() const;
@@ -356,7 +356,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时07分09秒
          */
         virtual int32_t open(void* param = NULL);
@@ -369,7 +369,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时07分49秒
          */
         virtual int32_t close(void* param = NULL);
@@ -382,7 +382,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时08分32秒
          */
         virtual int32_t write(const struct log_message_t& log_message);
@@ -394,7 +394,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时18分31秒
          */
         int32_t exec_time_split_policy();
@@ -407,7 +407,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时18分44秒
          */
         int32_t exec_size_split_policy(size_t len);
@@ -420,7 +420,7 @@ namespace bgcc {
          * @return  成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时19分19秒
          */
         int32_t get_file_stat(struct stat& state) const;
@@ -435,7 +435,7 @@ namespace bgcc {
          * @return 返回格式化后的字节数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 11时20分34秒
          */
         int32_t format_log_message(char* logbuf, int32_t logbufsiz,

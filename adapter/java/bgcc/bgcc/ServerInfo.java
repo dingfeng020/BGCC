@@ -11,7 +11,7 @@
 /**
  * @file     ServerInfo.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月31日 10时29分38秒
  *  

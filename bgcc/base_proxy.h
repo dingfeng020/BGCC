@@ -82,7 +82,7 @@ namespace bgcc {
          * @return 返回成功建立的连接个数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月19日 23时27分05秒
          */
         int32_t init(INIT_TYPE type=INIT_ALL);

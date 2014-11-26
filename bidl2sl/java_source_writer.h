@@ -11,7 +11,7 @@
 /**
  * @file     java_source_writer.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月04日 12时20分24秒
  *  
@@ -141,7 +141,7 @@ private:
      * @return 
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 16时11分18秒
      */
     std::string mkpath(const std::vector<std::string>& name_parts);

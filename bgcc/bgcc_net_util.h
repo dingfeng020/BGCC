@@ -25,7 +25,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 18时54分26秒
      */
     static bool is_valid_ipv4(const char* ipstr);
@@ -38,7 +38,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 18时54分57秒
      */
     static bool is_valid_port(const char* portstr);
@@ -51,7 +51,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 18时55分41秒
      */
     static uint16_t get_valid_port(const char* portstr);

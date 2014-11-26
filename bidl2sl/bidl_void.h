@@ -11,7 +11,7 @@
 /**
  * @file     bidl_void.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月10日 10时21分37秒
  *  

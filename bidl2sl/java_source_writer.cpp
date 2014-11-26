@@ -11,7 +11,7 @@
 /**
  * @file     java_source_writer.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月04日 12时21分11秒
  *  

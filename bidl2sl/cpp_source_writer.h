@@ -11,7 +11,7 @@
 /**
  * @file     cpp_source_writer.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月10日 13时24分33秒
  *  

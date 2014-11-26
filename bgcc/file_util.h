@@ -25,7 +25,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 14时34分26秒
      */
     static int32_t close_r(int32_t fd);
@@ -38,7 +38,7 @@ public:
      * @return 0表示创建成功
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月31日 15时36分09秒
      */
     static int32_t create_directories(const char* path);

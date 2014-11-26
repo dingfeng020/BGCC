@@ -9,7 +9,7 @@
  
 /**
  * @file server.cpp
- * @author chenyuzhen(chenyuzhen@baidu.com)
+ * @author
  * @date 2012/11/13 11:23:35
  * @version 1.0.0 
  * @brief 

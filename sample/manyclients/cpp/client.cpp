@@ -7,7 +7,7 @@
 
 /**
  * @file client.cpp
- * @author liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date 2012/3/23 16:23:12
  * @version $Revision$ 
  * @brief demo client

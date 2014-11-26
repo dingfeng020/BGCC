@@ -28,7 +28,7 @@ namespace bgcc {
          * @param str 待转换的C风格字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 10时57分10秒
          */
         static void toupper_inplace(char* str);
@@ -41,7 +41,7 @@ namespace bgcc {
          * @return 字符串str的大写形式
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 10时57分48秒
          */
         static std::string toupper(const char* str);
@@ -54,7 +54,7 @@ namespace bgcc {
          * @return 字符串str的大写形式
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 11时02分40秒
          */
         static std::string toupper(const std::string& str);
@@ -65,7 +65,7 @@ namespace bgcc {
          * @param str 待转换的C风格字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 11时17分45秒
          */
         static void tolower_inplace(char* str);
@@ -78,7 +78,7 @@ namespace bgcc {
          * @return 字符串str的小写形式
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 11时19分13秒
          */
         static std::string tolower(const char* str);
@@ -91,7 +91,7 @@ namespace bgcc {
          * @return 字符串str的小写形式
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 11时21分42秒
          */
         static std::string tolower(const std::string& str);
@@ -102,7 +102,7 @@ namespace bgcc {
          * @param str 原字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 12时33分44秒
          */
         static void ltrim_inplace(char* str);
@@ -115,7 +115,7 @@ namespace bgcc {
          * @return 去除左端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 12时34分31秒
          */
         static std::string ltrim(const char* str);
@@ -128,7 +128,7 @@ namespace bgcc {
          * @return 去除左端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 12时35分48秒
          */
         static std::string ltrim(const std::string& str);
@@ -139,7 +139,7 @@ namespace bgcc {
          * @param str 原字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 13时33分39秒
          */
         static void rtrim_inplace(char* str);
@@ -152,7 +152,7 @@ namespace bgcc {
          * @return 去除右端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 13时34分00秒
          */
         static std::string rtrim(const char* str);
@@ -165,7 +165,7 @@ namespace bgcc {
          * @return 去除右端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 13时34分42秒
          */
         static std::string rtrim(const std::string& str);
@@ -176,7 +176,7 @@ namespace bgcc {
          * @param str 原字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 16时53分47秒
          */
         static void trim_inplace(char* str);
@@ -189,7 +189,7 @@ namespace bgcc {
          * @return 去除两端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 16时54分19秒
          */
         static std::string trim(const char* str);
@@ -202,7 +202,7 @@ namespace bgcc {
          * @return  去除两端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 16时54分48秒
          */
         static std::string trim(const std::string& str);
@@ -216,7 +216,7 @@ namespace bgcc {
          * @param filter_empty 是否过滤空子串(length == 0)
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 16时57分03秒
          */
         static void split_string(const std::string& str, const std::string& separator,
@@ -232,7 +232,7 @@ namespace bgcc {
          * @return 替换完成后的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 18时29分39秒
          */
         static std::string replace_string(const std::string& str, const std::string& target,
@@ -247,7 +247,7 @@ namespace bgcc {
          * @return true表示转换成功；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 18时26分35秒
          */
         static bool str2uint32(const char* str, uint32_t& number);
@@ -261,7 +261,7 @@ namespace bgcc {
          * @return true表示转换成功；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 19时00分08秒
          */
         static bool str2int32(const char* str, int32_t& number);
@@ -275,7 +275,7 @@ namespace bgcc {
          * @return true表示转换成功；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 19时00分41秒
          */
         static bool str2uint64(const char* str, uint64_t& number);
@@ -289,7 +289,7 @@ namespace bgcc {
          * @return true表示转换成功；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 19时01分29秒
          */
         static bool str2int64(const char* str, int64_t& number);
@@ -300,7 +300,7 @@ namespace bgcc {
          * @return 返回“1b4e28ba-2fa1-11d2-883f-b9a76”格式的uuid字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 19时36分37秒
          */
         static std::string generate_uuid();
@@ -314,7 +314,7 @@ namespace bgcc {
          * @return 成功转换返回true；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 20时04分57秒
          */
         static bool ipv4_ntoa(uint32_t src, std::string& dest);
@@ -328,7 +328,7 @@ namespace bgcc {
          * @return 成功转换返回true；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 20时05分50秒
          */
         static bool ipv4_aton(const char* src, uint32_t& dest);
@@ -343,7 +343,7 @@ namespace bgcc {
          * @return 成功复制的字节数。错误时返回-1
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月22日 18时38分48秒
          */
         static int32_t xstrncpy(char* dest, const char* src, int32_t n);
@@ -354,7 +354,7 @@ namespace bgcc {
          * @return 随机数字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 14时32分41秒
          */
         static std::string rand_string();
@@ -369,7 +369,7 @@ namespace bgcc {
          * @return 成功返回true；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 20时03分22秒
          */
         template <typename T>
@@ -414,7 +414,7 @@ namespace bgcc {
          * @return 去除右端空白的字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月31日 16时23分34秒
          */
         static std::string rtrim(const char* str, int32_t len);

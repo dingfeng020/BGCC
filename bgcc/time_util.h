@@ -20,7 +20,7 @@ namespace bgcc {
      * @brief 时间实用工具类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 21时11分15秒
      */
 
@@ -42,7 +42,7 @@ namespace bgcc {
          * @return 返回从Epoch所经过的秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时11分25秒
          */
         static uint64_t get_timestamp_s();
@@ -53,7 +53,7 @@ namespace bgcc {
          * @return 返回从Epoch所经过的微秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时12分14秒
          */
         static uint64_t get_timestamp_ms();
@@ -76,7 +76,7 @@ namespace bgcc {
          * @param second 睡眠的秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时12分42秒
          */
         static void safe_sleep_s(uint32_t second);
@@ -87,7 +87,7 @@ namespace bgcc {
          * @param millisecond 睡眠的毫秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时13分05秒
          */
         static void safe_sleep_ms(uint32_t millisecond);
@@ -100,7 +100,7 @@ namespace bgcc {
          * @return 时间戳字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时13分53秒
          */
         static std::string format_datetime_str(uint64_t millisecond);
@@ -116,7 +116,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时14分47秒
          */
         static int32_t get_abs_timespec(struct timespec* ts, int32_t millisecond);
@@ -132,7 +132,7 @@ namespace bgcc {
          * @return 返回写入缓冲区的字符个数（不含\0）；否则返回-1
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月22日 16时50分14秒
          */
         static int32_t strftimeval(char* buffer, int32_t buflen, const struct timeval* tv);
@@ -143,7 +143,7 @@ namespace bgcc {
          * @return 日期串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 17时23分19秒
          */
         static std::string get_date();
@@ -154,7 +154,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 17时23分56秒
          */
         static std::string get_time();

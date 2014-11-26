@@ -11,7 +11,7 @@
 /**
  * @file     LongHolder.java
  * @brief    Long类型的Holder类
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时14分06秒
  *  

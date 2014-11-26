@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_BaseProxy.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月03日 13时29分59秒
  *  

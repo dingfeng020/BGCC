@@ -20,7 +20,7 @@ namespace bgcc {
      * @brief 服务器接口类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月15日 14时54分02秒
      */
     class IServer : public Shareable {
@@ -29,7 +29,7 @@ namespace bgcc {
          * @brief ~IServer 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月15日 14时54分11秒
          */
         virtual ~IServer() { }
@@ -40,7 +40,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月15日 14时54分20秒
          */
         virtual int32_t init() {
@@ -53,7 +53,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月15日 14时54分30秒
          */
         virtual int32_t serve() = 0;
@@ -64,7 +64,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月15日 14时54分45秒
          */
         virtual int32_t stop() = 0;

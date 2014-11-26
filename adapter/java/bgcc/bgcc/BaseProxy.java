@@ -11,7 +11,7 @@
 /**
  * @file     BaseProxy.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 17时01分09秒
  *  

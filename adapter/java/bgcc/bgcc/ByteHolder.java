@@ -11,7 +11,7 @@
 /**
  * @file     ByteHolder.java
  * @brief    byte类型的Holder类,用于传递out ,all类型的byte参数 
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时09分16秒
  *  

@@ -11,7 +11,7 @@
 /**
  * @file     global_parser.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 14时40分22秒
  *  
@@ -30,7 +30,7 @@
  * @brief 统一管理并解析若干个bidl文件
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2012年08月16日 14时40分55秒
  */
 class GlobalParser {

@@ -21,7 +21,7 @@ namespace bgcc {
      * @brief 事件类型标识
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时02分50秒
      */
     enum {
@@ -43,7 +43,7 @@ namespace bgcc {
      * @return 
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时01分17秒
      */
     typedef void (*callback_func_t)(EventLoop* el, int32_t fd, void* arg);
@@ -52,7 +52,7 @@ namespace bgcc {
      * @brief 封装事件及事件处理函数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时00分59秒
      */
     struct Event {
@@ -60,7 +60,7 @@ namespace bgcc {
          * @brief Event 事件类
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时04分59秒
          */
         Event() {
@@ -92,7 +92,7 @@ namespace bgcc {
      * @brief 事件循环
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时05分36秒
      */
     class EventLoop {
@@ -101,7 +101,7 @@ namespace bgcc {
          * @brief EventLoop 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时19分50秒
          */
         EventLoop();
@@ -112,7 +112,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时19分59秒
          */
         int32_t create();

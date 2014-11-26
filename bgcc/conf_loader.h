@@ -23,7 +23,7 @@ class ConfLoader;
  * @brief 配置文件加载器
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2012年06月01日 10时48分10秒
  */
 class ConfLoader {
@@ -32,7 +32,7 @@ public:
      * @brief 行最大长度
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月01日 10时46分17秒
      */
     static const int32_t MAX_LINE_LEN;
@@ -45,7 +45,7 @@ public:
      * @return 配置内容的Root;当加载出错时返回NULL
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月01日 10时46分48秒
      */
     static DEPRECATED(ConfUnit* load_conf(const char* conf_filename));
@@ -59,7 +59,7 @@ private:
      * @return true表示line为空白行；否则返回false
      * @see
      * @note 当(line == NULL)时返回false
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月01日 10时45分17秒
      */
     static bool is_white_line(const char* line);
@@ -72,7 +72,7 @@ private:
      * @return true表示line为注释行；否则返回false
      * @see
      * @note 当(line == NULL)时返回false
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月01日 10时43分22秒
      */
     static bool is_comment_line(const char* line);
@@ -106,7 +106,7 @@ public:
      * @return 成功返回true；否则返回false。返回false的同时，可能会向标准错误输出打印出错信息。
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 14时10分43秒
      */
     static bool load_conf(const std::string& conf_file, ConfUnit& conf_unit);

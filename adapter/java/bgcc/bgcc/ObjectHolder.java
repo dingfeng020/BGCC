@@ -11,7 +11,7 @@
 /**
  * @file     ObjectHolder.java
  * @brief    Object 的holder
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时15分55秒
  *  

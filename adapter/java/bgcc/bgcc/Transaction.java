@@ -11,7 +11,7 @@
 /**
  * @file     Transaction.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月02日 10时24分32秒
  *  

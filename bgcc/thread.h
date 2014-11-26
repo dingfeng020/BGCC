@@ -26,7 +26,7 @@ namespace bgcc {
      * @brief 操作系统线程模型的抽象，负责线程的创建、执行、等待、休眠以及销毁
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月13日 19时57分32秒
      */
     class Thread : public Shareable {
@@ -45,7 +45,7 @@ namespace bgcc {
          * @param detached 是否分离
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时07分35秒
          */
         Thread(const RunnableSP& runner, bool detached = false);
@@ -57,7 +57,7 @@ namespace bgcc {
          * @param detached 是否分离
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时08分00秒
          */
         Thread(run_func_t func, void* arg = NULL, bool detached = false);
@@ -66,7 +66,7 @@ namespace bgcc {
          * @brief ~Thread 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时08分21秒
          */
         ~Thread();
@@ -77,7 +77,7 @@ namespace bgcc {
          * @return 成功返回true
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时08分32秒
          */
         bool start();
@@ -88,7 +88,7 @@ namespace bgcc {
          * @return 成功返回true
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时08分59秒
          */
         bool join();
@@ -99,7 +99,7 @@ namespace bgcc {
          * @return 成功返回true
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时09分15秒
          */
         bool stop();
@@ -111,7 +111,7 @@ namespace bgcc {
          * @return 线程ID
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时09分49秒
          */
         DWORD get_thread_id() const;
@@ -122,7 +122,7 @@ namespace bgcc {
          * @return 线程句柄
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时10分19秒
          */
         operator HANDLE();
@@ -134,7 +134,7 @@ namespace bgcc {
          * @return 线程ID
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月13日 20时10分46秒
          */
         pthread_t get_thread_id() const;

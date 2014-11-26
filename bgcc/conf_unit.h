@@ -22,7 +22,7 @@ namespace bgcc {
  * @brief 配置单元
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2012年06月11日 14时04分23秒
  */
 class ConfUnit {
@@ -34,7 +34,7 @@ public:
      * @brief 配置单元的类型标识
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时04分12秒
      */
     enum unit_type_t {
@@ -53,7 +53,7 @@ public:
      * @param type
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时06分20秒
      */
     explicit ConfUnit(unit_type_t type);
@@ -64,7 +64,7 @@ public:
      * @param b 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时06分42秒
      */
     explicit ConfUnit(bool b);
@@ -75,7 +75,7 @@ public:
      * @param i 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时07分00秒
      */
     explicit ConfUnit(int32_t i);
@@ -86,7 +86,7 @@ public:
      * @param l 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时07分28秒
      */
     explicit ConfUnit(int64_t l);
@@ -97,7 +97,7 @@ public:
      * @param d 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时07分47秒
      */
     explicit ConfUnit(double d);
@@ -108,7 +108,7 @@ public:
      * @param str C风格字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时37分00秒
      */
     explicit ConfUnit(const char* str);
@@ -119,7 +119,7 @@ public:
      * @param str 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时08分00秒
      */
     explicit ConfUnit(const std::string& str);
@@ -128,7 +128,7 @@ public:
      * @brief ~ConfUnit 析构函数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时08分39秒
      */
     ~ConfUnit();
@@ -139,7 +139,7 @@ public:
      * @return 配置单元类型
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时10分18秒
      */
     int32_t get_type() const;
@@ -150,7 +150,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时10分46秒
      */
     bool is_bool() const;
@@ -161,7 +161,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时11分24秒
      */
     bool is_int32() const;
@@ -172,7 +172,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时11分47秒
      */
     bool is_int64() const;
@@ -183,7 +183,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分06秒
      */
     bool is_double() const;
@@ -194,7 +194,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分25秒
      */
     bool is_string() const;
@@ -205,7 +205,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分41秒
      */
     bool is_array() const;
@@ -216,7 +216,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分56秒
      */
     bool is_group() const;
@@ -227,7 +227,7 @@ public:
      * @return bool值
      * @see
      * @note 若配置单元不是bool类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时13分24秒
      */
     bool to_bool() const;
@@ -238,7 +238,7 @@ public:
      * @return int32值
      * @see
      * @note 若配置单元不是int32类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时15分47秒
      */
     int32_t to_int32() const;
@@ -249,7 +249,7 @@ public:
      * @return int64值
      * @see
      * @note 若配置单元不是int32或是int64类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时19分22秒
      */
     int64_t to_int64() const;
@@ -260,7 +260,7 @@ public:
      * @return double值
      * @see
      * @note 若配置单元不是double或int32或int64类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时21分35秒
      */
     double to_double() const;
@@ -271,7 +271,7 @@ public:
      * @return string值
      * @see
      * @note 若配置单元不是string类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时22分38秒
      */
     std::string to_string() const;
@@ -282,7 +282,7 @@ public:
      * @param b 值
      * @see
      * @note 若配置单元不是bool类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时07分39秒
      */
     void set_bool(bool b);
@@ -293,7 +293,7 @@ public:
      * @param i 值
      * @see
      * @note 若配置单元不是int32类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时08分23秒
      */
     void set_int32(int32_t i);
@@ -304,7 +304,7 @@ public:
      * @param l 值
      * @see
      * @note 若配置单元不是int64类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时08分52秒
      */
     void set_int64(int64_t l);
@@ -315,7 +315,7 @@ public:
      * @param d 值
      * @see
      * @note 若配置单元不是double类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时09分32秒
      */
     void set_double(double d);
@@ -326,7 +326,7 @@ public:
      * @param str 值
      * @see
      * @note 若配置单元不是string类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时10分07秒
      */
     void set_string(const std::string& str);
@@ -337,7 +337,7 @@ public:
      * @return 首迭代器
      * @see
      * @note 若配置单元不是array类型，将抛出std::explicit异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时23分53秒
      */
     const_iterator begin() const;
@@ -348,7 +348,7 @@ public:
      * @return 尾迭代器
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时24分53秒
      */
     const_iterator end() const;
@@ -361,7 +361,7 @@ public:
      * @return 配置单元指针，若找不到则返回NULL
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时26分08秒
      */
     ConfUnit* operator[](const std::string& index);
@@ -374,7 +374,7 @@ public:
      * @return 新元素
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时27分52秒
      */
     ConfUnit* push_back(ConfUnit* punit);
@@ -383,7 +383,7 @@ public:
      * @brief pop_back 从array中弹出元素
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时29分43秒
      */
     void pop_back();
@@ -395,7 +395,7 @@ public:
      * @param punit 新元素
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时30分55秒
      */
     void insert(const std::string& key, ConfUnit* punit);
@@ -406,7 +406,7 @@ public:
      * @param key 属性名
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时32分07秒
      */
     void erase(const std::string& key);
@@ -415,7 +415,7 @@ public:
      * @brief clear 清空array或group
      * @see
      * @note 若配置单元不是array或group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时33分02秒
      */
     void clear();
@@ -426,7 +426,7 @@ public:
      * @return 元素个数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 19时54分56秒
      */
     int32_t size() const;
@@ -450,7 +450,7 @@ namespace bgcc2 {
  * @brief 配置单元
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2012年06月11日 14时04分23秒
  */
 class ConfUnit {
@@ -462,7 +462,7 @@ public:
      * @brief 配置单元的类型标识
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时04分12秒
      */
     enum unit_type_t {
@@ -483,7 +483,7 @@ public:
      * @param type
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时06分20秒
      */
     explicit ConfUnit(unit_type_t type);
@@ -494,7 +494,7 @@ public:
      * @param b 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时06分42秒
      */
     explicit ConfUnit(bool b);
@@ -505,7 +505,7 @@ public:
      * @param l 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时07分28秒
      */
     explicit ConfUnit(int64_t l);
@@ -516,7 +516,7 @@ public:
      * @param d 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时07分47秒
      */
     explicit ConfUnit(double d);
@@ -527,7 +527,7 @@ public:
      * @param str C风格字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 15时37分00秒
      */
     explicit ConfUnit(const char* str);
@@ -538,7 +538,7 @@ public:
      * @param str 初始值
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时08分00秒
      */
     explicit ConfUnit(const std::string& str);
@@ -547,7 +547,7 @@ public:
      * @brief ~ConfUnit 析构函数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时08分39秒
      */
     ~ConfUnit();
@@ -558,7 +558,7 @@ public:
      * @return 配置单元类型
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时10分18秒
      */
     int32_t get_type() const;
@@ -572,7 +572,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 14时46分06秒
      */
     bool is_null() const;
@@ -583,7 +583,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分41秒
      */
     bool is_array() const;
@@ -594,7 +594,7 @@ public:
      * @return
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时12分56秒
      */
     bool is_group() const;
@@ -605,7 +605,7 @@ public:
      * @return bool值
      * @see
      * @note 若配置单元不是bool类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时13分24秒
      */
     bool to_bool() const;
@@ -616,7 +616,7 @@ public:
      * @return int64值
      * @see
      * @note 若配置单元不是int32或是int64类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时19分22秒
      */
     int64_t to_integer() const;
@@ -627,7 +627,7 @@ public:
      * @return port值
      * @see
      * @note 若配置单元不是合法port值，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月29日 10时52分37秒
      */
     uint16_t to_port() const;
@@ -638,7 +638,7 @@ public:
      * @return double值
      * @see
      * @note 若配置单元不是double或int32或int64类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时21分35秒
      */
     double to_double() const;
@@ -649,7 +649,7 @@ public:
      * @return string值
      * @see
      * @note 若配置单元不是string类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时22分38秒
      */
     std::string to_string() const;
@@ -660,7 +660,7 @@ public:
      * @return ipv4值
      * @see
      * @note 若配置单元不是ipv4，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月29日 10时46分56秒
      */
     std::string to_ipv4() const;
@@ -671,7 +671,7 @@ public:
      * @return 首迭代器
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时23分53秒
      */
     const_iterator begin() const;
@@ -682,7 +682,7 @@ public:
      * @return 尾迭代器
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时24分53秒
      */
     const_iterator end() const;
@@ -695,7 +695,7 @@ public:
      * @return 配置单元指针，若找不到则返回NULL
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时26分08秒
      */
     ConfUnit& operator[](const std::string& index);
@@ -710,7 +710,7 @@ public:
      * @return 新元素
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时27分52秒
      */
     ConfUnit* push_back(ConfUnit* punit);
@@ -719,7 +719,7 @@ public:
      * @brief pop_back 从array中弹出元素
      * @see
      * @note 若配置单元不是array类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时29分43秒
      */
     void pop_back();
@@ -731,7 +731,7 @@ public:
      * @param punit 新元素
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时30分55秒
      */
     void insert(const std::string& key, ConfUnit* punit);
@@ -742,7 +742,7 @@ public:
      * @param key 属性名
      * @see
      * @note 若配置单元不是group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时32分07秒
      */
     void erase(const std::string& key);
@@ -751,7 +751,7 @@ public:
      * @brief clear 清空array或group
      * @see
      * @note 若配置单元不是array或group类型，将抛出std::exception异常
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 14时33分02秒
      */
     void clear();
@@ -762,7 +762,7 @@ public:
      * @return 元素个数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月11日 19时54分56秒
      */
     int32_t size() const;

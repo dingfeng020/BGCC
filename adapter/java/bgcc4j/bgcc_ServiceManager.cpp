@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_ServiceManager.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月31日 10时55分32秒
  *  

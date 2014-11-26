@@ -9,7 +9,7 @@
  
 /**
  * @file callback_recv_impl.h
- * @author chenyuzhen(chenyuzhen@baidu.com)
+ * @author
  * @date 2012/11/13 11:31:37
  * @version 1.0.0 
  * @brief 

@@ -24,7 +24,7 @@ class ConfUnit;
  * @brief 配置解析器，用于解析配置文件或配置字符串
  * @see
  * @note
- * @author  liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @date    2013年10月11日 19时37分32秒
  */
 class ConfigureParser {
@@ -36,7 +36,7 @@ public:
      * @param conf_unit 配置单元
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 19时39分35秒
      */
     void parse(const std::string& conf_filename, ConfUnit& conf_unit);
@@ -48,7 +48,7 @@ public:
      * @param conf_unit 配置单元
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2013年10月11日 19时40分08秒
      */
     void parse(std::ifstream& conf_file, ConfUnit& conf_unit);

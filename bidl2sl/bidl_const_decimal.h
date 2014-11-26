@@ -11,7 +11,7 @@
 /**
  * @file     bidl_const_decimal.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月09日 19时03分29秒
  *  

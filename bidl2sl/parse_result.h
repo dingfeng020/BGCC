@@ -11,7 +11,7 @@
 /**
  * @file     parse_result.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 19时00分28秒
  *  

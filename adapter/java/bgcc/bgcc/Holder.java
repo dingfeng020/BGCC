@@ -11,7 +11,7 @@
 /**
  * @file     Holder.java
  * @brief    普通Holder类，用于bgcc in/all 类型的参数的传递
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时11分01秒
  *  

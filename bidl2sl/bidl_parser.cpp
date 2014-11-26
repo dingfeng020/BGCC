@@ -11,7 +11,7 @@
 /**
  * @file     bidl_parser.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 16时18分07秒
  *  
