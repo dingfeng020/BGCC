@@ -6,14 +6,14 @@ CLIENT = client
 OUTPUT_PATH=output
 
 CXXFLAGS = -Wall -g -W -Werror -pipe -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare
-LDFLAGS= -lbgcc -lpthread -lssl
+LDFLAGS= -lbgcc -lpthread -lssl -lcrypto
 
 INC_PATH = -I../../output/include
 LD_PATH = -L../../output/lib/
 
 BIDL_FILES=$(wildcard *.bidl)
 
-BIDL_SOURCES  = output-cpp/callback.cpp 
+BIDL_SOURCES  = output-cpp/callback.cpp
 BIDL_OBJS = $(patsubst %.cpp,%.o,$(BIDL_SOURCES))
 
 SERVER_SOURCES = $(wildcard *server.cpp) $(wildcard *send*.cpp)
@@ -24,7 +24,7 @@ CLIENT_OBJS= $(patsubst %.cpp,%.o,$(CLIENT_SOURCES))
 
 BIDL_FILES=$(notdir $(wildcard *.bidl))
 
-all:$(CLIENT) $(SERVER)
+all:$(CLIENT) $(SERVER) cacert.pem privkey.pem
 	if [ ! -d $(OUTPUT_PATH) ]; then mkdir -p $(OUTPUT_PATH); fi
 	cp $(SERVER) $(OUTPUT_PATH)/
 	cp $(CLIENT) $(OUTPUT_PATH)/
@@ -36,10 +36,10 @@ all:$(CLIENT) $(SERVER)
 $(SERVER): $(BIDL_OBJS) $(SERVER_OBJS)
 	$(CXX) $(CXXFLAGS) -o $(SERVER) $(SERVER_OBJS) $(BIDL_OBJS) $(INC_PATH) $(LD_PATH) $(LDFLAGS)
 
-$(CLIENT): $(BIDL_OBJS) $(CLIENT_OBJS) 	
+$(CLIENT): $(BIDL_OBJS) $(CLIENT_OBJS)
 	$(CXX) $(CXXFLAGS) -o $(CLIENT) $(CLIENT_OBJS) $(BIDL_OBJS) $(INC_PATH) $(LD_PATH) $(LDFLAGS)
 
-$(SERVER_OBJS): %.o: %.cpp 	
+$(SERVER_OBJS): %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $(INC_PATH) -c $<
 
 $(CLIENT_OBJS): %.o: %.cpp
@@ -50,6 +50,14 @@ $(BIDL_OBJS): %.o: %.cpp
 
 $(BIDL_SOURCES):
 	$(BIDL2SL) -g cpp $(BIDL_FILES)
+
+privkey.pem:
+	@echo "......generate privkey.pem"
+	openssl genrsa -out privkey.pem 2048
+
+cacert.pem: privkey.pem
+	@echo "......generate cacert.pem"
+	openssl req -new -x509 -key privkey.pem -out cacert.pem -days 1095
 
 clean:
 	if [ -d $(OUTPUT_PATH) ]; then rm -rf $(OUTPUT_PATH)/*; fi
