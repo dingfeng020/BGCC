@@ -2,8 +2,7 @@ CXX = g++
 SERVER = server
 CLIENT = client
 LOG = *.log*
-CFLAGS = -Wall -L.. -lbgcc -lpthread -lssl
-#CFLAGS = -Wall -L.. -lbgcc -lpthread -luuid -ftime-report -O0
+CFLAGS = -Wall -L.. -lbgcc -lpthread -lssl -lcrypto
 
 INC_PATH_PREFIX = ../../../output/include
 
@@ -15,7 +14,7 @@ LD_PATH = -L../../../output/lib/
 SRC += ../output-cpp/math_demo.cpp
 SRC += ../output-cpp/address.cpp
 
-all: $(CLIENT) $(SERVER)
+all: $(CLIENT) $(SERVER) privkey.pem cacert.pem
 
 $(SERVER): server.cpp $(SRC)
 	$(CXX) -g -o $@ $^ $(INC_PATH) $(LD_PATH)  $(CFLAGS)
@@ -25,3 +24,13 @@ $(CLIENT): client.cpp $(SRC)
 
 clean:
 	rm -rf $(CLIENT) $(SERVER) $(LOG)
+
+privkey.pem:
+	@echo "......generate privkey.pem"
+	openssl genrsa -out privkey.pem 2048
+
+cacert.pem: privkey.pem
+	@echo "......generate cacert.pem"
+	openssl req -new -x509 -key privkey.pem -out cacert.pem -days 1095
+
+.PHONY: clean all
