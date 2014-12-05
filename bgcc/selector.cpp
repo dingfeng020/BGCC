@@ -154,6 +154,7 @@ int32_t bgcc::Selector::Select(SSL* ssl){
 			} else {
 				int nwritten = 0;
 				int xwritten = 0;
+				last_deal = TimeUtil::get_timestamp_ms();
 
 				while (nwritten < HEAD_SIZE) {
 					if (-1 == ret) {
