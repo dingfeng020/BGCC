@@ -12,6 +12,8 @@
 #define _BGCC_NET_UTIL_H_
 
 #include "bgcc_common.h"
+#include <vector>
+#include <string>
 
 namespace bgcc {
 
@@ -55,6 +57,24 @@ public:
      * @date    2013年10月11日 18时55分41秒
      */
     static uint16_t get_valid_port(const char* portstr);
+
+    typedef struct ServerNode {
+        std::string ip;
+        uint32_t    port;
+    }ServerNode;
+
+    /**
+     * @brief get_valid_port 判断网络状态，选择一个最优IP
+     *
+     * @param server_node_list IP列表
+     *
+     * @return 返回迭代器iterator
+     * @see
+     * @note
+     * @author
+     * @date    2015年01月21日 10时55分41秒
+     */
+    static std::vector<ServerNode>::iterator net_check(std::vector<ServerNode>& server_node_list);
 };
 
 }
