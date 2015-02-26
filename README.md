@@ -33,8 +33,8 @@ BGCC（百度通用通信组件）是一个跨语言、跨平台、面向对象�
         <td>BGCC在Windows平台上的自动编译脚本</td>
     </tr>
     <tr>
-        <td>bgcc.sln、bgcc.vcproj</td>
-        <td>BGCC在Windows平台上的VS2003工程文件</td>
+        <td>bgcc.sln</td>
+        <td>BGCC在Windows平台上的解决方案文件</td>
     </tr>
     <tr>
         <td>bidl2sl</td>
@@ -42,7 +42,7 @@ BGCC（百度通用通信组件）是一个跨语言、跨平台、面向对象�
     </tr>
     <tr>
         <td>build.py</td>
-        <td>BGCC使用Python语言的自动编译脚本</td>
+        <td>BGCC跨平台编译统一入口文件</td>
     </tr>
     <tr>
         <td>doc</td>
