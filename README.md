@@ -29,7 +29,7 @@ BGCC（百度通用通信组件）是一个跨语言、跨平台、面向对象�
         <td>存放生成libbgcc.so和libbgcc.a的源码</td>
     </tr>
     <tr>
-        <td>bgcc_build_windows.bat</td>
+        <td>build.bat</td>
         <td>BGCC在Windows平台上的自动编译脚本</td>
     </tr>
     <tr>
@@ -59,10 +59,6 @@ BGCC（百度通用通信组件）是一个跨语言、跨平台、面向对象�
     <tr>
         <td>sample</td>
         <td>代码使用示例</td>
-    </tr>
-    <tr>
-        <td>set_vs_var.bat </td>
-        <td>VS2003环境变量设置脚本</td>
     </tr>
     <tr>
         <td>vimplugin</td>
