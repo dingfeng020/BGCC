@@ -9,6 +9,9 @@ BGCC（百度通用通信组件）是一个跨语言、跨平台、面向对象�
 #使用产品
 >1. [百度开源呼叫中心套件](https://github.com/Baidu-ecom/CC)
 
+#依赖库
+>1. [openssl](http://openssl.org)库，目前依赖的版本是[1.0.2](http://openssl.org/source/openssl-1.0.2.tar.gz)，详细情况请参考[这里](https://github.com/BaiduCC/BGCC/tree/master/deps)
+
 #联系我们
 >1. QQ群：425351662
 >2. [在线咨询](http://qiao.baidu.com/v3/?module=default&controller=im&action=index&ucid=7880242&type=n&siteid=6001152)
