@@ -5,11 +5,12 @@ CXXFLAGS = -Wall -W -pipe -Wno-unused-parameter -Wreorder -Wwrite-strings -Wswit
 	           -g3 -DVERSION=\"${SCMPF_MODULE_VERSION}\"\
               -fPIC -finline-functions -Winline -Wreturn-type -Wtrigraphs -Wformat -Wparentheses -Wpointer-arith -Werror 
 
-INC_DIR += -I.
-SRC_DIR += .
-LIB_DIR +=
-
 OUTPUT_DIR = ../$(OUTPUT_PATH)
+INC_DIR += -I.
+INC_DIR += -I$(OUTPUT_DIR)/include
+SRC_DIR += .
+LIB_DIR += -L$(OUTPUT_DIR)/lib
+
 OUTPUT_INCLUDE_DIR = $(OUTPUT_DIR)/include
 OUTPUT_INCLUDE_LIBS_DIR = $(OUTPUT_INCLUDE_DIR)/libs
 OUTPUT_LIBRARY_DIR = $(OUTPUT_DIR)/lib

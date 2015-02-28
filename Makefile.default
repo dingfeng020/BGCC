@@ -11,6 +11,7 @@ export ANT=ant
 endif
 
 export OUTPUT_PATH=./output
+export OPENSSL_PATH=${shell pwd}/deps/openssl/output
 
 all: ssl bgcc bidl2sl
 
@@ -22,7 +23,13 @@ bgcc: ssl
 	@echo "make bgcc ok."
 	@echo
 	@echo
-	
+
+ssl: 
+	if [ ! -f $(OPENSSL_PATH)/include/openssl/ssl.h  -o ! -f $(OPENSSL_PATH)/lib/libssl.a ]; then cd $(OPENSSL_PATH)/../ && ./config --prefix=$(OPENSSL_PATH)  no-shared threads && make && make install; fi 	
+	if [ ! -f $(OUTPUT_PATH) ]; then mkdir -p $(OUTPUT_PATH); fi
+	cp -r $(OPENSSL_PATH)/include $(OUTPUT_PATH)/include
+	cp -r $(OPENSSL_PATH)/lib $(OUTPUT_PATH)/lib
+
 bidl2sl:
 	@echo
 	@echo

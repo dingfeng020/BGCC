@@ -15,6 +15,7 @@ export CC=/opt/compiler/gcc-4.8.2/bin/gcc
 export AR=/opt/compiler/gcc-4.8.2/bin/ar
 export MAKE=/opt/compiler/gcc-4.8.2/bin/make
 export OUTPUT_PATH=./output/gcc482
+export OPENSSL_PATH=${shell pwd}/deps/openssl/output
 
 all: ssl bgcc bidl2sl
 
@@ -27,6 +28,12 @@ bgcc: ssl
 	@echo
 	@echo
 	
+ssl: 
+	if [ ! -f $(OPENSSL_PATH)/include/openssl/ssl.h  -o ! -f $(OPENSSL_PATH)/lib/libssl.a ]; then cd $(OPENSSL_PATH)/../ && ./config --prefix=$(OPENSSL_PATH)  no-shared threads && make && make install; fi 	
+	if [ ! -f $(OUTPUT_PATH) ]; then mkdir -p $(OUTPUT_PATH); fi
+	cp -r $(OPENSSL_PATH)/include $(OUTPUT_PATH)/include
+	cp -r $(OPENSSL_PATH)/lib $(OUTPUT_PATH)/lib
+
 bidl2sl:
 	@echo
 	@echo
