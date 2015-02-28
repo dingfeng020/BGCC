@@ -2,8 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgcc", "bgcc\bgcc.vcxproj", "{5DA91A65-082E-4E9C-BF08-498978509F2A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test4win", "test4win\test4win.vcxproj", "{0728D6E0-6206-461E-8EEB-8B4201183EB9}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgcc4j", "adapter\java\bgcc4j\bgcc4j\bgcc4j.vcxproj", "{435AECDC-FDAA-4DFC-BABD-15B52E581A81}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bgcc-MD", "bgcc\bgcc-MD.vcxproj", "{5DA91A65-082E-4E9C-BF08-498978509F2B}"
