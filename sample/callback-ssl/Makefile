@@ -6,7 +6,7 @@ CLIENT = client
 OUTPUT_PATH=output
 
 CXXFLAGS = -Wall -g -W -Werror -pipe -Wreorder -Wwrite-strings -Wswitch -Wno-sign-compare
-LDFLAGS= -lbgcc -lpthread -lssl -lcrypto
+LDFLAGS= -lbgcc -lpthread -lssl -lcrypto -ldl
 
 INC_PATH = -I../../output/include
 LD_PATH = -L../../output/lib/
