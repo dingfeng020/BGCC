@@ -307,7 +307,10 @@ int32_t BinaryProtocol::readMessageBegin(
             SocketTool::close(pTask->event.fd);
             return -1;
         }
-        if (pItem->psem->wait(DEFAULT_SERVER_TIMEOUT * 2) != 0 || pItem->err) {	//err occur
+        int32_t wait_tm = DEFAULT_SERVER_TIMEOUT * 2;
+        SocketTool::get_rcvtimeout(_transport->id(), wait_tm);
+            
+        if (pItem->psem->wait(wait_tm) != 0 || pItem->err) {	//err occur
             pItem->isWait=false;
             BGCC_WARN("bgcc", "Read Message Begin(fd=%d) Wait Timeout Or Err Occur", pTask->event.fd);
             return -1;

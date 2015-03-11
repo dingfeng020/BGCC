@@ -29,6 +29,7 @@ namespace bgcc {
 		static int32_t set_nonblock(SOCKET fd, int32_t val);
 		static int32_t set_sndtimeout(SOCKET fd, int32_t ms);
 		static int32_t set_rcvtimeout(SOCKET fd, int32_t ms);
+		static int32_t get_rcvtimeout(SOCKET fd, int32_t& ms);
         static bool is_ok(SOCKET sock);
         static int32_t close(SOCKET &fd);
         static int32_t peek(SOCKET fd);

@@ -17,6 +17,10 @@ namespace bgcc {
     int32_t SocketTool::getsockdetail(SOCKET sockfd, PeerInfo& peerInfo, bool remote) {
         struct sockaddr_in addr;
 
+        if (sockfd == INVALID_SOCKET) { 
+            return -1;
+        }
+
         memset(&addr,0,sizeof addr);
 
         int len = sizeof addr;
@@ -116,6 +120,28 @@ namespace bgcc {
 #endif
 		return setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char*)(&timeout), sizeof(timeout));
 	}
+
+    int32_t SocketTool::get_rcvtimeout(SOCKET fd, int32_t& ms) { 
+        int32_t ret= 0;
+#ifdef _WIN32
+        int32_t timeout=0;
+#else
+        struct timeval timeout;
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 0;
+#endif
+        int32_t buf_len = sizeof(timeout);
+        ret = getsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char*)(&timeout), &buf_len);
+        if(ret == 0) {
+#ifdef _WIN32
+            ms = timeout;
+#else
+            ms = timeout.tv_sec * 1000 + timeout.tv_usec/1000 ;
+#endif
+        }
+        
+        return ret;
+    }
 
         int32_t SocketTool::init() {
             int32_t ret = 0;

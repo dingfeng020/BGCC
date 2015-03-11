@@ -139,17 +139,17 @@ int32_t bgcc::Selector::Select(SSL* ssl){
 			//in order to judge quickly, reduce the sndbuf size , then the third send will EAGAIN when
 			//network is unable to connect to server
 
+			SocketTool::set_sndbufsize(_sock, HEAD_SIZE*2);
 			if (!ssl) {
-				SocketTool::set_sndbufsize(_sock, HEAD_SIZE*2);
 				int32_t r=send(_sock, (const char*)bp_hb_hdr, HEAD_SIZE, 0);
 				last_deal=TimeUtil::get_timestamp_ms();
 
 				if(0==r||(SOCKET_ERROR==r&&!SocketTool::is_interrupt())){
 					ret=-1;
-					BGCC_WARN("bgcc", "HeartBeat Send fd=%d, ret=%d, errno=%d", _sock, r, BgccSockGetLastError());
+					BGCC_WARN("bgcc", "HeartBeat Send fd=%d, ret=%d, err=%d", _sock, r, BgccSockGetLastError());
 				}
 				else{
-					BGCC_TRACE("bgcc", "HeartBeat Send fd=%d, ret=%d", _sock, r);
+					BGCC_TRACE("bgcc", "HB Send fd=%d, ret=%d", _sock, r);
 				}
 			} else {
 				int nwritten = 0;
@@ -162,8 +162,11 @@ int32_t bgcc::Selector::Select(SSL* ssl){
 					}
 
 					xwritten = SSL_write(ssl, (const char*)bp_hb_hdr + nwritten, HEAD_SIZE - nwritten);
+					int ssl_e = SSL_get_error(ssl, xwritten);
+					BGCC_TRACE("bgcc", "HB SSL Send fd=%d, ret=%d, err=%d",
+						_sock, xwritten, ssl_e);
 
-					switch(SSL_get_error(ssl, xwritten)) {
+					switch(ssl_e) {
 						case SSL_ERROR_NONE:
 							nwritten += xwritten;
 							break;
