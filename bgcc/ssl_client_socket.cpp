@@ -42,6 +42,8 @@ namespace bgcc {
             SSL_free(_ssl);
             _ssl = NULL;
         }
+
+        ClientSocket::close();
         return 0;
     }
     

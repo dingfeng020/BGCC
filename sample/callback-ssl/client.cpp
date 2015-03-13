@@ -35,7 +35,8 @@ void menu();
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-	log_open("client.conf");
+    log_open("client.conf");
+
     struct bgcc::ssl_init init;
     memset(&init, 0, sizeof(init));
     init.type = bgcc::SSL_CLIENT;
@@ -53,6 +54,7 @@ int main(int /*argc*/, char ** /*argv*/)
     ServerInfo si(SERVER_IP, SERVER_PORT);
 
     demo::SSLCallbackSenderProxy prx(si, 1, &mgr, 0);
+    prx.set_property(bgcc::BaseProxy::PROXY_HB_TIMEOUT, 500000);
 
     menu();
 

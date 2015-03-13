@@ -132,7 +132,7 @@ class BidlType {
             return "Unknown type";
         }
 
-        virtual std::string get_tag(const SourceWriter* ) const {
+        virtual std::string get_tag(const SourceWriter*) const {
             return "Unknown type";
         }
 

@@ -25,7 +25,7 @@ bgcc: ssl
 	@echo
 
 ssl: 
-	if [ ! -f $(OPENSSL_PATH)/output/include/openssl/ssl.h  -o ! -f $(OPENSSL_PATH)/output/lib/libssl.a ]; then cd $(OPENSSL_PATH) && ./config --prefix=$(OPENSSL_PATH)/output  no-shared threads && make && make install; fi
+	if [ ! -f $(OPENSSL_PATH)/output/include/openssl/ssl.h  -o ! -f $(OPENSSL_PATH)/output/lib/libssl.a ]; then cd $(OPENSSL_PATH) && chmod +x config && ./config --prefix=$(OPENSSL_PATH)/output  no-shared threads && make && make install; fi
 	if [ ! -f $(OUTPUT_PATH) ]; then mkdir -p $(OUTPUT_PATH); fi
 	cp -r $(OPENSSL_PATH)/output/include $(OUTPUT_PATH)/include
 	cp -r $(OPENSSL_PATH)/output/lib $(OUTPUT_PATH)/lib

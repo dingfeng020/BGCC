@@ -391,7 +391,7 @@ void bgcc::SSLEventCallback::SSLAcceptCallback(EventLoop* el, SOCKET fd, void* a
 			BGCC_TRACE("bgcc", "ERROR NONE");
 			PrepareEvent(e, fd, newCallbackArg);
 
-			if (el->del_event(&e) != 0 || el->add_event(&e) != 0) {
+            if (el->del_event(&e) != 0 || el->add_event(&e) != 0) {
 				SSL_shutdown(newCallbackArg->ssl);
 				BGCC_DEBUG("bgcc", "Memory SSL free: %p", newCallbackArg->ssl);
 				SSL_free(newCallbackArg->ssl);

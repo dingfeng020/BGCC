@@ -116,23 +116,24 @@ copy libs\*.h ..\output\include\libs\
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>call "%VS100COMNTOOLS%/../../vc/vcvarsall.bat"
+      <Command>rem call "%VS100COMNTOOLS%/../../vc/vcvarsall.bat"
 
-cd ..\deps\openssl
-if not exist output md output
-perl Configure VC-WIN32 no-asm --prefix=./output
-call ms\do_ms.bat
-set cl=-wd4244
-nmake -f ms\nt.mak vclean
-nmake -f ms\nt.mak
-nmake -f ms\nt.mak install
-if not exist ..\..\output md ..\..\output
-if not exist ..\..\output\lib md ..\..\output\lib
-copy .\output\lib\libeay32.lib ..\..\output\lib\libeay32.lib
-copy .\output\lib\ssleay32.lib ..\..\output\lib\ssleay32.lib
-if not exist ..\..\output\include md ..\..\output\include
-cd ..\..\output\include
-xcopy ..\..\deps\openssl\output\include /e /y
+rem cd ..\deps\openssl
+rem if not exist output md output
+rem perl Configure VC-WIN32 no-asm --prefix=./output
+rem call ms\do_ms.bat
+rem set cl=-wd4244
+rem nmake -f ms\nt.mak vclean
+rem nmake -f ms\nt.mak
+rem nmake -f ms\nt.mak install
+rem if not exist ..\..\output md ..\..\output
+rem if not exist ..\..\output\lib md ..\..\output\lib
+rem copy .\output\lib\libeay32.lib ..\..\output\lib\libeay32.lib
+rem copy .\output\lib\ssleay32.lib ..\..\output\lib\ssleay32.lib
+rem if not exist ..\..\output\include md ..\..\output\include
+rem cd ..\..\output\include
+rem xcopy ..\..\deps\openssl\output\include /e /y
+rem set errorlevel=0
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

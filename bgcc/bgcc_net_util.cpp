@@ -70,29 +70,32 @@ uint16_t NetUtil::get_valid_port(const char* portstr)
 }
 
 std::vector<bgcc::NetUtil::ServerNode>::iterator NetUtil::net_check(
-	std::vector<ServerNode>& server_node_list)
+    std::vector<ServerNode>& server_node_list)
 {
-    int64_t count_time = 0, temp_time = 0, min_time = -1, flag = 0;
-	std::vector<ServerNode>::iterator iter;
-	iter = server_node_list.end();
+    int64_t count_time = 0;
+    int64_t temp_time = 0; 
+    int64_t min_time = -1; 
+    int64_t flag = 0;
+    std::vector<ServerNode>::iterator iter;
+    iter = server_node_list.end();
     if (server_node_list.size() == 0) {
-		return server_node_list.end();
+        return server_node_list.end();
     }
 
     struct sockaddr_in client_addr;
     SocketTool::init();
 
-	for (std::vector<NetUtil::ServerNode>::iterator it = server_node_list.begin();
-				it != server_node_list.end();
-				++it) {
+    for (std::vector<NetUtil::ServerNode>::iterator it = server_node_list.begin();
+                it != server_node_list.end();
+                ++it) {
         for (int j = 0; j < 3; ++j) { 
             SOCKET sock;
             memset(&client_addr, 0, sizeof(client_addr));
-            fd_set  WriteSet; 
+            fd_set  write_set; 
             timeval to; 
             to.tv_sec = 1; 
             to.tv_usec = 0; 
-            char  error;  
+            char  error = '\0';
             int   len = sizeof(char); 
 
             if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -110,57 +113,57 @@ std::vector<bgcc::NetUtil::ServerNode>::iterator NetUtil::net_check(
 #endif
             SocketTool::set_nonblock(sock, 1);
             temp_time = TimeUtil::get_timestamp_us();
-            if(connect(sock, (struct sockaddr *)&server_addr, sizeof(sockaddr_in)) != 0) { 
+            if (connect(sock, (struct sockaddr *)&server_addr, sizeof(sockaddr_in)) != 0) { 
 
-                FD_ZERO(&WriteSet); 
-                FD_SET(sock, &WriteSet); 
+                FD_ZERO(&write_set); 
+                FD_SET(sock, &write_set); 
 
-                if(select(sock + 1, NULL, &WriteSet, NULL, &to) > 0) { 
+                if (select(sock + 1, NULL, &write_set, NULL, &to) > 0) { 
                     getsockopt(sock, SOL_SOCKET, SO_ERROR, &error, (socklen_t*)&len);  
-                    if(error == 0) {
-						flag = 0;
+                    if (error == 0) {
+                        flag = 0;
                         BGCC_TRACE("bgcc", "connect successful ip=%s, port=%d.", 
                                 it->ip.c_str(), 
                                 it->port);
                         SocketTool::close(sock);
                     } 
                     else { 
-						flag = -1;
+                        flag = -1;
                         BGCC_WARN("bgcc", "connect fail ip=%s, port=%d.", it->ip.c_str(), it->port);
-						break;
+                        break;
                     }
                 } else { 
-					flag = -1;
+                    flag = -1;
                     BGCC_WARN("bgcc", "connect fail ip=%s, port=%d.", it->ip.c_str(), it->port);
-					break;
+                    break;
                 } 
             } 
             else {
-				flag = 0;
+                flag = 0;
                 BGCC_TRACE("bgcc", "connect successful ip=%s, port=%d.", it->ip.c_str(), it->port);
                 SocketTool::close(sock);
             }
 
-			temp_time = TimeUtil::get_timestamp_us() - temp_time;
-			count_time += temp_time;
-			BGCC_TRACE("bgcc", "%d times (ip=%s, port=%d) need %ld us.", 
-				j, 
-				it->ip.c_str(), 
-				it->port, 
-				temp_time); 
+            temp_time = TimeUtil::get_timestamp_us() - temp_time;
+            count_time += temp_time;
+            BGCC_TRACE("bgcc", "%d times (ip=%s, port=%d) need %ld us.", 
+                j, 
+                it->ip.c_str(), 
+                it->port, 
+                temp_time); 
         }
-		if (flag == 0) {
-			if (min_time == -1 || (count_time < min_time && min_time != -1)) {
-				min_time = count_time;
-				iter = it;
-				BGCC_TRACE("bgcc", "(%s, %d) sum need %ld us.", 
-					iter->ip.c_str(), 
-					iter->port, 
-					count_time);
-			}
-		} else {
-			BGCC_TRACE("bgcc", "connect fail throw ip = %s, port=%d.", it->ip.c_str(), it->port);
-		}
+        if (flag == 0) {
+            if (min_time == -1 || (count_time < min_time && min_time != -1)) {
+                min_time = count_time;
+                iter = it;
+                BGCC_TRACE("bgcc", "(%s, %d) sum need %ld us.", 
+                    iter->ip.c_str(), 
+                    iter->port, 
+                    count_time);
+            }
+        } else {
+            BGCC_TRACE("bgcc", "connect fail throw ip = %s, port=%d.", it->ip.c_str(), it->port);
+        }
 
         count_time = 0;
     }

@@ -249,7 +249,7 @@ namespace bgcc {
         
         if (conn.is_valid() && conn->proto.is_valid() 
             && conn->proto->getTransport().is_valid()) { 
-            int32_t tm=0;
+            int32_t tm = 0;
             if (get_property(PROXY_SEND_TIMEOUT, tm)) { 
                 SocketTool::set_sndtimeout(conn->proto->getTransport()->id(), tm);
             }

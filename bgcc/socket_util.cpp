@@ -122,21 +122,22 @@ namespace bgcc {
 	}
 
     int32_t SocketTool::get_rcvtimeout(SOCKET fd, int32_t& ms) { 
-        int32_t ret= 0;
+        int32_t ret = 0;
 #ifdef _WIN32
-        int32_t timeout=0;
+        int32_t timeout = 0;
+        int32_t buf_len = sizeof(timeout);
 #else
         struct timeval timeout;
         timeout.tv_sec = 0;
         timeout.tv_usec = 0;
+        socklen_t buf_len = (socklen_t)sizeof(timeout);
 #endif
-        int32_t buf_len = sizeof(timeout);
         ret = getsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char*)(&timeout), &buf_len);
-        if(ret == 0) {
+        if (ret == 0) {
 #ifdef _WIN32
             ms = timeout;
 #else
-            ms = timeout.tv_sec * 1000 + timeout.tv_usec/1000 ;
+            ms = timeout.tv_sec * 1000 + timeout.tv_usec / 1000 ;
 #endif
         }
         
