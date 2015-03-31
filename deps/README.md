@@ -1,4 +1,4 @@
-bgcc编译需要依赖openssl库，为了方便在windows下编译，我们直接将openssl源代码直接引了进来，目前依赖版本是[1.0.2]a(http://openssl.org/source/openssl-1.0.2..tar.gz)。
+bgcc编译需要依赖openssl库，为了方便在windows下编译，我们直接将openssl源代码直接引了进来，目前依赖版本是[1.0.2a](http://openssl.org/source/openssl-1.0.2a.tar.gz)。
 
 注：
 >1. 相关开源协议及版权请参考openssl[官方网站](http://openssl.org)
