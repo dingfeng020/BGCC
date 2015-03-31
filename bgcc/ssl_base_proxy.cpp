@@ -210,16 +210,6 @@ namespace bgcc {
             if(client->open()==0){
                 SharedPointer<BinaryProtocol> prot = 
 					SharedPointer<BinaryProtocol>(new bgcc::BinaryProtocol(client));
-                if(prot.is_valid()&& prot->getTransport().is_valid()){
-                    int32_t tm=0;
-                    if(get_property(PROXY_SEND_TIMEOUT, tm)){
-                        SocketTool::set_sndtimeout(prot->getTransport()->id(), tm);
-                    }
-                    if(get_property(PROXY_RECV_TIMEOUT, tm)){
-                        SocketTool::set_rcvtimeout(prot->getTransport()->id(), tm);
-                    }
-                }
-
                 return SharedPointer<ConnInfo>(new ConnInfo(prot));
             }
         }
@@ -247,14 +237,6 @@ namespace bgcc {
 			while(_protocols.get(prot, 10)==0&&!ok){ //deal CLOSE_WAIT connect 
 				if(prot.is_valid()&&prot->getTransport().is_valid()){
 					if((ok=SocketTool::is_ok(prot->getTransport()->id()))){
-						int32_t tm=0;
-	                    if(get_property(PROXY_SEND_TIMEOUT, tm)){
-		                    SocketTool::set_sndtimeout(prot->getTransport()->id(), tm);
-			            }
-				        if(get_property(PROXY_RECV_TIMEOUT, tm)){
-					        SocketTool::set_rcvtimeout(prot->getTransport()->id(), tm);
-						}
-
 						conn=SharedPointer<ConnInfo>(new(std::nothrow)ConnInfo(prot));
 						break;
 					}
@@ -263,6 +245,17 @@ namespace bgcc {
 
             if(!ok){
                 conn=create_Conn();
+            }
+        }
+        
+        if (conn.is_valid() && conn->proto.is_valid() 
+            && conn->proto->getTransport().is_valid()) { 
+            int32_t tm = 0;
+            if (get_property(PROXY_SEND_TIMEOUT, tm)) { 
+                SocketTool::set_sndtimeout(conn->proto->getTransport()->id(), tm);
+            }
+            if (get_property(PROXY_RECV_TIMEOUT, tm)) {
+                SocketTool::set_rcvtimeout(conn->proto->getTransport()->id(), tm);
             }
         }
         return conn;

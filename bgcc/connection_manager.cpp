@@ -40,6 +40,10 @@ namespace bgcc {
 					_info=info;
 
 					ret=0;
+                    if (_info->param) {
+                        ReadItem *pitem = (ReadItem*)(info->param);
+                        pitem->Reset();
+                    }
 #ifndef _WIN32	
 					TaskAsso *pTask=(TaskAsso*)info->param->pTask;
 					if(!pTask
@@ -49,11 +53,6 @@ namespace bgcc {
 						SocketTool::close(pTask->event.fd);
 					}
 #endif
-
-					if(_info->param){
-						ReadItem *pItem=(ReadItem*)(info->param);
-						pItem->Reset();
-					}
 					BGCC_TRACE("bgcc","ConnectionNode put, ret=%d, fd=%d",
 							ret, _info->proto->getTransport()->id());
 				}

@@ -58,6 +58,11 @@ namespace bgcc {
         uint32_t mask = event->mask;
         int32_t op = EPOLL_CTL_ADD;
 
+        if (fd < 0 || fd >= MAXNFD) { 
+            BGCC_WARN("bgcc", "Before Add fd=%d to Epoll failed, fd is invalid", fd);
+            return -1;
+        }
+
         _events[fd].mask = mask;
 
         struct epoll_event ee;
@@ -119,6 +124,12 @@ namespace bgcc {
         }
 
         int32_t fd = event->fd;
+        
+        if (fd < 0 || fd >= MAXNFD) { 
+            BGCC_WARN("bgcc", "Before del fd=%d from Epoll failed, fd is invalid", fd);
+            return -1;
+        }
+        
         uint32_t mask = _events[fd].mask & (~event->mask);
         _events[fd].mask = mask;
 
