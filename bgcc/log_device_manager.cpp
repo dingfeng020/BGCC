@@ -44,9 +44,7 @@ namespace bgcc {
             exit(0);
         }
 
-        std::ostringstream oss;
-        oss << getpid();
-        ret = default_device->open(const_cast<char*>(oss.str().c_str()));
+        ret = default_device->open();
         if (0 != ret) {
             std::cerr << "Open default device failed: " << bgcc_strerror_r(ret, buffer, BUFSIZ) << std::endl;
             delete default_device;
@@ -161,6 +159,13 @@ namespace bgcc {
                 int32_t life_circle_value = get_life_circle_from_logdev_confunit(logdev, split_policy_value);
                 std::string layout_valstr = logdev["layout"].to_string();
 
+                bgcc2::ConfUnit& tmp_unit = logdev["file_use_pid"];
+                int32_t file_use_pid = 0;
+
+                if (tmp_unit.get_type() != bgcc2::ConfUnit::UT_NULL) {
+                    file_use_pid = tmp_unit.to_integer();
+                }
+
                 ILogDevice* device = new(std::nothrow) FileLogDevice(
                         filepath_valstr.c_str(), device_name_valstr.c_str(), level_value,
                         split_policy_value, (off_t)maxsize_value, life_circle_value,
@@ -171,7 +176,11 @@ namespace bgcc {
                 }
 
                 std::ostringstream oss;
-                oss << getpid();
+                 
+                if (file_use_pid == 1) {
+                    oss << getpid();
+                }
+
                 if (0 != (ret = device->open(const_cast<char*>(oss.str().c_str())))) {
                     std::cerr << "failed to Open device " << i << ": " << device_name_valstr << std::endl;
                     exit(-1);
