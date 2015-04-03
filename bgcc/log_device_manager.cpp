@@ -161,7 +161,6 @@ namespace bgcc {
 
                 bgcc2::ConfUnit& tmp_unit = logdev["file_use_pid"];
                 int32_t file_use_pid = 0;
-
                 if (tmp_unit.get_type() != bgcc2::ConfUnit::UT_NULL) {
                     file_use_pid = tmp_unit.to_integer();
                 }
