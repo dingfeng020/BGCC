@@ -121,6 +121,15 @@ namespace bgcc {
          */
         int32_t write(const char* device_name, const struct log_message_t& log_message);
 
+        void device_close() {
+            std::vector<ILogDevice *>::iterator itr;
+            for (itr = _devices.begin(); itr != _devices.end(); ++itr) {
+                (*itr)->close();
+                delete *itr;
+            }
+
+            _devices.clear();
+        };
     private:
         /**
          * @brief add_device 将新设备添加到设备列表中

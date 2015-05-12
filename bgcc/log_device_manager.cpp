@@ -213,6 +213,8 @@ namespace bgcc {
     }
 
     int32_t log_close() {
+        LogDeviceManager* manager = LogDeviceManager::get_instance();
+        manager->device_close();
         return 0;
     }
 
