@@ -15,9 +15,10 @@
 #endif
 #include <iostream>
 #include <algorithm>
-#include <stdlib.h>
+
 #include "time_util.h"
 #include "string_util.h"
+#include "guard.h"
 
 namespace bgcc {
 
@@ -250,7 +251,7 @@ namespace bgcc {
 #ifdef _WIN32
         GUID guid;
         CoCreateGuid(&guid);
-        _snprintf( uuid,
+        snprintf( uuid,
                 sizeof(uuid),
                 "%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                 guid.Data1, guid.Data2, guid.Data3,
@@ -259,6 +260,7 @@ namespace bgcc {
                 guid.Data4[4], guid.Data4[5],
                 guid.Data4[6], guid.Data4[7]);
 #else
+		Guard<Mutex> guard(&stMutex);
         FILE* f = fopen("/proc/sys/kernel/random/uuid", "r");
         if (f != NULL) {
             fread(uuid, 1, 36, f);
@@ -280,11 +282,7 @@ namespace bgcc {
         c = (src >> 8) & 0xff;
         d = src & 0xff;
 
-#ifdef _WIN32
-        _snprintf(buffer, 16, "%u.%u.%u.%u", a, b, c, d);
-#else
         snprintf(buffer, 16, "%u.%u.%u.%u", a, b, c, d);
-#endif
 
         dest = buffer;
         return true;
@@ -329,7 +327,7 @@ namespace bgcc {
 
     std::string StringUtil::rand_string() {
         struct timeval tv;
-        gettimeofday(&tv, NULL);
+		TimeUtil::gettimeofday(&tv, NULL);
         uint32_t seed = tv.tv_usec;
 
         std::stringstream ss;
@@ -343,5 +341,7 @@ namespace bgcc {
         ss >> str;
         return str;
     }
+
+	Mutex StringUtil::stMutex;
 }
 

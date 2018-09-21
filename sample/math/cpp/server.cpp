@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <bgcc.h>
-#include "math.h"
+#include <math_demo.h>
 
 using namespace bgcc;
 using namespace math;
@@ -785,7 +785,7 @@ public:
 
 Server* server;
 
-void* server_func(void*) {
+void* server_func(const bool* isstopped, void*) {
     SharedPointer<IProcessor> xp(
             new MathProcessor(
                 SharedPointer<Math>(
@@ -796,7 +796,7 @@ void* server_func(void*) {
 
     ThreadPool tp;
     tp.init(10);
-    server = new Server(&sm, &tp, 8503);
+    server = new Server(&sm, &tp, 8321);
     if (0 != server->serve()) {
         return 0;
     }
@@ -804,7 +804,7 @@ void* server_func(void*) {
 }
 
 int main(int argc, char* argv[]) {
-    log_open("bgcc.cfg");
+    log_open("server.conf");
     Thread t(server_func);
     t.start();
 

@@ -13,8 +13,9 @@
 
 #include <map>
 #include <vector>
+
+#include "bgcc_common.h"
 #include "mutex.h"
-#include "bgcc_stdint.h"
 
 namespace bgcc {
 
@@ -24,7 +25,7 @@ namespace bgcc {
         ~Mempool();
 
         void* get_mem_block(int32_t size);
-        void put_mem_block(void* mem_block);
+        void put_mem_block(void** mem_block);
 
         int32_t get_size(int32_t size);
     private:
@@ -36,7 +37,7 @@ namespace bgcc {
         void free_mem_block(int32_t size);
         std::map<int32_t, std::vector<void*> > _mem_blocks;
 
-        mutable Mutex _mutex;
+        Mutex _mutex;
 
     }; // end of class Mempool
 

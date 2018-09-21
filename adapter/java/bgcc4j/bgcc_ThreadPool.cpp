@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_ThreadPool.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月01日 13时17分05秒
  *  

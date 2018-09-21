@@ -11,7 +11,7 @@
 /**
  * @file     cpp_source_writer.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月10日 13时24分33秒
  *  
@@ -56,6 +56,7 @@ private:
     void output_header_class_result(const BidlClass* t, int32_t level);
     void output_header_class_presult(const BidlClass* t, int32_t level);
     void output_header_class_proxy(const BidlClass* t, int32_t level);
+    void output_header_class_ssl_proxy(const BidlClass* t, int32_t level);
     void output_header_class_processor(const BidlClass* t, int32_t level);
 
     void write_implement_recursive(const BidlType* bt, int32_t level);
@@ -67,7 +68,6 @@ private:
     void output_implement_class(const BidlType* bt, int32_t level);
 
     void output_implement_struct_constructor_destructor_operators(const BidlType* bt, int32_t level);
-    void output_implement_struct_function_read(const BidlType* bt, int32_t level);
     void output_implement_struct_read_clause(const BidlType* bt, int32_t level, const std::string& field_name);
     void output_implement_struct_function_read_from_buffer(const BidlType* bt, int32_t level);
     void output_implement_struct_read_clause_from_buffer(const BidlType* bt, int32_t level, const std::string& field_name);
@@ -84,6 +84,7 @@ private:
     void output_implement_class_presult_read(const BidlType* bt, int32_t level, const std::string& field_name);
 
     void output_implement_class_proxy(const BidlType* t, int32_t level);
+    void output_implement_class_ssl_proxy(const BidlType* t, int32_t level);
     void output_implement_class_processor(const BidlType* t, int32_t level);
 public:
     virtual std::string get_class_tag()     const {

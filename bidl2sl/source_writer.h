@@ -11,7 +11,7 @@
 /**
  * @file     source_writer.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月10日 14时03分42秒
  *  
@@ -37,7 +37,7 @@ public:
      * @return SourceWriter子类对象指针
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月28日 17时26分01秒
      */
     static SourceWriter* make_source_writer(const std::string& bidl);
@@ -48,7 +48,7 @@ public:
      * @param bt 经BidlParser解释后的BidlType类型指针
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月28日 17时28分46秒
      */
     virtual void write_header(const BidlType* bt) = 0;
@@ -59,7 +59,7 @@ public:
      * @param bt 经BidlParser解释后的BidlType类型指针
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月28日 17时30分00秒
      */
     virtual void write_implement(const BidlType* bt) = 0;

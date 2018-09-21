@@ -11,7 +11,7 @@
 /**
  * @file     ExceptionType.java
  * @brief    ExceptionType枚举类
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 18时50分41秒
  *  

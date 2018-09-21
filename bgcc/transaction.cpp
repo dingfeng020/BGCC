@@ -23,38 +23,15 @@
 #include "log.h"
 
 namespace bgcc {
-
-    class IntervalClearRunner : public Runnable {
-        public:
-            IntervalClearRunner(Transaction* parent) : _parent(parent) {
-            }
-
-            virtual int32_t operator()(void*) {
-                while (true) {
-                    TimeUtil::safe_sleep_s(60);
-                    _parent->intervalClear();
-                }
-                return 0;
-            }
-        private:
-            Transaction *_parent;
-    };
-
     Transaction* Transaction::get_instance() {
         static Transaction trans;
         return &trans;
     }
 
     Transaction::Transaction() : _counter(0) {
-        SharedPointer<Runnable> runner(new IntervalClearRunner(this));
-        _intervalClearThread = SharedPointer<Thread>(new Thread(runner));
-        _intervalClearThread->start();
     }
 
     Transaction::~Transaction() {
-        if (_intervalClearThread.is_valid()) {
-            _intervalClearThread->stop();
-        }
     }
 
     TicketIdType Transaction::getTicketId(ProtocolSharedPointer protocol, ThreadIdType threadId, std::string funcName) {
@@ -184,7 +161,6 @@ namespace bgcc {
         return ++_counter;
     }
 
-
     TicketMapKeyType Transaction::makeKey(const std::string& ip, PortType port, ThreadIdType threadId, const std::string& funcName) {
         TicketMapKeyType key;
 
@@ -194,59 +170,6 @@ namespace bgcc {
         key.funcName = funcName;
 
         return key;
-    }
-
-
-    int32_t Transaction::retrieveDataCopyByTicketId(TicketIdType ticketId, void** data, int32_t& size) {
-        TicketId2DataMap::const_iterator citr;
-        typedef Guard<Mutex> ScopedMutex;
-
-        ScopedMutex guard(&_mutex);
-        citr = _data.find(ticketId);
-        if (_data.end() != citr) {
-            return citr->second->get_data_copy(data, size);
-        } else {
-            return -1;
-        }
-    }
-
-    int32_t Transaction::saveDataByTicketId(TicketIdType ticketId, void* data, int32_t size) {
-        TicketId2DataMap::iterator itr;
-        typedef Guard<Mutex> ScopedMutex;
-        int32_t ret;
-        SharedPointer<NBDataBuffer> d(new NBDataBuffer);
-
-        ret = d->append(data, size);
-        if (0 != ret) {
-            return ret;
-        }
-
-        ScopedMutex guard(&_mutex);
-        itr = _data.find(ticketId);
-        if (_data.end() != itr) {
-            itr->second = d;
-        } else {
-            _data.insert(std::make_pair(ticketId, d));
-        }
-        return 0;
-    }
-
-    int32_t Transaction::intervalClear() {
-        std::vector<TicketIdType> timedoutTicketIds;
-        std::vector<TicketIdType>::iterator timedoutTicketIdsItr;
-
-        typedef Guard<Mutex> ScopedMutex;
-        ScopedMutex guard(&_mutex);
-
-        xremove_if(_tickets, timedoutTicketIds, TimedoutPredicate<TicketKey2TicketValueMap>());
-
-        for (timedoutTicketIdsItr = timedoutTicketIds.begin();
-                timedoutTicketIdsItr != timedoutTicketIds.end();
-                ++timedoutTicketIdsItr) {
-            _data.erase(*timedoutTicketIdsItr);
-        }
-
-        return 0;
     }
 
     bool operator<(const TicketMapKeyType& lhs, const TicketMapKeyType& rhs) {

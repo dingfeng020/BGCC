@@ -58,27 +58,46 @@ namespace bgcc {
         int32_t ret = 0;
 
         if (BGCC_SEMA_WAIT_INFINITE == millisecond) {
-            ret = sem_wait(&_sem);
-        }
-        else {
+			while((ret=sem_wait(&_sem))==-1 && EINTR==errno);
+		}
+		else{
             struct timespec ts = {0, 0};
             TimeUtil::get_abs_timespec(&ts, millisecond);
-            ret = sem_timedwait(&_sem, &ts);
-        }
+            while( (ret=sem_timedwait(&_sem, &ts))==-1 && EINTR==errno );
+		}
+		
+		if(0!=ret){
+			if(BgccGetLastError()==ETIMEDOUT){
+				return E_BGCC_TIMEOUT;
+			}
+			else{
+				return E_BGCC_SYSERROR;
+			}
+		}
 
-        if (-1 == ret) {
-            int32_t e = BgccGetLastError();
-            if (ETIMEDOUT == e) {
-                return E_BGCC_TIMEOUT;
-            }
-            else {
-                return E_BGCC_SYSERROR;
-            }
-        }
-
-        return 0;
+		return 0;
 #endif
     }
+
+	bool Semaphore::try_wait(){
+#ifdef _WIN32
+		if (NULL == _sem) {
+            return false;
+        }
+
+        DWORD ret = WaitForSingleObject(_sem, 0);
+        if (WAIT_OBJECT_0 == ret || WAIT_ABANDONED == ret) {
+            return true;
+        }
+
+		return false;
+#else
+		int32_t ret=0;
+		while((ret=sem_trywait(&_sem))==-1 && EINTR==errno);
+		return (0==ret);
+#endif
+
+	}
 
     int32_t Semaphore::signal() {
 #ifdef _WIN32
@@ -89,13 +108,11 @@ namespace bgcc {
         }
         return (0 != ret ? 0 : E_BGCC_SYSERROR);
 #else
-        int32_t ret = sem_post(&_sem);
-        if (-1 == ret) {
-            return E_BGCC_SYSERROR;
-        }
-        else {
-            return 0;
-        }
+
+		int32_t ret=0;
+		while((ret=sem_post(&_sem))==-1 && EINTR==errno);
+		return (0==ret?0:E_BGCC_SYSERROR);
+
 #endif
     }
 }

@@ -11,7 +11,7 @@
 /**
  * @file     global_parser.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 14时43分02秒
  *  
@@ -20,7 +20,9 @@
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 #include <errno.h>
 #include <string.h>
 #include "global_parser.h"
@@ -81,7 +83,7 @@ bool GlobalParser::is_bidl_exist_in_bidl_include_dirs(const std::string& bidl, s
 }
 
 bool GlobalParser::is_file_exist(const std::string& full_name) {
-    return access(full_name.c_str(), F_OK) == 0;
+    return ACCESS(full_name.c_str(), F_OK) == 0;
 }
 
 bool GlobalParser::is_dir_exist(const std::string& dir) {

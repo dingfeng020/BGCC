@@ -8,91 +8,50 @@
   *      license.txt
   *********************************************************************/
 
-#ifdef _WIN32
-typedef int socklen_t;
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
-#else
-#include <sys/socket.h>
-#include <sstream>   
-#include <errno.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#endif
-
-#include <string.h>
-
-#include "transport.h"
 #include "client_socket.h"
+#include "transport.h"
 #include "exception.h"
 #include "bgcc_error.h"
-#include "log.h"
 #include "string_util.h"
 
 namespace bgcc {
-
-    ClientSocket::~ClientSocket() {
-        close();
-    }
-
-    bool ClientSocket::is_open() const 
-    {
-        if(_socket == INVALID_SOCKET){
-            return false;
-        }
-        else{
-#ifdef _WIN32
-            int   optval,   optlen   =   sizeof(int); 
-            getsockopt(_socket, SOL_SOCKET, SO_ERROR,(char*)&optval,&optlen); 
-            if(optval == 0)      
-#else
-
-                struct tcp_info info;
-            int len = sizeof(info);
-            getsockopt(_socket,IPPROTO_TCP,TCP_INFO,&info,(socklen_t*)&len);
-            if(info.tcpi_state == TCP_ESTABLISHED || info.tcpi_state == TCP_LISTEN)
-#endif
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-    }   
-    /*待合入接口后，实现内部*/
-    int32_t ClientSocket::get_timeout_info(int optname ){
-        int timeout;
-#ifndef _WIN32
-        timeout = 5;
-#else
-        timeout = 5000;
-#endif
-        return timeout;
+    bool ClientSocket::is_open() const {
+        return SocketTool::is_ok(_socket);
     }
 
     int32_t ClientSocket::open_impl(struct addrinfo *res) {
-        if (res == NULL) {
+        if (!res) {
             return E_BGCC_NULL_POINTER;
         }
 
         //create a socket
         _socket = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-        if (-1 == _socket) {
+        if (INVALID_SOCKET == _socket) {
+		    BGCC_WARN("bgcc", "Client Connect To %s:%d Failed , fd=%d , ERR:%d", 
+                    _host.c_str(), _port, _socket, BgccSockGetLastError());
             return -1;
         }
 
         //connect to server
         int32_t ret = connect(_socket, res->ai_addr, (int32_t)res->ai_addrlen);
         if (0 != ret) {
-            close();
-            _socket = -1;
+		    BGCC_WARN("bgcc", "Client Connect To %s:%d Failed , fd=%d , ERR:%d", 
+                    _host.c_str(), _port, _socket, BgccSockGetLastError());
+			close();
             return -1;
         }
+
+		PeerInfo tmp("", 0);
+		SocketTool::getsockdetail(_socket, tmp, false);
+		BGCC_NOTICE("bgcc", "Client Connect (%s:%d-->%s:%d) Success, fd=%d", 
+				tmp.GetHost().c_str(), tmp.GetPort(),
+				_host.c_str(), _port, 
+				_socket);
+
+		SocketTool::set_sndbufsize(_socket, SocketTool::DEF_BUF_SIZE);
+		SocketTool::set_rcvbufsize(_socket, SocketTool::DEF_BUF_SIZE);
+
+		SocketTool::set_tcpnodealy(_socket, 1);
 
         return 0;
     }
@@ -108,26 +67,14 @@ namespace bgcc {
         std::string port;
         ss >> port;
 
-        int32_t ret = getaddrinfo(_host.empty() ? NULL: _host.c_str(), port.c_str(), &hints, ppres);
-        if (0 != ret) {
-            close();
-            return -1;
-        }
-
-        return 0;
+        return (getaddrinfo(_host.empty() ? NULL: _host.c_str(), port.c_str(), &hints, ppres) == 0 ? 0 : -1);
     }
 
-    int ClientSocket::open() {
-        if(is_open()){
-            return 0;
-        }
 
-        int ret = init();
-        if(0 != ret){
-            return ret;
-        }
+    int32_t ClientSocket::open() {
+		close();
 
-        ret = 0;
+        int32_t ret = 0;
         struct addrinfo *res, *res0;
         ret = get_address_list(&res0);
         if (0 != ret) {
@@ -137,18 +84,14 @@ namespace bgcc {
         for (res = res0; NULL != res; res = res->ai_next) {
             ret = open_impl(res);
             if (0 == ret) {
-                set_send_timeout(get_timeout_info(SO_SNDTIMEO));
-                set_recv_timeout(get_timeout_info(SO_RCVTIMEO));
+				SocketTool::set_sndtimeout(_socket, DEFAULT_CLIENT_TIMEOUT);
+				SocketTool::set_rcvtimeout(_socket, DEFAULT_CLIENT_TIMEOUT);
                 break;
             } 
         }   
 
         freeaddrinfo(res0);
-        if (0 == ret) {
-            return 0;
-        } else {
-            return ret;
-        }
+		return ret;
     }
 }
 

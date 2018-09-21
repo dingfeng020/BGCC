@@ -11,18 +11,19 @@
 #ifndef _BGCC2_BGCC_H_
 #define _BGCC2_BGCC_H_
 
+#include "bgcc_common.h"
 #include "base_processor.h"
 #include "base_proxy.h"
+#include "ssl_base_proxy.h"
 #include "bgcc_error.h"
-#include "bgcc_stdint.h"
 #include "binary_protocol.h"
-#include "byte_order.h"
 #include "client_socket.h"
 #include "conf_loader.h"
 #include "conf_unit.h"
 #include "connection_manager.h"
 #include "cp_server.h"
 #include "epoll_server.h"
+#include "ssl_epoll_server.h"
 #include "event_poll.h"
 #include "exception.h"
 #include "file_util.h"
@@ -56,6 +57,8 @@
 #include "time_util.h"
 #include "transport.h"
 #include "transaction.h"
+#include "bgcc_net_util.h"
+#include "bgcc_ssl.h"
 
 #endif // _BGCC2_BGCC_H_
 

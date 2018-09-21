@@ -11,7 +11,7 @@
 /**
  * @file     BooleanHolder.java
  * @brief    boolean 类型的holder类
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时22分46秒
  *  

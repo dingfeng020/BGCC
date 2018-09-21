@@ -11,7 +11,7 @@
 /**
  * @file     coordination.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 13时55分30秒
  *  

@@ -11,7 +11,7 @@
 /**
  * @file     bidl_include.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月14日 20时02分28秒
  *  

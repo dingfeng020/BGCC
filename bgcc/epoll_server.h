@@ -13,12 +13,13 @@
 
 #ifndef _WIN32
 
-#include <stdint.h>
+#include "bgcc_common.h"
 #include "server.h"
 #include "event_poll.h"
 #include "mempool.h"
 #include "service_manager.h"
 #include "thread_pool.h"
+#include "server_task.h"
 
 namespace bgcc {
 
@@ -39,7 +40,9 @@ namespace bgcc {
         ServiceManager* get_service_manager();
         ThreadPool* get_thread_pool();
 
-    private:
+        static TaskAsso Tasks[MAXNFD];
+
+    protected:
         enum state_t {
             S_UNINIT,
             S_INIT,

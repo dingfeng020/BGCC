@@ -11,22 +11,8 @@
 #ifndef _BGCC2_TIME_UTIL_H_
 #define _BGCC2_TIME_UTIL_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#include <winsock.h>
-
-#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
-#else
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
-#endif
-
-#else
-#include <sys/time.h>   // for struct timeval
-#endif
-
 #include <string>
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 namespace bgcc {
 
@@ -34,7 +20,7 @@ namespace bgcc {
      * @brief 时间实用工具类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 21时11分15秒
      */
 
@@ -45,7 +31,7 @@ namespace bgcc {
         int  tz_dsttime;     /* type of dst correction */
     };
 
-	int gettimeofday(struct ::timeval *tv, struct timezone *tz);
+	//int gettimeofday(struct ::timeval *tv, struct timezone *tz);
 #endif
 
     class TimeUtil {
@@ -56,21 +42,33 @@ namespace bgcc {
          * @return 返回从Epoch所经过的秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时11分25秒
          */
         static uint64_t get_timestamp_s();
 
         /**
-         * @brief get_timestamp_ms 获取时间戳（微秒）
+         * @brief get_timestamp_ms 获取时间戳（毫秒）
          *
          * @return 返回从Epoch所经过的微秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时12分14秒
          */
         static uint64_t get_timestamp_ms();
+        
+        /**
+         * @brief 获取微秒级时间戳
+         *
+         * @return  uint64_t 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:38:45
+        **/
+        static uint64_t get_timestamp_us();
 
         /**
          * @brief safe_sleep_s 支持中断的sleep（秒）
@@ -78,7 +76,7 @@ namespace bgcc {
          * @param second 睡眠的秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时12分42秒
          */
         static void safe_sleep_s(uint32_t second);
@@ -89,7 +87,7 @@ namespace bgcc {
          * @param millisecond 睡眠的毫秒数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时13分05秒
          */
         static void safe_sleep_ms(uint32_t millisecond);
@@ -102,7 +100,7 @@ namespace bgcc {
          * @return 时间戳字符串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时13分53秒
          */
         static std::string format_datetime_str(uint64_t millisecond);
@@ -118,7 +116,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 21时14分47秒
          */
         static int32_t get_abs_timespec(struct timespec* ts, int32_t millisecond);
@@ -134,7 +132,7 @@ namespace bgcc {
          * @return 返回写入缓冲区的字符个数（不含\0）；否则返回-1
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月22日 16时50分14秒
          */
         static int32_t strftimeval(char* buffer, int32_t buflen, const struct timeval* tv);
@@ -145,7 +143,7 @@ namespace bgcc {
          * @return 日期串
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 17时23分19秒
          */
         static std::string get_date();
@@ -156,11 +154,96 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 17时23分56秒
          */
         static std::string get_time();
 
+        /**
+         * @brief 获取当前星期几
+         *
+         * @return  int32_t 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:08
+        **/
+        static int32_t get_day();
+
+        /**
+         * @brief 获取指定日期的星期几
+         *
+         * @param [in/out] time   : time_t
+         * @return  int32_t 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:11
+        **/
+        static int32_t get_day( time_t time );
+
+        /**
+         * @brief 格式化当前时间，默认格式为【%Y%m%d-%H:%M:%S】
+         *
+         * @param [in/out] fmt   : const char*
+         * @return  std::string 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:18
+        **/
+        static std::string format_time(const char * fmt = NULL);
+
+        /**
+         * @brief 格式化指定时间，默认格式为【%Y%m%d-%H:%M:%S】
+         *
+         * @param [in/out] time   : time_t
+         * @param [in/out] fmt   : const char*
+         * @return  std::string 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:28
+        **/
+        static std::string format_time(time_t time, const char * fmt = NULL);
+
+        /**
+         * @brief 格式化指定时间，默认格式为【%Y%m%d-%H:%M:%S】
+         *
+         * @param [in/out] time   : const struct timeval*
+         * @param [in/out] fmt   : const char*
+         * @return  std::string 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:31
+        **/
+        static std::string format_time(const struct timeval* tv, const char * fmt = NULL);
+		 
+		/**
+         * @brief 格式化指定时间，默认格式为【%Y%m%d-%H:%M:%S】
+         *
+         * @param [in/out] time   : const struct timeval*
+         * @param [in/out] fmt   : const char*
+         * @return  std::string 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2012/12/24 16:20:31
+        **/
+		static int32_t gettimeofday(struct ::timeval *tv, struct timezone *tz);
+
+#ifdef _WIN32
+    private:
+		/*__declspec(thread)*/ static FILETIME _ft;             /**< 标准时间    */
+        /*__declspec(thread)*/ static LARGE_INTEGER _pform;     /**< 标准时间戳  */
+#endif
     }; // end of class TimeUtil
 }
 

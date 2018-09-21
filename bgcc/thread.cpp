@@ -8,12 +8,6 @@
   *      license.txt
   *********************************************************************/
 
-#include <errno.h>
-
-#ifdef _WIN32
-#include <process.h>
-#endif
-
 #include "thread.h"
 #include "time_util.h"
 
@@ -25,7 +19,8 @@ namespace bgcc {
         _func_ptr(NULL),
         _func_arg(NULL),
         _detached(detached),
-        _state(INIT)
+        _state(INIT),
+        _isstopped(false)
 #ifdef _WIN32
           ,_handle(NULL)
 #endif
@@ -36,7 +31,8 @@ namespace bgcc {
         _func_ptr(func),
         _func_arg(arg),
         _detached(detached),
-        _state(INIT)
+        _state(INIT),
+        _isstopped(false)
 #ifdef _WIN32
           ,_handle(NULL)
 #endif
@@ -56,9 +52,13 @@ namespace bgcc {
                 (LPTHREAD_START_ROUTINE)thread_start_func, this, 0, &_thread_id);
 
         if (NULL != _handle) {
-            TimeUtil::safe_sleep_s(0);
             _sema.wait();
+			if(_detached)
+			{
+				CloseHandle(_handle);
+			}
         }
+        _isstopped = false;
         _state = START;
 
         return (NULL != _handle);
@@ -81,7 +81,6 @@ namespace bgcc {
         ret = pthread_create(&_thread, &attr, thread_start_func, (void*)this);
 
         if (0 == ret) {
-            TimeUtil::safe_sleep_s(0);
             _sema.wait();
         }
 
@@ -91,13 +90,14 @@ namespace bgcc {
             return false;
         }
 
+        _isstopped = false;
         _state = START;
         return true;
 #endif
     }
 
     bool Thread::join() {
-        if (START != _state) {
+        if (START != _state && STOP != _state) {
             return false;
         }
 #ifdef _WIN32
@@ -106,6 +106,7 @@ namespace bgcc {
             if (NULL != _handle) {
                 DWORD dw = ::WaitForSingleObject(_handle, INFINITE);
                 if (WAIT_OBJECT_0 == dw || WAIT_ABANDONED == dw) {
+					CloseHandle(_handle);
                     ret = true;
                     _handle = NULL;
                 }
@@ -132,20 +133,12 @@ namespace bgcc {
     }
 
     bool Thread::stop() {
-        bool ret = true;
-        if (_state != STOP && _state >= START) {
-#ifdef _WIN32
+		bool ret = false;
+        if (_state != STOP && _state >= START)
+        {
+            _isstopped = true;
             _state = STOP;
-            ret = ::TerminateThread(_handle, 0) != 0;
-#else
-            int r = pthread_cancel(_thread);
-            if (0 != r) {
-                ret = false;
-            } else {
-                _state = STOP;
-                ret = true;
-            }
-#endif
+            ret = true;
         }
         return ret;
     }
@@ -170,12 +163,12 @@ namespace bgcc {
         DWORD ret = 0;
         if (use_functor) {
             if (runner.is_valid()) {
-                ret = (*runner)();
+                ret = (*runner)(&me->_isstopped, arg);
             }
         }
         else {
             if (func) {
-                func(arg);
+                func(&me->_isstopped, arg);
             }
         }
 
@@ -195,13 +188,13 @@ namespace bgcc {
         me->_sema.signal();
 
         if (use_functor) {
-            if (runner.is_valid()) {
-                (*runner)();
+                if (runner.is_valid()) {
+                (*runner)(&me->_isstopped);
             }
         }
         else {
             if (func) {
-                func(func_arg);
+                func(&me->_isstopped, func_arg);
             }
         }
         return NULL;

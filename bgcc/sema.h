@@ -11,14 +11,7 @@
 #ifndef _BGCC2_SEMAPHORE_H_
 #define _BGCC2_SEMAPHORE_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <semaphore.h>
-#include <limits.h>
-#endif
-
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 #ifdef _WIN32
 #define BGCC_SEMA_WAIT_INFINITE INFINITE
@@ -34,7 +27,7 @@ namespace bgcc {
      * @brief 实现线程间的任务同步
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 14时19分15秒
      */
     class Semaphore {
@@ -45,7 +38,7 @@ namespace bgcc {
          * @param ninit 信号量的初始值
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时22分46秒
          */
         Semaphore(int32_t ninit = 0);
@@ -54,7 +47,7 @@ namespace bgcc {
          * @brief ~Semaphore 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时19分48秒
          */
         ~Semaphore();
@@ -67,10 +60,11 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码。错误码可使用ErrorUtil::strbgccerror_r转化为文本信息
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时20分33秒
          */
         int32_t wait(uint32_t millisecond = BGCC_SEMA_WAIT_INFINITE);
+        bool try_wait();
 
         /**
          * @brief signal 触发信号量
@@ -78,7 +72,7 @@ namespace bgcc {
          * @return 成功返回0；否则返回错误码。错误码可使用ErrorUtil::strbgccerror_r转化为文本信息
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时21分34秒
          */
         int32_t signal();
@@ -90,7 +84,7 @@ namespace bgcc {
          * @param Semaphore
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时20分00秒
          */
         Semaphore(const Semaphore&);
@@ -103,7 +97,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 14时20分19秒
          */
         Semaphore& operator=(const Semaphore&);

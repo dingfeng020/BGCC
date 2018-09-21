@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_Server.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月01日 12时59分05秒
  *  

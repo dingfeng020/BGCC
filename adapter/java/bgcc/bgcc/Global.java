@@ -11,7 +11,7 @@
 /**
  * @file     Global.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月01日 13时04分38秒
  *  

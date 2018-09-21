@@ -11,7 +11,7 @@
 /**
  * @file     MapHolder.java
  * @brief    list的holder，用于out , all类型参数
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时27分48秒
  *  

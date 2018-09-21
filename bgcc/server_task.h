@@ -11,11 +11,33 @@
 #ifndef _BGCC_SERVERTASK_H_
 #define _BGCC_SERVERTASK_H_
 
+#include "server.h"
 #include "runnable.h"
 #include "protocol.h"
 #include "processor.h"
+#include "event_poll.h"
 
 namespace bgcc {
+#ifndef _WIN32 
+    class TaskAsso{
+        public:
+        EventLoop   *pLoop;
+        Event       event;
+		IServer		*pServer;
+		ReadItem	*pItem;
+        public:
+        TaskAsso():pLoop(NULL),pServer(NULL),pItem(NULL){
+            memset(&event, 0, sizeof(Event));
+        }
+		void Reset(){
+			pLoop=NULL;
+			memset(&event, 0, sizeof(Event));
+			pServer=NULL;
+			pItem=NULL;
+		}
+    };
+#endif
+
     /**
      * @class ServerTask
      * @brief 可被ThreadPool执行的任务类型
@@ -28,17 +50,15 @@ namespace bgcc {
              * @param   in 读入数据协议对象
              * @param   out 写出数据协议对象
              **/
-            ServerTask(SharedPointer<IProcessor> processor,
-                    void* request,
-                    int32_t request_len,
-                    SharedPointer<IProtocol> out);
+            ServerTask(SharedPointer<IProcessor> processor, void* request, int32_t request_len, 
+					SharedPointer<IProtocol> out, void *pAsso=NULL);
 
             /**
              * @brief   任务执行体
              * @param   
              * @return  
              */
-            virtual int32_t operator()(void* param = NULL);
+            virtual int32_t operator()(const bool* isstopped, void* param = NULL);
 
             virtual ~ServerTask() { }
 
@@ -51,7 +71,10 @@ namespace bgcc {
 
 			/** 写出数据协议对象 */
             SharedPointer<IProtocol> _out;
+            
+			void *_asso;
     };
+
 }
 
 #endif

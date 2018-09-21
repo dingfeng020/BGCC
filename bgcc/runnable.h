@@ -11,15 +11,14 @@
 #ifndef _BGCC2_RUNNABLE_H_
 #define _BGCC2_RUNNABLE_H_
 
-#include <stdlib.h>
+#include "bgcc_common.h"
 #include "shareable.h"
-#include "bgcc_stdint.h"
 
 namespace bgcc {
 
     class Runnable : public Shareable {
     public:
-        virtual int32_t operator()(void* param = NULL) = 0;
+        virtual int32_t operator()(const bool* isstopped, void* param = NULL) = 0;
         virtual ~Runnable() { }
     };
 }

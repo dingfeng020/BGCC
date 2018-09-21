@@ -11,7 +11,7 @@
 /**
  * @file     bidl_namespace.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月08日 16时24分57秒
  *  

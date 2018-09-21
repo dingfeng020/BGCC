@@ -11,7 +11,7 @@
 /**
  * @file     ShortHolder.java
  * @brief    Short类型的Holder类
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时28分35秒
  *  

@@ -11,7 +11,7 @@
 /**
  * @file     bidl_typedef.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月09日 17时04分25秒
  *  

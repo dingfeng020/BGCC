@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_Protocol.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月02日 15时17分19秒
  *  

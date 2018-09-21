@@ -11,14 +11,9 @@
 #ifndef _BGCC_PEERINFO_H_
 #define _BGCC_PEERINFO_H_
 
-#ifdef _WIN32
-    #include <winsock.h>
-#else
-    #include <sys/socket.h>
-#endif
-
 #include <string>
-#include "socket_base.h"
+
+#include "bgcc_common.h"
 #include "shareable.h"
 
 namespace bgcc {

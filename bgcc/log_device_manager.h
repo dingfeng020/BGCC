@@ -12,8 +12,11 @@
 #define _BGCC2_LOG_DEVICE_MANAGER_H_
 
 #include <vector>
+#include "bgcc_common.h"
 #include "log_device.h"
-#include "bgcc_stdint.h"
+
+#define STR(x) STR2(x)
+#define STR2(x) #x
 
 //BGCC log level definition
 #define BGCC_LOGLEVEL_TRACE  0x0
@@ -32,7 +35,7 @@ namespace bgcc {
      * @see
      * @note 当配置文件不存在或者配置文件有误时将给出错误提示并直接退出程序的执行
      * 请在main函数入口处调用该函数
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 10时39分56秒
      */
     void log_open(const char* conf_filepath = NULL);
@@ -44,7 +47,7 @@ namespace bgcc {
      * @see
      * @note
      * 请在main函数结束前调用该函数
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 10时47分16秒
      */
     int32_t log_close();
@@ -53,7 +56,7 @@ namespace bgcc {
      * @brief 日志对象类
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月12日 10时50分39秒
      */
     class LogDeviceManager {
@@ -64,7 +67,7 @@ namespace bgcc {
          * @return  日志对象单例
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时51分00秒
          */
         static LogDeviceManager* get_instance();
@@ -73,7 +76,7 @@ namespace bgcc {
          * @brief ~LogDeviceManager 析构函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时51分19秒
          */
         ~LogDeviceManager();
@@ -86,7 +89,7 @@ namespace bgcc {
          * @return 当设备存在时返回true；否则返回false
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时51分48秒
          */
         bool is_device_exist(const char* device_name);
@@ -99,7 +102,7 @@ namespace bgcc {
          * @return 日志级别。当设备名称指定的设备不存在时，返回BGCC_LOGLEVEL_NOLOG
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时52分34秒
          */
         int32_t get_device_loglevel(const char* device_name);
@@ -113,11 +116,20 @@ namespace bgcc {
          * @return 成功则返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时55分28秒
          */
         int32_t write(const char* device_name, const struct log_message_t& log_message);
 
+        void device_close() {
+            std::vector<ILogDevice *>::iterator itr;
+            for (itr = _devices.begin(); itr != _devices.end(); ++itr) {
+                (*itr)->close();
+                delete *itr;
+            }
+
+            _devices.clear();
+        };
     private:
         /**
          * @brief add_device 将新设备添加到设备列表中
@@ -127,7 +139,7 @@ namespace bgcc {
          * @return 操作成功返回0。当新设备名称与已有设备名称相同时，则认为添加失败，返回非0值
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时57分33秒
          */
         int32_t add_device(ILogDevice* device);
@@ -140,7 +152,7 @@ namespace bgcc {
          * @return 设备指针。当指定设备不存在时返回NULL
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时58分33秒
          */
         ILogDevice* get_device(const char* device_name);
@@ -151,7 +163,7 @@ namespace bgcc {
          * @brief LogDeviceManager 禁用显示构造
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时57分04秒
          */
         LogDeviceManager();
@@ -164,7 +176,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月12日 10时57分15秒
          */
         LogDeviceManager& operator=(const LogDeviceManager&);

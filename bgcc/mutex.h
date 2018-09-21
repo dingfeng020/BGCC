@@ -11,14 +11,7 @@
 #ifndef _BGCC_MUTEX_H_
 #define _BGCC_MUTEX_H_
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <pthread.h>
-#include <limits.h>
-#endif
-
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 
 #ifdef _WIN32
 #define BGCC_MUTEX_WAIT_INFINITE INFINITE
@@ -34,7 +27,7 @@ namespace bgcc {
      * @brief 实现线程间的互斥访问
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 17时23分40秒
      */
     class Mutex {
@@ -43,7 +36,7 @@ namespace bgcc {
          * @brief Mutex 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时24分08秒
          */
         Mutex();
@@ -52,7 +45,7 @@ namespace bgcc {
          * @brief ~Mutex 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时24分14秒
          */
         ~Mutex();
@@ -65,7 +58,7 @@ namespace bgcc {
          * @return 加锁成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时24分23秒
          */
         int32_t lock(uint32_t millisecond = BGCC_MUTEX_WAIT_INFINITE);
@@ -76,7 +69,7 @@ namespace bgcc {
          * @return 加锁成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时24分57秒
          */
         int32_t try_lock();
@@ -87,7 +80,7 @@ namespace bgcc {
          * @return 解锁成功返回0；否则返回错误码
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时25分44秒
          */
         int32_t unlock();
@@ -99,7 +92,7 @@ namespace bgcc {
          * @param Mutex
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时28分45秒
          */
         Mutex(const Mutex&);
@@ -112,7 +105,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年05月30日 17时29分08秒
          */
         Mutex& operator=(const Mutex&);

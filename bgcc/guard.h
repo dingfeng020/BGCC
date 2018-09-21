@@ -11,7 +11,7 @@
 #ifndef _BGCC2_GUARD_H_
 #define _BGCC2_GUARD_H_
 
-#include <stdlib.h>
+#include "bgcc_common.h"
 
 namespace bgcc {
 
@@ -21,7 +21,7 @@ namespace bgcc {
      * @tparam LockType
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年05月30日 19时19分33秒
      */
     template <typename LockType>
@@ -33,7 +33,7 @@ namespace bgcc {
              * @param lock 待加锁指针
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年05月30日 19时26分09秒
              */
             Guard(LockType* lock) : _locked(false), _lock(lock) {
@@ -50,7 +50,7 @@ namespace bgcc {
              * @return 加锁成功返回true；否则返回false
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年05月30日 19时26分33秒
              */
             bool is_locked() const {
@@ -61,7 +61,7 @@ namespace bgcc {
              * @brief ~Guard 析构函数，对Mutex解锁
              * @see
              * @note
-             * @author  liuxupeng(liuxupeng@baidu.com)
+             * @author
              * @date    2012年05月30日 19时27分12秒
              */
             ~Guard() {
@@ -72,7 +72,7 @@ namespace bgcc {
                 }
             }
         private:
-            mutable bool _locked;
+            volatile bool _locked;
             LockType* _lock;
         };
 }

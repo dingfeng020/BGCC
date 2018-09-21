@@ -11,7 +11,7 @@
 /**
  * @file     BaseProcessor.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月01日 23时02分22秒
  *  

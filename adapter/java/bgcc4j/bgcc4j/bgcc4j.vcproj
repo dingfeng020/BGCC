@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="E:\program\jdk\include;E:\program\jdk\include\win32;..\..\..\..\bgcc;C:\jdk1.6.0_22\include\win32;C:\jdk1.6.0_22\include"
+				AdditionalIncludeDirectories="C:\jdk1.6.0_22\include;C:\jdk1.6.0_22\include\win32;E:\dev\java\jdk1.6.0_30\include\win32;E:\dev\java\jdk1.6.0_30\include;..\..\..\..\output\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;BGCC4J_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -33,10 +33,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ws2_32.lib bgcc.lib"
+				AdditionalDependencies="ws2_32.lib bgccd.lib"
 				OutputFile="$(OutDir)/bgcc4j.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\..\..\Debug"
+				AdditionalLibraryDirectories="..\..\..\..\output\lib"
 				AddModuleNamesToAssembly=""
 				DelayLoadDLLs=""
 				GenerateDebugInformation="TRUE"
@@ -47,7 +47,10 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="if not exist ..\..\..\..\output\lib md ..\..\..\..\output\lib
+copy Debug\bgcc4j.dll ..\..\..\..\output\lib\
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -73,8 +76,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="C:\jdk1.6.0_22\include;C:\jdk1.6.0_22\include\win32;E:\dev\java\jdk1.6.0_30\include\win32;E:\dev\java\jdk1.6.0_30\include;..\..\..\..\output\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;BGCC4J_EXPORTS"
 				RuntimeLibrary="0"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -83,8 +88,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="bgcc.lib Ws2_32.lib"
 				OutputFile="$(OutDir)/bgcc4j.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\..\..\output\lib"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -94,7 +101,10 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="if not exist ..\..\..\..\output\lib md ..\..\..\..\output\lib
+copy Release\bgcc4j.dll ..\..\..\..\output\lib\
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool

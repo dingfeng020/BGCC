@@ -12,14 +12,8 @@
 #define _BGCC_CLIENTSOCKET_H_
 
 #include <string>
-#ifdef _WIN32
-    #include <WinSock.h>
-#else
-    #include <sys/socket.h>
-	#include <netdb.h>
-#endif
-
 #include "socket_base.h"
+#include "log.h"
 
 namespace bgcc {
 
@@ -36,14 +30,19 @@ namespace bgcc {
 		 * @return  无
 		 */
 		ClientSocket(const std::string& host, int port) : _host(host), _port(port) {}
+		~ClientSocket(){
+			BGCC_NOTICE("bgcc", "Client Disconnect from %s:%d , fd=%d", 
+					_host.c_str(), _port, _socket);
+			close();
+		}
 
-        virtual ~ClientSocket();
-        
         /**
 		 * @brief   打开客户端连接，主要发起connect操作
 		 * @return  操作成功返回0；否则返回错误码
 		 */
         virtual int open();
+        
+		
         
         /**
 		 * @brief   判断client连接是否打开
@@ -70,9 +69,8 @@ namespace bgcc {
 		 * @param   optname  方向，接受or发送
 		 * @return  返回超时时间
 		 */
-		int32_t get_timeout_info(int optname);
 		std::string _host;
-		int _port;
+		int32_t _port;
 	};
 }
 

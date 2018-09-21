@@ -19,9 +19,10 @@ namespace bgcc {
             typedef typename CheckedContainer::iterator iterator;
             iterator first = checkedContainer.begin();
             iterator last = checkedContainer.end();
+            time_t now = time(NULL);
 
             while (first != last) {
-                if (predicate(*first)) {
+                if (predicate(*first, now)) {
                     resultContainer.push_back(first->second.ticketId);
                     checkedContainer.erase(first++);
                 } else {
@@ -33,12 +34,11 @@ namespace bgcc {
     template <typename Map>
         class TimedoutPredicate {
         public:
-            bool operator()(const typename Map::value_type& value) {
+            bool operator()(const typename Map::value_type& value, time_t now) {
                 time_t storeTime = value.second.storeTime;
-                time_t now = time(NULL);
 
                 double delta = fabs(difftime(storeTime, now));
-                double interval = 60;
+                double interval = 6;
 
                 //TODO: get interval from GlobalConf
 
@@ -49,6 +49,44 @@ namespace bgcc {
                 }
             }
         };
+
+    template <typename CheckedContainer, typename ResultContainer, typename Predicate>
+        void xremove_if_ex(CheckedContainer& checkedContainer, ResultContainer& resultContainer, Predicate predicate) {
+            typedef typename CheckedContainer::iterator iterator;
+            iterator first = checkedContainer.begin();
+            iterator last = checkedContainer.end();
+            time_t now = time(NULL);
+
+            while (first != last) {
+                if (predicate(*first, now)) {
+                    resultContainer.push_back(first->first);
+                    checkedContainer.erase(first++);
+                } else {
+                    ++first;
+                }
+            }
+        }
+
+    template <typename Map>
+    class TimedoutPredicateEx {
+    public:
+        bool operator()(const typename Map::value_type& value, time_t now) {
+                time_t storeTime = value.second;
+
+                double delta = fabs(difftime(storeTime, now));
+                double interval = 6;
+
+                //TODO: get interval from GlobalConf
+
+                if (delta > interval) {
+                    return true;
+                } else {
+                    return false;
+                }
+            return true;
+        }
+
+    };
 }
 #endif
 

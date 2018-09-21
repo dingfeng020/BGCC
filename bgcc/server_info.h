@@ -12,18 +12,29 @@
 #define _BGCC_SERVERINFO_H_
 
 #include <string>
-#include "bgcc_stdint.h"
+
+#include "bgcc_common.h"
 
 namespace bgcc {
     
     class ServerInfo {
         public:
-            ServerInfo(const std::string& serverIp, int32_t port); 
+            ServerInfo() : _port(0) { }
+            ServerInfo(const std::string& ip, uint16_t port); 
+            ServerInfo(const std::string& ip, int port); 
+
+            // getIP & getPort was deprecated
             std::string getIP() const;
-            int32_t getPort() const;
+            uint16_t getPort() const;
+
+            std::string ip() const;
+            uint16_t port() const;
+
+            void ip(const std::string& ip);
+            void port(uint16_t port);
         private:
-            std::string _serverip;
-            int32_t _serverport;
+            std::string _ip;
+            int32_t _port;
     };
 
 }

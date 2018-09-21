@@ -11,7 +11,7 @@
 /**
  * @file     java_source_writer.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月04日 12时21分11秒
  *  
@@ -23,13 +23,13 @@
 #include "util.h"
 #include "java_source_writer.h"
 
-JavaSourceWriter::JavaSourceWriter(const std::string& bidl) {
+JavaSourceWriter::JavaSourceWriter(const std::string&) {
 }
 
 JavaSourceWriter::~JavaSourceWriter() {
 }
 
-void JavaSourceWriter::write_header(const BidlType* bt) {
+void JavaSourceWriter::write_header(const BidlType*) {
     //do nothing. Java代码不需要创建头文件
 }
 
@@ -39,7 +39,7 @@ void JavaSourceWriter::write_implement(const BidlType* bt) {
     }
 
     if (!GlobalParser::is_dir_exist(g_parser.get_outdir())) {
-        mkdir(g_parser.get_outdir().c_str(), 0777);
+        MKDIR(g_parser.get_outdir().c_str());
     }
     write_implement_recursive(bt);
 }
@@ -2108,7 +2108,7 @@ std::string JavaSourceWriter::mkpath(const std::vector<std::string>& name_parts)
 
     std::string path;
     if (!GlobalParser::is_dir_exist(g_parser.get_outdir())) {
-        mkdir(g_parser.get_outdir().c_str(), 0777);
+        MKDIR(g_parser.get_outdir().c_str());
     }
     path.append(g_parser.get_outdir());
 
@@ -2116,7 +2116,7 @@ std::string JavaSourceWriter::mkpath(const std::vector<std::string>& name_parts)
         citr = name_parts.begin() + 1;
         for (; citr != name_parts.end() - 1; ++citr) {
             path.append(*citr + "/");
-            mkdir(path.c_str(), 0777);
+            MKDIR(path.c_str());
         }
     }
     return path;

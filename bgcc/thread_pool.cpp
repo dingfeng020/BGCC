@@ -32,7 +32,7 @@ namespace bgcc {
          * @param   
          * @return  
          */
-        virtual int32_t operator()(void* param);
+        virtual int32_t operator()(const bool* isstopped, void* param);
     private:
         ThreadPool* _tp;
     };
@@ -40,12 +40,11 @@ namespace bgcc {
     ThreadPool::ThreadPoolRunner::ThreadPoolRunner(ThreadPool* tp) : _tp(tp) {
     }
 
-    int32_t ThreadPool::ThreadPoolRunner::operator()(void* param) {
-        while (true) {
+    int32_t ThreadPool::ThreadPoolRunner::operator()(const bool* isstopped, void* param) {
+        while (!(*isstopped)) {
             RunnableSharedPointer pr;
-            _tp->_tasks.get(pr, BGCC_SEMA_WAIT_INFINITE);
-            if (pr.is_valid()) {
-                (*pr)();
+            if(_tp->_tasks.get(pr, THREADPOOL_GET_TASK_TIMEOUT)==0&&pr.is_valid()){
+                (*pr)(isstopped, param);
             }
         }
         return 1;

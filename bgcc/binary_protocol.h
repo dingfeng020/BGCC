@@ -11,11 +11,77 @@
 #ifndef _BGCC_BINARY_PROTOCOL_H_
 #define _BGCC_BINARY_PROTOCOL_H_
 
-#include "bgcc_stdint.h"
+#include "bgcc_common.h"
 #include "protocol.h"
 #include "nb_data_buffer.h"
 
 namespace bgcc {
+
+/*
+ * HEAD + BODY
+ * HEAD:
+ * protocol(4) version(2)	protocoltype(1) reverd(1) logid(4) ticketid(4)	bodysize(4)
+ * bgcP		   10			1				0					
+ *
+ * BODY:
+ * processor_name		
+ * msgType				2 byte
+ * ticketid				4 byte
+ * version				2 byte
+ * function_name		string		
+ * proxy_name			string
+ *
+ *
+ * String	:	len+content
+ * int32_t	:	4 byte	network order
+ * */
+
+extern const unsigned char bp_magic[];
+extern const unsigned char bp_hb_hdr[];
+
+#define HEAD_SIZE	20
+#define LENGTH_SIZE	sizeof(int32_t)
+#define MSGTYPE_LEN	2
+#define TICKETID_LEN	4
+#define VERSION_LEN		2
+#define MAX_DEFAULT_LEN 1024
+
+
+#define OFFSET_PTR(p, offset)	((p)?((char*)p+offset):NULL)
+#define INT8(p) (*((int8_t*)((char*)p)))
+#define UINT8(p) ((uint8_t)INT8(p))
+#define INT16(p) (ntohs(*((int16_t*)((char*)p))))
+#define INT32(p) (ntohl(*((int32_t*)((char*)p))))
+#define INT64(p) (ntohll(*((int64_t*)((char*)p))))
+
+#define ISHB(p) (0xff==UINT8(OFFSET_PTR(p, 7)))
+
+#define BODY_LEN(pack_head) ((int32_t)ntohl(*(uint32_t*)(((char*)pack_head+16))))
+#define	BODY_PTR(pack) ((char*)(pack)+(HEAD_SIZE))
+#define BODY_LEN_PTR(pack) (BODY_PTR(pack)-LENGTH_SIZE)
+#define PROCESSOR_NAME_LEN(pack_body) ((int32_t)ntohl(*(uint32_t*)pack_body))
+#define PROCESSOR_NAME_PTR(pack_body) ((char*)pack_body+LENGTH_SIZE)
+#define BODY_MINUS_PROCESSOR_PTR(pack_body)	\
+	( PROCESSOR_NAME_PTR(pack_body)+ PROCESSOR_NAME_LEN(pack_body) )
+#define BODY_MINUS_PROCESSOR_LEN(pack_body, body_len) \
+	(  body_len- PROCESSOR_NAME_LEN(pack_body) - LENGTH_SIZE )
+
+#define FUNC_NAME_OFFSET(pack_body) \
+	(BODY_MINUS_PROCESSOR_PTR(pack_body)+MSGTYPE_LEN+TICKETID_LEN+VERSION_LEN)
+#define FUNC_NAME_PTR(pack_body) \
+	(FUNC_NAME_OFFSET(pack_body)+LENGTH_SIZE)
+#define FUNC_NAME_LEN(pack_body) \
+	((int32_t)ntohl(*(uint32_t*)(FUNC_NAME_OFFSET(pack_body))))
+
+#define PROXY_NAME_OFFSET(pack_body) \
+	(FUNC_NAME_PTR(pack_body)+FUNC_NAME_LEN(pack_body))
+#define PROXY_NAME_PTR(pack_body)\
+	(PROXY_NAME_OFFSET(pack_body)+LENGTH_SIZE)
+#define PROXY_NAME_LEN(pack_body)\
+	((int32_t)ntohl(*(uint32_t*)(PROXY_NAME_OFFSET(pack_body))))
+
+
+
 
     /**
      * @class BinaryProtocol 
@@ -104,7 +170,7 @@ namespace bgcc {
          * @brief   消息序列化结束
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t writeMessageEnd();
+        virtual int32_t writeMessageEnd(bool tosend=true);
 
         /**
          * @brief   struct序列化开始
@@ -198,56 +264,56 @@ namespace bgcc {
          * @param   value 反序列化后得到的布尔值
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readBool(bool& value);
+        virtual int32_t readBool(char *request, int32_t request_len, bool& value);
 
         /**
          * @brief   8位整数反序列化
          * @param   value 反序列化后得到的8位整数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readByte(int8_t& value);
+        virtual int32_t readByte(char *request, int32_t request_len, int8_t& value);
 
         /**
          * @brief   16位整数反序列化
          * @param   value 反序列化后得到的16位整数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readInt16(int16_t& value);
+        virtual int32_t readInt16(char *request, int32_t request_len, int16_t& value);
 
         /**
          * @brief   32位整数反序列化
          * @param   value 反序列化后得到的32位整数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readInt32(int32_t& value);
+        virtual int32_t readInt32(char *request, int32_t request_len, int32_t& value);
 
         /**
          * @brief   64位整数反序列化
          * @param   value 反序列化后得到的64位整数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readInt64(int64_t& value);
+        virtual int32_t readInt64(char *request, int32_t request_len, int64_t& value);
 
         /**
          * @brief   浮点数反序列化
          * @param   value 反序列化后得到的浮点数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readFloat(float& value);
+        virtual int32_t readFloat(char *request, int32_t request_len, float& value);
 
         /**
          * @brief   字符串反序列化
          * @param   value 反序列化后得到的字符串
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readString(std::string& value);
+        virtual int32_t readString(char *request, int32_t request_len, std::string& value);
 
         /**
          * @brief   二进制数据反序列化
          * @param   value 反序列化后得到的二进制数据
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readBinary(std::string& value);
+        virtual int32_t readBinary(char *request, int32_t request_len, std::string& value);
 
         /**
          * @brief   set反序列化开始
@@ -255,7 +321,7 @@ namespace bgcc {
          * @param   size 反序列化后得到的set元素个数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readSetBegin(DataTypeID& elemType, int32_t& size);
+        virtual int32_t readSetBegin(char *request, int32_t request_len, DataTypeID& elemType, int32_t& size);
 
         /**
          * @brief   set反序列化结束
@@ -269,7 +335,7 @@ namespace bgcc {
          * @param   size 反序列化后得到的list元素个数
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readListBegin(DataTypeID& elemType, int32_t& size);
+        virtual int32_t readListBegin(char *request, int32_t request_len, DataTypeID& elemType, int32_t& size);
 
         /**
          * @brief   list反序列化结束
@@ -285,6 +351,8 @@ namespace bgcc {
          * @return  成功时返回0。出错时返回错误码。
          */
         virtual int32_t readMapBegin(
+				char *request,
+                int32_t request_len, 
                 DataTypeID& keyType,
                 DataTypeID& valueType,
                 int32_t& size);
@@ -300,7 +368,7 @@ namespace bgcc {
          * @param   name 反序列化后得到的struct名称
          * @return  成功时返回0。出错时返回错误码。
          */
-        virtual int32_t readStructBegin(std::string& name);
+        virtual int32_t readStructBegin(char *request, int32_t request_len, std::string& name);
 
         /**
          * @brief   struct反序列化结束
@@ -316,9 +384,12 @@ namespace bgcc {
          * @return  成功时返回0。出错时返回错误码。
          */
         virtual int32_t readMessageBegin(
+				char **request,
+                int32_t &request_len, 
                 std::string& msgName,
                 MsgTypeID& msgType,
-                SequenceNOType& seqNO);
+                SequenceNOType& seqNO,
+				ReadItem *pItem=NULL);
 
         /**
          * @brief   消息反序列化结束
@@ -334,6 +405,8 @@ namespace bgcc {
          * @return  成功时返回0。出错时返回错误码。
          */
         virtual int32_t readFieldBegin(
+				char *request,
+                int32_t request_len, 
                 std::string& name,
                 DataTypeID& fieldType,
                 FieldIDType& fieldID);
@@ -357,167 +430,8 @@ namespace bgcc {
          */
         virtual TransportSharedPointer getTransport();
 
-        /**
-         * @brief   略过指定类型的数据
-         * @param   dataTypeID待略过的数据类型标识
-         * @return  成功时返回0。出错时返回错误码。
-         */
-        virtual int32_t skip(DataTypeID dataTypeID);
-
         int32_t getDataCopy(void** ppdata, int32_t& size);
-        ///////////////////////////////////////////////////////
-        /**
-         * @brief   布尔值反序列化
-         * @param   value 反序列化后得到的布尔值
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readBool(char* request, int32_t request_len, bool& value);
-
-        /**
-         * @brief   8位整数反序列化
-         * @param   value 反序列化后得到的8位整数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readByte(char* request, int32_t request_len, int8_t& value);
-
-        /**
-         * @brief   16位整数反序列化
-         * @param   value 反序列化后得到的16位整数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readInt16(char* request, int32_t request_len, int16_t& value);
-
-        /**
-         * @brief   32位整数反序列化
-         * @param   value 反序列化后得到的32位整数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readInt32(char* request, int32_t request_len, int32_t& value);
-
-        /**
-         * @brief   64位整数反序列化
-         * @param   value 反序列化后得到的64位整数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readInt64(char* request, int32_t request_len, int64_t& value);
-
-        /**
-         * @brief   浮点数反序列化
-         * @param   value 反序列化后得到的浮点数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readFloat(char* request, int32_t request_len, float& value);
-
-        /**
-         * @brief   字符串反序列化
-         * @param   value 反序列化后得到的字符串
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readString(char* request, int32_t request_len, std::string& value);
-
-        /**
-         * @brief   二进制数据反序列化
-         * @param   value 反序列化后得到的二进制数据
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readBinary(char* request, int32_t request_len, std::string& value);
-
-        /**
-         * @brief   set反序列化开始
-         * @param   elemType 反序列化后得到的set元素类型标识
-         * @param   size 反序列化后得到的set元素个数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readSetBegin(char* request, int32_t request_len, DataTypeID& elemType, int32_t& size);
-
-        /**
-         * @brief   set反序列化结束
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readSetEnd(char* request, int32_t request_len);
-
-        /**
-         * @brief   list反序列化开始
-         * @param   elemType 反序列化后得到的list元素类型标识
-         * @param   size 反序列化后得到的list元素个数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readListBegin(char* request, int32_t request_len, DataTypeID& elemType, int32_t& size);
-
-        /**
-         * @brief   list反序列化结束
-         * @return  成功时返回0。出错时返回错误码。
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readListEnd(char* request, int32_t request_len);
-
-        /**
-         * @brief   map反序列化开始
-         * @param   keyType 反序列化后得到的map键类型标识
-         * @param   valueType 反序列化后得到的map值类型标识
-         * @param   size 反序列后得到的元素个数
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readMapBegin(char* request, int32_t request_len, 
-                DataTypeID& keyType,
-                DataTypeID& valueType,
-                int32_t& size);
-
-        /**
-         * @brief   map反序列化结束
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readMapEnd(char* request, int32_t request_len);
-
-        /**
-         * @brief   struct反序列化开始
-         * @param   name 反序列化后得到的struct名称
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readStructBegin(char* request, int32_t request_len, std::string& name);
-
-        /**
-         * @brief   struct反序列化结束
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readStructEnd(char* request, int32_t request_len);
-
-        /**
-         * @brief   消息反序列化开始
-         * @param   msgName 反序列化后得到的消息名称
-         * @param   msgType 反序列化后得到的消息类型
-         * @param   seqNO 反序列化得到的消息序列号
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readMessageBegin(char* request, int32_t request_len, 
-                std::string& msgName,
-                MsgTypeID& msgType,
-                SequenceNOType& seqNO);
-
-        /**
-         * @brief   消息反序列化结束
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readMessageEnd(char* request, int32_t request_len);
-
-        /**
-         * @brief   域反序列化开始
-         * @param   name 反序列化后得到的域名称
-         * @param   field_type 反序列化后得到的域类型标识
-         * @param   field_id ？待定
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readFieldBegin(char* request, int32_t request_len, 
-                std::string& name,
-                DataTypeID& fieldType,
-                FieldIDType& fieldID);
-
-        /**
-         * @brief   域反序列化结束
-         * @return  返回消耗的request的字节数。错误时返回-1
-         */
-        virtual int32_t readFieldEnd(char* request, int32_t request_len);
-
+    
         NBDataBuffer* get_data_buffer() {
             return &_data;
         }
@@ -526,134 +440,8 @@ namespace bgcc {
         TransportSharedPointer _transport;
         NBDataBuffer _data;
 
-    private:
-        /**
-         * @brief   过滤布尔值
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipBool();
-
-        /**
-         * @brief   过滤8位整数
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipByte();
-
-        /**
-         * @brief   过滤16位整数
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipInt16();
-
-        /**
-         * @brief   过滤32位整数
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipInt32();
-
-        /**
-         * @brief   过滤64位整数
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipInt64();
-
-        /**
-         * @brief   过滤浮点数
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipFloat();
-
-        /**
-         * @brief   过滤字符串
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipString();
-
-        /**
-         * @brief   过滤二进制数据
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipBinary();
-
-        /**
-         * @brief   过滤结构体
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipStruct();
-
-        /**
-         * @brief   过滤结构体域
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipStructFields();
-
-        /**
-         * @brief   过滤结构体单个域
-         * @param   stop [out] 通知调用者是否已遇到stop域
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipStructField(bool& stop);
-
-        /**
-         * @brief   过滤map
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipMap();
-
-        /**
-         * @brief   过滤map元素
-         * @param   keyType map元素的键类型标识
-         * @param   valueType map元素的值类型标识
-         * @param   size map元素个数
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipMapElements(DataTypeID keyType,
-                DataTypeID valueType,
-                int32_t size);
-
-        /**
-         * @brief   过滤set
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipSet();
-
-        /**
-         * @brief   过滤set元素
-         * @param   elemType set元素类型标识
-         * @param   size set元素个数
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipSetElements(DataTypeID elemType,
-                int32_t size);
-
-        /**
-         * @brief   过滤list
-         * @param   
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipList();
-
-
-        /**
-         * @brief   过滤list元素
-         * @param   elemType list元素类型标识
-         * @param   size list元素个数
-         * @return  成功时返回0.出错时返回错误码。
-         */
-        int32_t skipListElements(DataTypeID elemType,
-                int32_t size);
+	private:
+		int32_t readBasic(char *_dstbuf, int32_t dstbuf_len, const char *srcbuf, int32_t srcbuf_len);
     };
 }
 

@@ -8,44 +8,30 @@
   *      license.txt
   *********************************************************************/
 
-#ifdef _WIN32
-    #include <WinSock.h>
-#else
-    #include <sys/socket.h>
-    #include <arpa/inet.h>
-    #include <errno.h>
-#endif
-
-#include <string.h>
-
-#include <sys/types.h>
 #include "server_peer_socket.h"
 #include "socket_util.h"
 #include "bgcc_error.h"
+#include "log.h"
 
 namespace bgcc {
 
 	ServerPeerSocket::ServerPeerSocket(SOCKET socket) {
         
 		_socket = socket;
-		int initresult = InitPeerInfo();
-        if(initresult != 0){
-		}
+		InitPeerInfo();
 	}
     
     typedef SharedPointer<PeerInfo> PeerInfoSharedPointer;
-#ifdef _WIN32
-	typedef  int socklen_t;
-#endif
-    int ServerPeerSocket::InitPeerInfo(){
+    int32_t ServerPeerSocket::InitPeerInfo(){
 
         if(_socket<0){
             return -1;
         }
 
         PeerInfo tmp("", 0);
-        int32_t ret = getpeerinfo((int32_t)_socket, tmp);
+        int32_t ret = SocketTool::getsockdetail(_socket, tmp, true);
         if (ret != 0) {
+            BGCC_WARN("bgcc", "InitPeerInfo Failed, fd=%d", _socket);
             return ret;
         }
         _peerinfo = SharedPointer<PeerInfo>(new PeerInfo(tmp.GetHost(), tmp.GetPort()));

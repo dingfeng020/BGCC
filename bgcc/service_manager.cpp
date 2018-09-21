@@ -20,7 +20,7 @@ namespace bgcc {
     }
 
     int32_t ServiceManager::add_service(SharedPointer<IProcessor> processor) {
-        BGCC_TRACE("bgcc", "Enter ServiceManager::add_service");
+        BGCC_TRACE("bgcc", "ServiceManager::add_service");
         std::string name;
         bool exist;
      
@@ -32,13 +32,11 @@ namespace bgcc {
             return -1;
         }
 
-        BGCC_TRACE("bgcc", "Before Lock");
         Guard<Mutex> guard(&_mutex);
         if (!guard.is_locked()) {
             BGCC_WARN("bgcc", "Failed to lock mutex");
             return -1;
         }
-        BGCC_TRACE("bgcc", "End Lock");
 
         exist = _name2service.find(name) != _name2service.end();
         if (!exist) {
@@ -54,7 +52,7 @@ namespace bgcc {
     }
 
     int32_t ServiceManager::remove_service(const std::string& name) {
-        BGCC_TRACE("bgcc", "Enter ServiceManager::remove_service");
+        BGCC_TRACE("bgcc", "ServiceManager::remove_service");
         Guard<Mutex> guard(&_mutex);
         if (!guard.is_locked()) {
             return -1;
@@ -64,7 +62,6 @@ namespace bgcc {
         if (_name2service.end() != itr) {
             _name2service.erase(itr);
         }
-        BGCC_TRACE("bgcc", "Leave ServiceManager::remove_service");
         return 0;
     }
 

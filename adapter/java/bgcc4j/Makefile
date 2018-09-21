@@ -3,7 +3,7 @@ ifndef JAVA_HOME
 endif
 
 LIB = libbgcc4j.so
-CXX = g++
+#CXX = g++
 CXXFLAGS = -shared -W -fPIC -Wno-format-security
 SRC_DIR = .
 INC_PATH = -I$(JAVA_HOME)/include/ \

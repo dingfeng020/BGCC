@@ -11,7 +11,7 @@
 /**
  * @file     util.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月08日 15时52分35秒
  *  

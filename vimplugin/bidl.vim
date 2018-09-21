@@ -1,6 +1,6 @@
 " Vim syntax file
 " Language:	bidl
-" Maintainer:	liuxupeng<liuxupeng@baidu.com>
+" Maintainer:	liuxupeng<haorenpingan030@126.com>
 " Last Change:	2012 Oct 23
 
 if exists("b:current_syntax")

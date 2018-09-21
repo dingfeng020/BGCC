@@ -8,9 +8,6 @@
   *      license.txt
   *********************************************************************/
 
-#ifndef _WIN32
-#include <pthread.h>
-#endif
 #include "base_processor.h"
 #include "processor.h"
 #include "bgcc_error.h"
@@ -18,12 +15,13 @@
 #include "transaction.h"
 #include "thread_util.h"
 #include "bgcc_error.h"
+#include "fake.h"
 
 namespace bgcc {
 
     BaseProcessor::BaseProcessor() {
-        __fun_map["__get_ticket_id"] = &BaseProcessor::do___get_ticket_id;
-        __fun_map["__service_not_found"] = &BaseProcessor::do___service_not_found;
+        __fun_map[TICKET_FUNC] = &BaseProcessor::do___get_ticket_id;
+        __fun_map[DEF_FUNC] = &BaseProcessor::do___service_not_found;
     }
 
     int32_t BaseProcessor::process(
@@ -36,7 +34,7 @@ namespace bgcc {
         std::string fname;
         int32_t nread = 0;
 
-        ret = proto->readMessageBegin(request, request_len, fname, mtype, seqid);
+        ret = proto->readMessageBegin(&request, request_len, fname, mtype, seqid);
         if(ret < 0) { return ret;}
         nread += ret;
 
@@ -66,7 +64,7 @@ namespace bgcc {
             char* request,
             int32_t request_len,
             bgcc::SharedPointer<bgcc::IProtocol> proto,
-            int32_t seqid) {
+            int32_t ) {
         int32_t ret = 0;
         int32_t nread = 0;
         int32_t thr_id = (int32_t)bgcc::ThreadUtil::self_id();
@@ -85,7 +83,7 @@ namespace bgcc {
         if (ret < 0) { return ret;}
         nread += ret;
 
-        ret = proto->readMessageEnd(request + nread, request_len - nread);
+        ret = proto->readMessageEnd();
         if (ret < 0) { return ret;}
         nread += ret;
 
@@ -97,7 +95,7 @@ namespace bgcc {
             tid = Transaction::get_instance()->getTicketId(proto, thr_id, fname);
         }   
 
-        ret = proto->writeMessageBegin("xxx", "__get_ticket_id", bgcc::REPLY, 0); 
+        ret = proto->writeMessageBegin(TICKET_PROC, TICKET_FUNC, bgcc::REPLY, 0); 
         if (ret < 0) { return ret;}
         ret = proto->writeInt32(tid);
         if (ret < 0) { return ret;}
@@ -106,8 +104,8 @@ namespace bgcc {
     }
 
     int32_t BaseProcessor::do___service_not_found(
-            char* request,
-            int32_t request_len,
+            char* ,
+            int32_t ,
             SharedPointer<IProtocol> proto,
             int32_t seqid) {
         int32_t ret;
@@ -120,7 +118,11 @@ namespace bgcc {
     }
 
     std::string BaseProcessor::get_name() const {
-        return "._baseservice_2012";
+        return DEF_SERVICE;
     }
+
+	const char * BaseProcessor::PROXY_NAME="ProxyName";
+	const char * BaseProcessor::PEER_IP="PeerIP";
+	const char * BaseProcessor::PEER_PORT="PeerPort";
 
 } // namespace

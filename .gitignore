@@ -10,3 +10,11 @@
 *.lai
 *.la
 *.a
+
+#ignore folder
+
+deps/openssl/
+
+*.user
+*.filters
+output/

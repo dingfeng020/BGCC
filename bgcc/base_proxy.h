@@ -20,29 +20,14 @@
 #include "time_util.h"
 #include "thread.h"
 #include "sema.h"
+#include "selector.h"
 
-#define GetNewProtocol(prot)\
-{\
-    SharedPointer<BinaryProtocol> prottmp(new(std::nothrow) BinaryProtocol(client));\
-    if(!prot.is_valid())\
-    {\
-        return false;\
-    }\
-    prot = prottmp;\
-}
+#include "connection_manager.h"
 
 namespace bgcc {
 
     typedef SharedPointer<BinaryProtocol> BinaryProtocolSharedPtr;
-
-    struct callback_thread_arg_t {
-        std::string proxy_name;
-        std::string server_ip;
-        int32_t server_port;
-        ServiceManager* service_manager;
-		Semaphore* sema;
-    };
-
+    
     class BaseProxy : public Exception {
     public:
         int32_t __get_ticket_id(
@@ -54,44 +39,82 @@ namespace bgcc {
 
         BaseProxy(
                 ServerInfo serverinfo,
-                int32_t nprotocols,
+                int32_t maxConn,
+                bool initConsNow,
                 ServiceManager* service_manager = NULL,
                 int32_t tryCount = 3,
                 int32_t tryInterval = 3000);
 
-        ~BaseProxy();
+        virtual ~BaseProxy();
+
+        /**
+         * @brief 手动关闭连接
+         *
+         * @return  void 
+         * @retval   
+         * @see 
+         * @note 
+         * @author zhangyue
+         * @date 2013/01/05 14:47:58
+        **/
+        void close();
 
         std::string get_name() const;
         void set_name(const std::string& name);
 
         std::string get_whoami() const;
         void set_whoami(const std::string& whoami);
+
+		bool set_property(const std::string &key, int32_t val);
+		bool set_property(const std::string &key, const std::string& val);
+
+		bool get_property(const std::string &key, int32_t &val) const;
+		bool get_property(const std::string &key, std::string &val) const;
     protected:
+		enum INIT_TYPE{
+			INIT_CALL		=1,
+			INIT_CALLBACK	=2,
+			INIT_ALL		=3
+		};
         /**
          * @brief init 初始化代理
          *
          * @return 返回成功建立的连接个数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月19日 23时27分05秒
          */
-        int32_t init();
+        int32_t init(INIT_TYPE type=INIT_ALL);
         int32_t uninit();
 
         std::string _name;
-
         std::string _whoami;
+		Selector _selector;
 
     public:
         SyncVector<SharedPointer<BinaryProtocol> > _protocols;
     protected:
-        int32_t _nProtocols;
+        int32_t _nMaxConn;
         ServerInfo _serverinfo;
         int32_t _tryCount;
         int32_t _tryInterval;
+        int32_t _seqid;
         SharedPointer<Thread> _callback_thread;
         ServiceManager* _service_manager;
+        bool _use_existing_socket;
+            
+		void free_Conn(SharedPointer<ConnInfo> conn, int32_t err);
+        SharedPointer<ConnInfo> get_Conn();
+        SharedPointer<ConnInfo> create_Conn();
+	public:
+		const static char * PROXY_SEND_TIMEOUT;
+		const static char * PROXY_RECV_TIMEOUT;
+		const static char * PROXY_HB_TIMEOUT;
+
+	private:
+		std::map<std::string, std::string> _property;
+		bool is_support(const std::string& key) const;
     };
 
 } // namespace

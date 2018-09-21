@@ -15,7 +15,7 @@ namespace bgcc {
 #ifdef _WIN32
 		return (int64_t)GetCurrentThreadId();
 #else
-		return (int64_t)pthread_self();
+		return (int64_t)syscall(__NR_gettid);
 #endif
 	}
 }

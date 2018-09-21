@@ -11,7 +11,7 @@
 /**
  * @file     util.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月08日 15时51分51秒
  *  

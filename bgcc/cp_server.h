@@ -13,12 +13,11 @@
 
 #ifdef _WIN32
 
+#include "bgcc_common.h"
 #include "server.h"
 #include "mempool.h"
 #include "service_manager.h"
 #include "thread_pool.h"
-#include "bgcc_stdint.h"
-#include "server_socket.h"
 
 namespace bgcc {
 

@@ -11,7 +11,7 @@
 /**
  * @file     ExceptionTypeHolder.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 18时55分12秒
  *  

@@ -22,7 +22,7 @@ namespace bgcc {
      * @brief 管理一组服务实体。每个服务由单个processor来提供
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月21日 13时14分58秒
      */
     class ServiceManager {
@@ -31,7 +31,7 @@ namespace bgcc {
          * @brief ServiceManager 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 16时22分29秒
          */
         ServiceManager();
@@ -44,7 +44,7 @@ namespace bgcc {
          * @return 添加成功或服务已存在则返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时15分51秒
          */
         int32_t add_service(SharedPointer<IProcessor> processor);
@@ -57,7 +57,7 @@ namespace bgcc {
          * @return 删除成功或服务不存在返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时18分49秒
          */
         int32_t remove_service(SharedPointer<IProcessor> processor);
@@ -70,7 +70,7 @@ namespace bgcc {
          * @return 删除成功或服务不存在返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时21分49秒
          */
         int32_t remove_service(const std::string& name);
@@ -81,7 +81,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时22分51秒
          */
         int32_t remove_all_service();
@@ -94,7 +94,7 @@ namespace bgcc {
          * @return 服务实体智能指针
          * @see
          * @note 在调用完成后，请调用返回值的is_valid()方法来检查返回值是否可用
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时23分44秒
          */
         SharedPointer<IProcessor> get_service(const std::string& name) const;
@@ -107,7 +107,7 @@ namespace bgcc {
          * @return true表示服务实体存在
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 13时26分16秒
          */
         bool is_service_exist(const std::string& name) const;
@@ -118,7 +118,7 @@ namespace bgcc {
          * @return 服务实体总数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 16时19分29秒
          */
         int32_t get_service_count() const;
@@ -129,7 +129,7 @@ namespace bgcc {
          * @param ServiceManager
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 16时20分26秒
          */
         ServiceManager(const ServiceManager&);
@@ -142,7 +142,7 @@ namespace bgcc {
          * @return 
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月21日 16时20分41秒
          */
         ServiceManager& operator=(const ServiceManager&);

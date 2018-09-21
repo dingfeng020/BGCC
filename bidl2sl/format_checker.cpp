@@ -11,7 +11,7 @@
 /**
  * @file     format_checker.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 15时48分50秒
  *  

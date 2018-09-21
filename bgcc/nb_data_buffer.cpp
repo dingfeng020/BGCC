@@ -8,14 +8,9 @@
   *      license.txt
   *********************************************************************/
 
-#ifndef _WIN32
-#include <netinet/in.h>
-#endif
-
-#include <string.h>
+#include "bgcc_common.h"
 
 #include "nb_data_buffer.h"
-#include "byte_order.h"
 #include "bgcc_error.h"
 
 namespace bgcc {
@@ -46,7 +41,7 @@ namespace bgcc {
     }
 
     int32_t NBDataBuffer::append_int64(int64_t i64) {
-        uint64_t tmp = HTONLL((uint64_t)i64);
+        uint64_t tmp = htonll((uint64_t)i64);
         return append(&tmp, sizeof(uint64_t));
     }
 

@@ -11,7 +11,7 @@
 /**
  * @file     StringHolder.java
  * @brief    String的holder类, 用于bgcc  out/all类型参数
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时19分58秒
  *  

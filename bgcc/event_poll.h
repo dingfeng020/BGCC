@@ -13,12 +13,7 @@
 
 #ifndef _WIN32
 
-#include <sys/epoll.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#define MAXNFD 10000
+#include "bgcc_common.h"
 
 namespace bgcc {
 
@@ -26,7 +21,7 @@ namespace bgcc {
      * @brief 事件类型标识
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时02分50秒
      */
     enum {
@@ -48,7 +43,7 @@ namespace bgcc {
      * @return 
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时01分17秒
      */
     typedef void (*callback_func_t)(EventLoop* el, int32_t fd, void* arg);
@@ -57,7 +52,7 @@ namespace bgcc {
      * @brief 封装事件及事件处理函数
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时00分59秒
      */
     struct Event {
@@ -65,19 +60,23 @@ namespace bgcc {
          * @brief Event 事件类
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时04分59秒
          */
-        Event() :
-            fd(-1),
-            mask(EVENT_NONE),
-            read_cb(NULL),
-            write_cb(NULL),
-            error_cb(NULL),
-            read_cb_arg(NULL),
-            write_cb_arg(NULL),
-            error_cb_arg(NULL) {
+        Event() {
+			Reset();
             }
+
+		void Reset(){
+			fd=INVALID_SOCKET;
+			mask=EVENT_NONE;
+			read_cb=NULL;
+			write_cb=NULL;
+			error_cb=NULL;	
+			read_cb_arg=NULL;
+			write_cb_arg=NULL;
+			error_cb_arg=NULL;	
+		}
 
         int32_t fd; /** 事件对应的fd*/
         uint32_t mask;  /** 事件标识位*/
@@ -93,7 +92,7 @@ namespace bgcc {
      * @brief 事件循环
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年06月14日 20时05分36秒
      */
     class EventLoop {
@@ -102,7 +101,7 @@ namespace bgcc {
          * @brief EventLoop 构造函数
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时19分50秒
          */
         EventLoop();
@@ -113,7 +112,7 @@ namespace bgcc {
          * @return 成功返回0
          * @see
          * @note
-         * @author  liuxupeng(liuxupeng@baidu.com)
+         * @author
          * @date    2012年06月14日 20时19分59秒
          */
         int32_t create();
@@ -125,6 +124,8 @@ namespace bgcc {
         int32_t loop();
         int32_t unloop();
         bool is_stopped() const;
+
+        void reset_event(int event_idx);
     private:
         enum state_t {
             S_UNINIT,
@@ -135,10 +136,12 @@ namespace bgcc {
         };
     private:
         state_t _state;
-        mutable bool _stopped;
+        volatile bool _stopped;
         int32_t _epfd;
-        struct epoll_event _ep_events[MAXNFD];
         Event _events[MAXNFD];
+
+        static const int MAXNEVENT_EACH_ROUND;
+        static const int GREATER_THAN_ZERO;
     };
 }
 

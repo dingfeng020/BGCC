@@ -11,7 +11,7 @@
 /**
  * @file     ListHolder.java
  * @brief    LinkedList的holder类用于all, out参数
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 16时26分35秒
  *  

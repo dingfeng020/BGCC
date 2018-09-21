@@ -11,7 +11,7 @@
 /**
  * @file     bidl_const_boolean.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月09日 19时14分46秒
  *  

@@ -11,7 +11,7 @@
 /**
  * @file     MessageTypeHolder.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月30日 18时59分57秒
  *  

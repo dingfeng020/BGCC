@@ -11,7 +11,7 @@
 /**
  * @file     BidlParser.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月16日 16时15分49秒
  *  

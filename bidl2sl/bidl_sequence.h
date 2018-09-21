@@ -11,7 +11,7 @@
 /**
  * @file     bidl_sequence.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月09日 16时06分18秒
  *  
@@ -78,7 +78,7 @@ public:
      * @return 类型字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 14时32分23秒
      */
     virtual std::string get_return_type_name() const {
@@ -101,7 +101,7 @@ public:
      * @return 类型字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 14时37分33秒
      */
     virtual std::string get_parameter_type_name() const {
@@ -115,7 +115,7 @@ public:
      * @return 类型字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 14时38分19秒
      */
     virtual std::string get_general_type_name() const {
@@ -129,7 +129,7 @@ public:
      * @return 类型字符串
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 14时45分41秒
      */
     virtual std::string get_holder_type_name() const {
@@ -147,7 +147,7 @@ public:
      * @return 类型初始化语句
      * @see
      * @note
-     * @author  liuxupeng(liuxupeng@baidu.com)
+     * @author
      * @date    2012年09月08日 14时41分00秒
      */
     virtual std::string get_init_clause() const {

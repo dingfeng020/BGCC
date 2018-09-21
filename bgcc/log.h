@@ -11,22 +11,28 @@
 #ifndef _BGCC2_LOG_H_
 #define _BGCC2_LOG_H_
 
-#include <sstream>
-#ifndef _WIN32
-#include <pthread.h>
-#include <sys/time.h>
+// for cross platform integer output
+#ifdef _WIN32
+#define I32d "%I32d"
+#define I32u "%I32u"
+#define I64d "%I64d"
+#define I64u "%I64u"
+#else
+#define I32d "%d"
+#define I32u "%u"
+#define I64d "%ld"
+#define I64u "%lu"
 #endif
+// end for cross platform integer output
+
+#include <sstream>
 
 #include "log_device_manager.h"
 #include "thread_util.h"
 #include "time_util.h"
 
-
-
-#define STR(x) STR2(x)
-#define STR2(x) #x
 #ifdef _WIN32
-#define GETTIMEOFDAY bgcc::gettimeofday
+#define GETTIMEOFDAY bgcc::TimeUtil::gettimeofday
 #else
 #define GETTIMEOFDAY gettimeofday
 #endif
@@ -43,6 +49,7 @@
                 LOGLEVEL_NAME, \
                 __FILE__, \
                 STR(__LINE__), \
+                __FUNCTION__, \
                 ___tv, \
 				bgcc::ThreadUtil::self_id() \
             }; \
@@ -71,6 +78,7 @@ struct bgcc::log_message_t log_message = { \
 	LOGLEVEL_NAME, \
 	__FILE__, \
 	STR(__LINE__), \
+    __FUNCTION__, \
 	___tv, \
 	bgcc::ThreadUtil::self_id() \
 }; \
@@ -90,8 +98,8 @@ struct bgcc::log_message_t log_message = { \
     do { \
         int32_t ___device_log_level = bgcc::LogDeviceManager::get_instance()->get_device_loglevel(DEVICE); \
         if (___device_log_level <= LOGLEVEL) { \
-            char ___buffer[1024]; \
-            snprintf(___buffer, 1024, FORMAT_AND_CONTENT); \
+            char ___buffer[1024] = {0}; \
+            snprintf(___buffer, 1023, FORMAT_AND_CONTENT); \
             struct timeval ___tv; \
             gettimeofday(&___tv, NULL); \
             struct bgcc::log_message_t log_message = { \
@@ -100,6 +108,7 @@ struct bgcc::log_message_t log_message = { \
                 LOGLEVEL_NAME, \
                 __FILE__, \
                 STR(__LINE__), \
+                __FUNCTION__, \
                 ___tv, \
                 bgcc::ThreadUtil::self_id() \
             }; \
@@ -115,58 +124,64 @@ struct bgcc::log_message_t log_message = { \
 
 #else
 
-class CTraceFileAndLineInfo
+namespace bgcc
 {
-public:
-	CTraceFileAndLineInfo(
-		const char* file_name,
-		int32_t line_no,
-		int32_t log_level,
-		const char* log_level_name)
-		: _file_name(file_name), _line_no(line_no),
-		_log_level(log_level), _log_level_name(log_level_name)
-	{}
+    class CTraceFileAndLineInfo
+    {
+        public:
+            CTraceFileAndLineInfo(
+                    const char* file_name,
+                    int32_t line_no,
+                    const char* func_name,
+                    int32_t log_level,
+                    const char* log_level_name)
+                : _file_name(file_name), _line_no(line_no), _func_name(func_name),
+                _log_level(log_level), _log_level_name(log_level_name)
+        {}
 
-	
-	void __cdecl operator()(const char* device_name, const char* fmt, ...) const
-	{
-		std::stringstream ss;
-		ss << _line_no;
-		std::string line_no;
-		ss >> line_no;
-		va_list ptr; va_start(ptr, fmt);
-		int32_t ___device_log_level = bgcc::LogDeviceManager::get_instance()->get_device_loglevel(device_name);
-		if (___device_log_level <= _log_level) {
-			char ___buffer[1024];
-			_vsnprintf(___buffer, 1024, fmt, ptr);
-			struct ::timeval ___tv;
-			bgcc::gettimeofday(&___tv, NULL);
-			struct bgcc::log_message_t log_message = {
-				_log_level,
-				___buffer,
-				_log_level_name,
-				_file_name,
-				line_no.c_str(),
-				___tv, \
-				bgcc::ThreadUtil::self_id()
-			};
-			bgcc::LogDeviceManager::get_instance()->write(device_name, log_message);
-		}
-		va_end(ptr);
-	}
 
-private:
-	const char* const _file_name;
-	int32_t _line_no;
-	int32_t _log_level;
-	const char* const _log_level_name;
-};
+            void __cdecl operator()(const char* device_name, const char* fmt, ...) const
+            {
+                std::stringstream ss;
+                ss << _line_no;
+                std::string line_no;
+                ss >> line_no;
+                va_list ptr; va_start(ptr, fmt);
+                int32_t ___device_log_level = bgcc::LogDeviceManager::get_instance()->get_device_loglevel(device_name);
+                if (___device_log_level <= _log_level) {
+                    char ___buffer[1024] = {0};
+                    _vsnprintf(___buffer, 1023, fmt, ptr);
+                    struct ::timeval ___tv;
+                    bgcc::TimeUtil::gettimeofday(&___tv, NULL);
+                    struct bgcc::log_message_t log_message = {
+                        _log_level,
+                        ___buffer,
+                        _log_level_name,
+                        _file_name,
+                        line_no.c_str(),
+                        _func_name,
+                        ___tv, \
+                            bgcc::ThreadUtil::self_id()
+                    };
+                    bgcc::LogDeviceManager::get_instance()->write(device_name, log_message);
+                }
+                va_end(ptr);
+            }
 
-#define BGCC_TRACE CTraceFileAndLineInfo(__FILE__, __LINE__, BGCC_LOGLEVEL_TRACE, "trace")
-#define BGCC_DEBUG CTraceFileAndLineInfo(__FILE__, __LINE__, BGCC_LOGLEVEL_DEBUG, "debug")
-#define BGCC_NOTICE CTraceFileAndLineInfo(__FILE__, __LINE__, BGCC_LOGLEVEL_NOTICE, "notice")
-#define BGCC_WARN CTraceFileAndLineInfo(__FILE__, __LINE__, BGCC_LOGLEVEL_WARN, "warn")
-#define BGCC_FATAL CTraceFileAndLineInfo(__FILE__, __LINE__, BGCC_LOGLEVEL_FATAL, "fatal")
+        private:
+            const char* const _file_name;
+            int32_t _line_no;
+            const char* const _func_name;
+            int32_t _log_level;
+            const char* const _log_level_name;
+    };
+}
+
+#define BGCC_TRACE bgcc::CTraceFileAndLineInfo(__FILE__, __LINE__, __FUNCTION__, BGCC_LOGLEVEL_TRACE, "trace")
+#define BGCC_DEBUG bgcc::CTraceFileAndLineInfo(__FILE__, __LINE__, __FUNCTION__, BGCC_LOGLEVEL_DEBUG, "debug")
+#define BGCC_NOTICE bgcc::CTraceFileAndLineInfo(__FILE__, __LINE__, __FUNCTION__, BGCC_LOGLEVEL_NOTICE, "notice")
+#define BGCC_WARN bgcc::CTraceFileAndLineInfo(__FILE__, __LINE__, __FUNCTION__, BGCC_LOGLEVEL_WARN, "warn")
+#define BGCC_FATAL bgcc::CTraceFileAndLineInfo(__FILE__, __LINE__, __FUNCTION__, BGCC_LOGLEVEL_FATAL, "fatal")
 
 
 #endif

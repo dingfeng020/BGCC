@@ -11,7 +11,7 @@
 /**
  * @file     Transport.java
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月31日 09时51分03秒
  *  

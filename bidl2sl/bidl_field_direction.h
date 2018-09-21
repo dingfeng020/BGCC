@@ -11,7 +11,7 @@
 /**
  * @file     bidl_field_direction.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月10日 10时39分30秒
  *  

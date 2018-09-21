@@ -11,12 +11,7 @@
 #ifndef _BGCC_SERVERPEERSOCKET_H_
 #define _BGCC_SERVERPEERSOCKET_H_
 
-#ifdef _WIN32
-    #include <winsock.h>
-#else
-    #include <sys/socket.h>
-#endif
-
+#include "bgcc_common.h"
 #include "socket_base.h"
 #include "shared_pointer.h"
 #include "peer_info.h"

@@ -11,7 +11,7 @@
 /**
  * @file     bidl_double.h
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年08月09日 14时33分15秒
  *  

@@ -12,18 +12,40 @@
 
 namespace bgcc {
 
-    ServerInfo::ServerInfo(const std::string& serverIp, int32_t port)
+    ServerInfo::ServerInfo(const std::string& ip, uint16_t port)
     {
-        _serverip = serverIp;
-        _serverport = port;
+        _ip = ip;
+        _port = port;
+    }
+
+    ServerInfo::ServerInfo(const std::string& ip, int port)
+    {
+        _ip = ip;
+        _port = (uint16_t)port;
     }
 
     std::string ServerInfo::getIP() const {
-        return _serverip;
+        return _ip;
     }
 
-    int32_t ServerInfo::getPort() const {
-        return _serverport;
+    uint16_t ServerInfo::getPort() const {
+        return _port;
+    }
+
+    std::string ServerInfo::ip() const {
+        return _ip;
+    }
+
+    uint16_t ServerInfo::port() const {
+        return _port;
+    }
+
+    void ServerInfo::ip(const std::string& ip) {
+        _ip = ip;
+    }
+
+    void ServerInfo::port(uint16_t port) {
+        _port = port;
     }
 
 }

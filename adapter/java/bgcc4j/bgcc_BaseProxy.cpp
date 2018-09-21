@@ -11,7 +11,7 @@
 /**
  * @file     bgcc_BaseProxy.cpp
  * @brief    
- * @author   liuxupeng(liuxupeng@baidu.com)
+ * @author
  * @version  
  * @date     2012年09月03日 13时29分59秒
  *  
@@ -40,7 +40,7 @@ JNIEXPORT jint JNICALL Java_bgcc_BaseProxy_create
       jclass baseProxyCls = env->GetObjectClass(baseProxy);
       jfieldID proxyAddressFid = env->GetFieldID(baseProxyCls, "proxyAddress", "J");
 
-      BaseProxy* pBaseProxy = new(std::nothrow) BaseProxy(*pServerInfo, 3);
+      BaseProxy* pBaseProxy = new(std::nothrow) BaseProxy(*pServerInfo, 3, true);
 	  pBaseProxy->set_errno(BgccSockGetLastError());
       jlong addr = (jlong)pBaseProxy;
       env->SetLongField(baseProxy, proxyAddressFid, addr);

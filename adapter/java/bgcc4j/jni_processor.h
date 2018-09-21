@@ -19,7 +19,7 @@
  
 /**
  * @file bgcc_jni_processor.h
- * @author liujian03(liujian03@baidu.com)
+ * @author
  * @date 2011/09/26 01:47:15
  * @version $Revision$ 
  * @brief 实现runtime的processor类，处理runtime的类似回调功能
